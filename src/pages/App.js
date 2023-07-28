@@ -23,8 +23,8 @@ for (let i = 0; i < ROW_COUNT; i++) {
 
 function Square({ value, onSquareClick }) {
     return (
-        <button className="square" onClick={onSquareClick}>
-            {value}
+        <button className={value === WARNING ? "warning" : "square"} onClick={onSquareClick}>
+            {value === WARNING ? "" : value}
         </button>
     );
 }

@@ -3,6 +3,9 @@ import { useState } from "react";
 const rowCount = 19;
 const colCount = 19;
 
+const players = ["X", "O"];
+//const warning = "W";
+
 function Square({ value, onSquareClick }) {
     return (
         <button className="square" onClick={onSquareClick}>
@@ -82,7 +85,7 @@ function calculateWinner(squares) {
 }
 
 export default function Board() {
-    const [xIsNext, setXIsNext] = useState(true);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
     const [squares, setSquares] = useState(Array(rowCount * colCount).fill(null));
     const [winner, setWinner] = useState(null);
 
@@ -91,19 +94,17 @@ export default function Board() {
             return;
         }
         const nextSquares = squares.slice();
-        if (xIsNext) {
-            nextSquares[i] = "X";
-        } else {
-            nextSquares[i] = "O";
-        }
+        nextSquares[i] = players[currentPlayer];
         setSquares(nextSquares);
-        setXIsNext(!xIsNext);
+        setCurrentPlayer((currentPlayer + 1) % 2);
         setWinner(calculateWinner(nextSquares));
     }
 
     return (
         <>
-            <div className="status">{winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O")}</div>
+            <div className="status">
+                {winner ? "Winner: " + winner : "Next player: " + players[currentPlayer]}
+            </div>
             {range(rowCount).map((row) => (
                 <Row squares={squares} row={row} key={"row" + row} rowSize={colCount} handleClick={handleClick} />
             ))}

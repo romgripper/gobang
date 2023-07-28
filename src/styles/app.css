@@ -86,6 +86,21 @@
     width: 36px;
   }
   
+  .win {
+    background: #81f67fdf;
+    border: 1px solid #999;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    height: 36px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 36px;
+  }
+  
   .board-row:after {
     clear: both;
     content: '';

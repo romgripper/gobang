@@ -8,7 +8,8 @@ const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
 
 const PLAYERS = ["X", "O"];
 const WARNING = "W";
-const VIRTUAL = "V";
+const VIRTUAL = "VIRTUAL";
+const WIN = "WIN";
 
 function getIndex(row, col) {
     return row * VIRTUAL_COLUMN_COUNT + col;
@@ -22,9 +23,18 @@ for (let i = 0; i < ROW_COUNT; i++) {
 }
 
 function Square({ value, onSquareClick }) {
+    let className = "square";
+    if (value === WARNING) {
+        className = "warning";
+        value = "";
+    } else if (value && value.includes(WIN)) {
+        className = "win";
+        value = value.charAt(0);
+    }
+
     return (
-        <button className={value === WARNING ? "warning" : "square"} onClick={onSquareClick}>
-            {value === WARNING ? "" : value}
+        <button className={className} onClick={onSquareClick}>
+            {value}
         </button>
     );
 }
@@ -61,6 +71,10 @@ function check5Inline(squares, currentIndex, indexCalculate) {
         return squares[indexCalculate(currentIndex, n)];
     }
 
+    function setNthInLine(n, value) {
+        squares[indexCalculate(currentIndex, n)] = value;
+    }
+
     const first = getNthInLine(0);
     if (
         isSquareMarkedByPlayer(first) &&
@@ -69,6 +83,11 @@ function check5Inline(squares, currentIndex, indexCalculate) {
         first === getNthInLine(3) &&
         first === getNthInLine(4)
     ) {
+        setNthInLine(0, first + WIN);
+        setNthInLine(1, first + WIN);
+        setNthInLine(2, first + WIN);
+        setNthInLine(3, first + WIN);
+        setNthInLine(4, first + WIN);
         return first;
     }
     return null;

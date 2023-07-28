@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+const rowCount = 19;
+const colCount = 19;
+
 function Square({ value, onSquareClick }) {
     return (
         <button className="square" onClick={onSquareClick}>
@@ -8,10 +11,10 @@ function Square({ value, onSquareClick }) {
     );
 }
 
-function Row({ squares, row, rowSize, handleClick }) {
+function Row({ squares, row, handleClick }) {
     let columns = [];
-    for (let i = 0; i < rowSize; i++) {
-        const squareIndex = row * (rowSize + 4) + i;
+    for (let i = 0; i < colCount; i++) {
+        const squareIndex = row * colCount + i;
         columns.push(
             <Square
                 value={squares[squareIndex]}
@@ -31,69 +34,46 @@ function range(size) {
     return a;
 }
 
-function fiveInRow(squares, currentIndex) {
-    console.log("fiveInRow" + currentIndex);
+function fiveInLine(squares, currentIndex, indexCalculate) {
+    function getNthInLine(n) {
+        return squares[indexCalculate(currentIndex, n)];
+    }
+
+    // function setNthInLine(n, value) {
+    //     squares[indexCalculate(currentIndex, n)] = value;
+    // }
+    const first = getNthInLine(0);
     if (
-        squares[currentIndex] &&
-        squares[currentIndex] === squares[currentIndex + 1] &&
-        squares[currentIndex] === squares[currentIndex + 2] &&
-        squares[currentIndex] === squares[currentIndex + 3] &&
-        squares[currentIndex] === squares[currentIndex + 4]
+        first &&
+        first === getNthInLine(1) &&
+        first === getNthInLine(2) &&
+        first === getNthInLine(3) &&
+        first === getNthInLine(4)
     ) {
-        console.log("winner");
-        return squares[currentIndex];
+        return first;
     }
     return null;
 }
 
-function fiveInColumn(squares, currentIndex, colCount) {
-    if (
-        squares[currentIndex] &&
-        squares[currentIndex] === squares[currentIndex + 1 * colCount] &&
-        squares[currentIndex] === squares[currentIndex + 2 * colCount] &&
-        squares[currentIndex] === squares[currentIndex + 3 * colCount] &&
-        squares[currentIndex] === squares[currentIndex + 4 * colCount]
-    )
-        return squares[currentIndex];
-    return null;
-}
-
-function fiveInDiagonal(squares, currentIndex, colCount) {
-    if (
-        squares[currentIndex] &&
-        squares[currentIndex] === squares[currentIndex + 1 * colCount + 1] &&
-        squares[currentIndex] === squares[currentIndex + 2 * colCount + 2] &&
-        squares[currentIndex] === squares[currentIndex + 3 * colCount + 3] &&
-        squares[currentIndex] === squares[currentIndex + 4 * colCount + 4]
-    ) {
-        console.log("fiveInDiagonal" + currentIndex);
-        return squares[currentIndex];
-    } else if (
-        squares[currentIndex + 4] &&
-        squares[currentIndex + 4] === squares[currentIndex + 1 * colCount + 3] &&
-        squares[currentIndex + 4] === squares[currentIndex + 2 * colCount + 2] &&
-        squares[currentIndex + 4] === squares[currentIndex + 3 * colCount + 1] &&
-        squares[currentIndex + 4] === squares[currentIndex + 4 * colCount]
-    ) {
-        console.log("fiveInDiagonal" + currentIndex);
-        return squares[currentIndex + 4];
+function calculateWinnerSubScope(squares, currentIndex) {
+    const indexCalculators = [
+        (current, n) => current + n,
+        (current, n) => current + colCount * n,
+        (current, n) => current + n * (colCount + 1),
+        (current, n) => current + 4 + n * (colCount - 1)
+    ];
+    for (let i = 0; i < indexCalculators.length; i++) {
+        const winner = fiveInLine(squares, currentIndex, indexCalculators[i]);
+        if (winner) return winner;
     }
     return null;
 }
 
-function calculateWinnerSmallScope(squares, currentIndex, virualColCount) {
-    return (
-        fiveInRow(squares, currentIndex) ||
-        fiveInColumn(squares, currentIndex, virualColCount) ||
-        fiveInDiagonal(squares, currentIndex, virualColCount)
-    );
-}
-
-function calculateWinner(squares, virtualRowCount, virualColCount) {
-    for (let i = 0; i < virtualRowCount - 4; i++)
-        for (let j = 0; j < virualColCount - 4; j++) {
-            const currentIndex = i * virualColCount + j;
-            const winner = calculateWinnerSmallScope(squares, currentIndex, virualColCount);
+function calculateWinner(squares) {
+    for (let i = 0; i < rowCount; i++)
+        for (let j = 0; j < colCount; j++) {
+            const currentIndex = i * colCount + j;
+            const winner = calculateWinnerSubScope(squares, currentIndex);
             if (winner) {
                 return winner;
             }
@@ -102,13 +82,8 @@ function calculateWinner(squares, virtualRowCount, virualColCount) {
 }
 
 export default function Board() {
-    const rowCount = 19;
-    const colCount = 19;
-    const virtualRowCount = rowCount + 4;
-    const virtualColCount = colCount + 4;
-
     const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(Array(virtualRowCount * virtualColCount).fill(null));
+    const [squares, setSquares] = useState(Array(rowCount * colCount).fill(null));
     const [winner, setWinner] = useState(null);
 
     function handleClick(i) {
@@ -123,7 +98,7 @@ export default function Board() {
         }
         setSquares(nextSquares);
         setXIsNext(!xIsNext);
-        setWinner(calculateWinner(nextSquares, virtualRowCount, virtualColCount));
+        setWinner(calculateWinner(nextSquares));
     }
 
     return (

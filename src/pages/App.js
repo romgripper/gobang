@@ -142,7 +142,7 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
     }
 }
 
-const check3InLinePatterns = [
+const THREE_IN_LINE_PATTERNS = [
     {
         playerIndexes: [1, 3, 4],
         emptyIndexes: [0, 2, 5],
@@ -161,7 +161,7 @@ const check3InLinePatterns = [
 ];
 
 function check3InLine(squares, currentIndex, indexCalculate) {
-    checkInLine(squares, currentIndex, indexCalculate, check3InLinePatterns);
+    checkInLine(squares, currentIndex, indexCalculate, THREE_IN_LINE_PATTERNS);
 }
 
 function mark3InLineWarningsSubScope(squares, currentIndex) {
@@ -173,6 +173,52 @@ function mark3InLineWarningsSubScope(squares, currentIndex) {
     ];
     for (let i = 0; i < indexCalculators.length; i++) {
         const winner = check3InLine(squares, currentIndex, indexCalculators[i]);
+        if (winner) return winner;
+    }
+    return null;
+}
+
+const FOUR_IN_LINE_PATTERNS = [
+    {
+        playerIndexes: [1, 2, 3, 4],
+        emptyIndexes: [0],
+        warningIndexes: [0]
+    },
+    {
+        playerIndexes: [0, 2, 3, 4],
+        emptyIndexes: [1],
+        warningIndexes: [1]
+    },
+    {
+        playerIndexes: [0, 1, 3, 4],
+        emptyIndexes: [2],
+        warningIndexes: [2]
+    },
+    {
+        playerIndexes: [0, 1, 2, 4],
+        emptyIndexes: [3],
+        warningIndexes: [3]
+    },
+    {
+        playerIndexes: [0, 1, 2, 3],
+        emptyIndexes: [4],
+        warningIndexes: [4]
+    }
+];
+
+function check4InLine(squares, currentIndex, indexCalculate) {
+    checkInLine(squares, currentIndex, indexCalculate, FOUR_IN_LINE_PATTERNS);
+}
+
+function mark4InLineWarningsSubScope(squares, currentIndex) {
+    const indexCalculators = [
+        (current, n) => current + n,
+        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
+        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
+        (current, n) => current + 4 + n * (VIRTUAL_COLUMN_COUNT - 1)
+    ];
+    for (let i = 0; i < indexCalculators.length; i++) {
+        const winner = check4InLine(squares, currentIndex, indexCalculators[i]);
         if (winner) return winner;
     }
     return null;
@@ -195,6 +241,7 @@ function markWarnings(squares) {
         for (let j = 0; j < COLUMN_COUNT; j++) {
             let current = getIndex(i, j);
             mark3InLineWarningsSubScope(squares, current);
+            mark4InLineWarningsSubScope(squares, current);
         }
     }
 }

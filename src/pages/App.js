@@ -94,6 +94,7 @@ function calculateWinner(squares) {
             const currentIndex = getIndex(i, j);
             const winner = calculateWinnerSubScope(squares, currentIndex);
             if (winner) {
+                clearWarnings(squares);
                 return winner;
             }
         }

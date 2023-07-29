@@ -11,6 +11,8 @@ const WARNING = "W";
 const VIRTUAL = "VIRTUAL";
 const WIN = "WIN";
 
+const HISTORY_COUNT = 9;
+
 function getIndex(row, col) {
     return row * VIRTUAL_COLUMN_COUNT + col;
 }
@@ -270,7 +272,11 @@ export default function Board() {
     const [currentPlayer, setCurrentPlayer] = useState(0);
     const [squares, setSquares] = useState(INITIAL_SQAURES);
     const [winner, setWinner] = useState(null);
-    const [history, setHistory] = useState(null);
+    const [history, setHistory] = useState([]);
+
+    function takeTurn() {
+        setCurrentPlayer((currentPlayer + 1) % 2);
+    }
 
     function handleClick(i) {
         if (winner || isSquareMarkedByPlayer(squares[i])) {
@@ -280,25 +286,31 @@ export default function Board() {
         nextSquares[i] = PLAYERS[currentPlayer];
         markWarnings(nextSquares);
         setSquares(nextSquares);
-        setHistory(squares);
-        setCurrentPlayer((currentPlayer + 1) % 2);
+        history.unshift(squares);
+        if (history.length > HISTORY_COUNT) {
+            history.pop();
+        }
+        setHistory(history);
+        takeTurn();
         setWinner(calculateWinner(nextSquares));
     }
 
     function rollbackStep() {
-        if (history) {
-            const nextSquares = history;
+        if (history.length > 0) {
+            const nextSquares = history.shift();
             markWarnings(nextSquares);
             setSquares(nextSquares);
-            setHistory(null);
-            setCurrentPlayer((currentPlayer + 1) % 2);
+            setHistory(history);
+            takeTurn();
         }
     }
 
     return (
         <>
             <div className="status">
-                {winner ? "Winner: " + winner : "Next player: " + PLAYERS[currentPlayer]}
+                {(winner ? "Winner: " + winner : "Next player: " + PLAYERS[currentPlayer]) +
+                    "; History: " +
+                    history.length}
                 <button onClick={rollbackStep} style={{ marginLeft: 20 }}>
                     Back
                 </button>

@@ -270,6 +270,7 @@ export default function Board() {
     const [currentPlayer, setCurrentPlayer] = useState(0);
     const [squares, setSquares] = useState(INITIAL_SQAURES);
     const [winner, setWinner] = useState(null);
+    const [history, setHistory] = useState(null);
 
     function handleClick(i) {
         if (winner || isSquareMarkedByPlayer(squares[i])) {
@@ -279,13 +280,29 @@ export default function Board() {
         nextSquares[i] = PLAYERS[currentPlayer];
         markWarnings(nextSquares);
         setSquares(nextSquares);
+        setHistory(squares);
         setCurrentPlayer((currentPlayer + 1) % 2);
         setWinner(calculateWinner(nextSquares));
     }
 
+    function rollbackStep() {
+        if (history) {
+            const nextSquares = history;
+            markWarnings(nextSquares);
+            setSquares(nextSquares);
+            setHistory(null);
+            setCurrentPlayer((currentPlayer + 1) % 2);
+        }
+    }
+
     return (
         <>
-            <div className="status">{winner ? "Winner: " + winner : "Next player: " + PLAYERS[currentPlayer]}</div>
+            <div className="status">
+                {winner ? "Winner: " + winner : "Next player: " + PLAYERS[currentPlayer]}
+                <button onClick={rollbackStep} style={{ marginLeft: 20 }}>
+                    Back
+                </button>
+            </div>
             {range(ROW_COUNT).map((row) => (
                 <Row squares={squares} row={row} key={"row" + row} rowSize={COLUMN_COUNT} handleClick={handleClick} />
             ))}

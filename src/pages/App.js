@@ -36,6 +36,10 @@ function getIndex(row, col) {
     return row * VIRTUAL_COLUMN_COUNT + col;
 }
 
+function getCoordinate(index) {
+    return [Math.floor(index / VIRTUAL_COLUMN_COUNT), index % VIRTUAL_COLUMN_COUNT];
+}
+
 let INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
 for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
     for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
@@ -44,7 +48,7 @@ for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
 }
 
 function isOutOfBoard(row, column) {
-    return row >= ROW_COUNT || column >= COLUMN_COUNT;
+    return row < 0 || row >= ROW_COUNT || column < 0 || column >= COLUMN_COUNT;
 }
 
 function isEmpty(squareData) {
@@ -296,10 +300,12 @@ function clearWarnings(squares) {
     }
 }
 
-function markWarnings(squares) {
+function markWarnings(squares, lastMove) {
     clearWarnings(squares);
-    for (let i = 0; i < ROW_COUNT; i++) {
-        for (let j = 0; j < COLUMN_COUNT; j++) {
+    const [row, column] = getCoordinate(lastMove);
+    for (let i = row - 5; i <= row + 5; i++) {
+        for (let j = column - 5; j <= column + 5; j++) {
+            if (isOutOfBoard(i, j)) continue;
             let current = getIndex(i, j);
             mark3InLineWarningsSubScope(squares, current);
             mark4InLineWarningsSubScope(squares, current);
@@ -328,10 +334,10 @@ export default function Board() {
         if (lastMove) {
             nextSquares[lastMove].isLastMove = false;
         }
-        markWarnings(nextSquares);
+        markWarnings(nextSquares, lastMove);
         setSquares(nextSquares);
         setLastMove(i);
-        history.unshift(squares);
+        history.unshift([squares, lastMove]);
         if (history.length > HISTORY_COUNT) {
             history.pop();
         }
@@ -342,8 +348,9 @@ export default function Board() {
 
     function rollbackStep() {
         if (history.length > 0) {
-            const nextSquares = history.shift();
-            markWarnings(nextSquares);
+            const [nextSquares, lastMove] = history.shift();
+            markWarnings(nextSquares, lastMove);
+            setLastMove(lastMove);
             setSquares(nextSquares);
             setHistory(history);
             takeTurn();

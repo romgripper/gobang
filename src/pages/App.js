@@ -60,6 +60,10 @@ function isIn5(squareData) {
     return isSquareMarkedByPlayer(squareData) && squareData.isIn5;
 }
 
+function isLastMove(squareData) {
+    return isSquareMarkedByPlayer(squareData) && squareData.isLastMove;
+}
+
 function Square({ squareData, onSquareClick }) {
     let className = "square";
     const value = isSquareMarkedByPlayer(squareData) ? getPlayer(squareData.isBlack) : "";
@@ -67,6 +71,8 @@ function Square({ squareData, onSquareClick }) {
         className = "warning";
     } else if (isIn5(squareData)) {
         className = "win";
+    } else if (isLastMove(squareData)) {
+        className = "last-move";
     }
 
     return (
@@ -301,6 +307,7 @@ function markWarnings(squares) {
 export default function Board() {
     const [isNextBlack, setNextBlack] = useState(true);
     const [squares, setSquares] = useState(INITIAL_SQAURES);
+    const [lastMove, setLastMove] = useState(null);
     const [winner, setWinner] = useState(null);
     const [history, setHistory] = useState([]);
 
@@ -314,8 +321,13 @@ export default function Board() {
         }
         const nextSquares = squares.slice();
         nextSquares[i] = new PlayerSquareData(isNextBlack);
+        nextSquares[i].isLastMove = true;
+        if (lastMove) {
+            nextSquares[lastMove].isLastMove = false;
+        }
         markWarnings(nextSquares);
         setSquares(nextSquares);
+        setLastMove(i);
         history.unshift(squares);
         if (history.length > HISTORY_COUNT) {
             history.pop();

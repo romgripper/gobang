@@ -8,8 +8,8 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Go Bang</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>Gobang</title>
+                <link rel="icon" href="favicon.ico" />
             </Head>
             <Board />
         </>

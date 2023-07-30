@@ -39,12 +39,15 @@ function getIndex(row, col) {
 let INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
 for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
     for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
-        INITIAL_SQAURES[getIndex(i, j)] = new EmptySquareData(i >= ROW_COUNT || j >= COLUMN_COUNT);
+        INITIAL_SQAURES[getIndex(i, j)] = new EmptySquareData(isOutOfBoard(i, j));
     }
 }
 
+function isOutOfBoard(row, column) {
+    return row >= ROW_COUNT || column >= COLUMN_COUNT;
+}
+
 function isEmpty(squareData) {
-    console.log(squareData);
     return squareData.type === SQUARE_TYPE_EMPTY;
 }
 

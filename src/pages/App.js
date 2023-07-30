@@ -6,32 +6,67 @@ const COLUMN_COUNT = 19;
 const VIRTUAL_ROW_COUNT = ROW_COUNT + 4;
 const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
 
-const PLAYERS = ["X", "O"];
-const WARNING = "W";
-const VIRTUAL = "VIRTUAL";
-const WIN = "WIN";
-
 const HISTORY_COUNT = 9;
+
+const SQUARE_TYPE_PLAYER = "PLAYER";
+const SQUARE_TYPE_EMPTY = "EMPTY";
+
+class PlayerSquareData {
+    constructor(isBlack) {
+        this.type = SQUARE_TYPE_PLAYER;
+        this.isBlack = isBlack; // black or white
+        this.isIn5 = false;
+        this.isLastMove = false;
+    }
+}
+
+class EmptySquareData {
+    constructor(isVirtual) {
+        this.type = SQUARE_TYPE_EMPTY;
+        this.isVirtual = isVirtual;
+        this.showWarning = false;
+    }
+}
+
+function getPlayer(isBlack) {
+    return isBlack ? "X" : "O";
+}
 
 function getIndex(row, col) {
     return row * VIRTUAL_COLUMN_COUNT + col;
 }
 
-let INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT).fill(VIRTUAL);
-for (let i = 0; i < ROW_COUNT; i++) {
-    for (let j = 0; j < COLUMN_COUNT; j++) {
-        INITIAL_SQAURES[getIndex(i, j)] = null;
+let INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
+for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
+    for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
+        INITIAL_SQAURES[getIndex(i, j)] = new EmptySquareData(i >= ROW_COUNT || j >= COLUMN_COUNT);
     }
 }
 
-function Square({ value, onSquareClick }) {
+function isEmpty(squareData) {
+    console.log(squareData);
+    return squareData.type === SQUARE_TYPE_EMPTY;
+}
+
+function isWarning(squareData) {
+    return isEmpty(squareData) && squareData.showWarning;
+}
+
+function isSquareMarkedByPlayer(squareData) {
+    return squareData.type === SQUARE_TYPE_PLAYER;
+}
+
+function isIn5(squareData) {
+    return isSquareMarkedByPlayer(squareData) && squareData.isIn5;
+}
+
+function Square({ squareData, onSquareClick }) {
     let className = "square";
-    if (value === WARNING) {
+    const value = isSquareMarkedByPlayer(squareData) ? getPlayer(squareData.isBlack) : "";
+    if (isWarning(squareData)) {
         className = "warning";
-        value = "";
-    } else if (value && value.includes(WIN)) {
+    } else if (isIn5(squareData)) {
         className = "win";
-        value = value.charAt(0);
     }
 
     return (
@@ -47,7 +82,7 @@ function Row({ squares, row, handleClick }) {
         const squareIndex = getIndex(row, i);
         columns.push(
             <Square
-                value={squares[squareIndex]}
+                squareData={squares[squareIndex]}
                 key={"square" + squareIndex}
                 onSquareClick={() => handleClick(squareIndex)}
             />
@@ -64,35 +99,34 @@ function range(size) {
     return a;
 }
 
-function isSquareMarkedByPlayer(value) {
-    return PLAYERS.includes(value);
-}
-
 function check5Inline(squares, currentIndex, indexCalculate) {
     function getNthInLine(n) {
         return squares[indexCalculate(currentIndex, n)];
     }
 
-    function setNthInLine(n, value) {
-        squares[indexCalculate(currentIndex, n)] = value;
-    }
-
     const first = getNthInLine(0);
     if (
-        isSquareMarkedByPlayer(first) &&
-        first === getNthInLine(1) &&
-        first === getNthInLine(2) &&
-        first === getNthInLine(3) &&
-        first === getNthInLine(4)
+        playerSquareAndEquals(first, getNthInLine(1)) &&
+        playerSquareAndEquals(first, getNthInLine(2)) &&
+        playerSquareAndEquals(first, getNthInLine(3)) &&
+        playerSquareAndEquals(first, getNthInLine(4))
     ) {
-        setNthInLine(0, first + WIN);
-        setNthInLine(1, first + WIN);
-        setNthInLine(2, first + WIN);
-        setNthInLine(3, first + WIN);
-        setNthInLine(4, first + WIN);
+        getNthInLine(0).isIn5 = true;
+        getNthInLine(1).isIn5 = true;
+        getNthInLine(2).isIn5 = true;
+        getNthInLine(3).isIn5 = true;
+        getNthInLine(4).isIn5 = true;
         return first;
     }
     return null;
+}
+
+function playerSquareAndEquals(squareData1, squareData2) {
+    return (
+        isSquareMarkedByPlayer(squareData1) &&
+        isSquareMarkedByPlayer(squareData2) &&
+        squareData1.isBlack === squareData2.isBlack
+    );
 }
 
 function calculateWinnerSubScope(squares, currentIndex) {
@@ -127,29 +161,25 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
         return squares[indexCalculate(currentIndex, n)];
     }
 
-    function setNthInLine(n, value) {
-        squares[indexCalculate(currentIndex, n)] = value;
-    }
-
     function playerMarkersMatchPattern(playerIndexPattern) {
-        const firstMarker = getNthInLine(playerIndexPattern[0]);
-        if (!isSquareMarkedByPlayer(firstMarker)) return false;
+        const first = getNthInLine(playerIndexPattern[0]);
+        if (!isSquareMarkedByPlayer(first)) return false;
         for (let i = 1; i < playerIndexPattern.length; i++) {
-            if (getNthInLine(playerIndexPattern[i]) !== firstMarker) return false;
+            if (!playerSquareAndEquals(first, getNthInLine(playerIndexPattern[i]))) return false;
         }
         return true;
     }
 
     function emptySquaresMatchPattern(emptyIndexPattern) {
         for (let i = 0; i < emptyIndexPattern.length; i++) {
-            if (getNthInLine(emptyIndexPattern[i])) return false;
+            if (!isEmpty(getNthInLine(emptyIndexPattern[i]))) return false;
         }
         return true;
     }
 
     function markWarningsInLine(warningIndexPattern) {
         for (let i = 0; i < warningIndexPattern.length; i++) {
-            setNthInLine(warningIndexPattern[i], WARNING);
+            getNthInLine(warningIndexPattern[i]).showWarning = true;
         }
     }
 
@@ -250,8 +280,8 @@ function clearWarnings(squares) {
     for (let i = 0; i < ROW_COUNT; i++) {
         for (let j = 0; j < COLUMN_COUNT; j++) {
             let current = getIndex(i, j);
-            if (squares[current] === WARNING) {
-                squares[current] = null;
+            if (isWarning(squares[current])) {
+                squares[current].showWarning = false;
             }
         }
     }
@@ -269,13 +299,13 @@ function markWarnings(squares) {
 }
 
 export default function Board() {
-    const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [isNextBlack, setNextBlack] = useState(true);
     const [squares, setSquares] = useState(INITIAL_SQAURES);
     const [winner, setWinner] = useState(null);
     const [history, setHistory] = useState([]);
 
     function takeTurn() {
-        setCurrentPlayer((currentPlayer + 1) % 2);
+        setNextBlack(!isNextBlack);
     }
 
     function handleClick(i) {
@@ -283,7 +313,7 @@ export default function Board() {
             return;
         }
         const nextSquares = squares.slice();
-        nextSquares[i] = PLAYERS[currentPlayer];
+        nextSquares[i] = new PlayerSquareData(isNextBlack);
         markWarnings(nextSquares);
         setSquares(nextSquares);
         history.unshift(squares);
@@ -308,7 +338,7 @@ export default function Board() {
     return (
         <>
             <div className="status">
-                {(winner ? "Winner: " + winner : "Next player: " + PLAYERS[currentPlayer]) +
+                {(winner ? "Winner: " + getPlayer(winner.isBlack) : "Next player: " + getPlayer(isNextBlack)) +
                     "; History: " +
                     history.length}
                 <button onClick={rollbackStep} style={{ marginLeft: 20 }}>

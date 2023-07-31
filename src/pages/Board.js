@@ -330,7 +330,6 @@ export default function Board() {
             if (lastMove) {
                 lastSquares[lastMove].setCurrentMove(true);
             }
-            lastSquares[currentMove].setCurrentMove(false);
             markWarnings(lastSquares, lastMove);
             setCurrentMove(lastMove);
             setSquares(lastSquares);

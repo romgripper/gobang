@@ -11,6 +11,21 @@ const HISTORY_COUNT = 9;
 const SQUARE_TYPE_PLAYER = "PLAYER";
 const SQUARE_TYPE_EMPTY = "EMPTY";
 
+const INDEX_CALCULATORS = [
+    (current, n) => current + n,
+    (current, n) => current + n * VIRTUAL_COLUMN_COUNT,
+    (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
+    (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
+];
+
+const WINNING_PATTERNS = [
+    [0, 1, 2, 3, 4],
+    [-1, 0, 1, 2, 3],
+    [-2, -1, 0, 1, 2],
+    [-3, -2, -1, 0, 1],
+    [-4, -3, -2, -1, 0]
+];
+
 const WARNING_PATTERNS = [
     // 3 in line
     // OXXXO
@@ -248,24 +263,34 @@ function range(size) {
 
 function check5Inline(squares, currentIndex, indexCalculate) {
     function getNthInLine(n) {
-        return squares[indexCalculate(currentIndex, n)];
+        const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
+        return isOutOfBoard(row, column)
+            ? new EmptySquareData(true) // virtual
+            : squares[indexCalculate(currentIndex, n)];
     }
 
-    const first = getNthInLine(0);
-    if (
-        playerSquareAndEquals(first, getNthInLine(1)) &&
-        playerSquareAndEquals(first, getNthInLine(2)) &&
-        playerSquareAndEquals(first, getNthInLine(3)) &&
-        playerSquareAndEquals(first, getNthInLine(4))
-    ) {
-        getNthInLine(0).isIn5 = true;
-        getNthInLine(1).isIn5 = true;
-        getNthInLine(2).isIn5 = true;
-        getNthInLine(3).isIn5 = true;
-        getNthInLine(4).isIn5 = true;
-        return first;
+    function playerMarkersMatchPattern(indexPattern) {
+        const first = getNthInLine(indexPattern[0]);
+        for (let i = 1; i < indexPattern.length; i++) {
+            if (!playerSquareAndEquals(first, getNthInLine(indexPattern[i]))) return false;
+        }
+        return true;
     }
-    return null;
+
+    function mark5InLine(indexPattern) {
+        for (let i = 0; i < indexPattern.length; i++) {
+            getNthInLine(indexPattern[i]).isIn5 = true;
+        }
+        return true;
+    }
+
+    for (let i = 0; i < WINNING_PATTERNS.length; i++) {
+        if (playerMarkersMatchPattern(WINNING_PATTERNS[i])) {
+            mark5InLine(WINNING_PATTERNS[i]);
+            return true;
+        }
+    }
+    return false;
 }
 
 function playerSquareAndEquals(squareData1, squareData2) {
@@ -276,30 +301,13 @@ function playerSquareAndEquals(squareData1, squareData2) {
     );
 }
 
-function calculateWinnerSubScope(squares, currentIndex) {
-    const indexCalculators = [
-        (current, n) => current + n,
-        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + 4 + n * (VIRTUAL_COLUMN_COUNT - 1)
-    ];
-    for (let i = 0; i < indexCalculators.length; i++) {
-        const winner = check5Inline(squares, currentIndex, indexCalculators[i]);
-        if (winner) return winner;
-    }
-    return null;
-}
-
-function calculateWinner(squares) {
-    for (let i = 0; i < ROW_COUNT; i++)
-        for (let j = 0; j < COLUMN_COUNT; j++) {
-            const currentIndex = getIndex(i, j);
-            const winner = calculateWinnerSubScope(squares, currentIndex);
-            if (winner) {
-                clearWarnings(squares);
-                return winner;
-            }
+function calculateWinner(squares, currentMove) {
+    for (let i = 0; i < INDEX_CALCULATORS.length; i++) {
+        const winning = check5Inline(squares, currentMove, INDEX_CALCULATORS[i]);
+        if (winning) {
+            return squares[currentMove];
         }
+    }
     return null;
 }
 
@@ -311,17 +319,17 @@ function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patte
             : squares[indexCalculate(currentIndex, n)];
     }
 
-    function playerMarkersMatchPattern(playerIndexPattern) {
-        const first = getNthInLine(playerIndexPattern[0]);
-        for (let i = 1; i < playerIndexPattern.length; i++) {
-            if (!playerSquareAndEquals(first, getNthInLine(playerIndexPattern[i]))) return false;
+    function playerMarkersMatchPattern(indexPattern) {
+        const first = getNthInLine(indexPattern[0]);
+        for (let i = 1; i < indexPattern.length; i++) {
+            if (!playerSquareAndEquals(first, getNthInLine(indexPattern[i]))) return false;
         }
         return true;
     }
 
-    function emptySquaresMatchPattern(emptyIndexPattern) {
-        for (let i = 0; i < emptyIndexPattern.length; i++) {
-            if (!isEmptyAndNotVirtual(getNthInLine(emptyIndexPattern[i]))) return false;
+    function emptySquaresMatchPattern(indexPattern) {
+        for (let i = 0; i < indexPattern.length; i++) {
+            if (!isEmptyAndNotVirtual(getNthInLine(indexPattern[i]))) return false;
         }
         return true;
     }
@@ -356,12 +364,9 @@ function clearWarnings(squares) {
 function markWarnings(squares, currentMove) {
     clearWarnings(squares);
 
-    [
-        (current, n) => current + n,
-        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
-    ].forEach((indexCalculator) => checkAndShowWarningsInLine(squares, currentMove, indexCalculator, WARNING_PATTERNS));
+    INDEX_CALCULATORS.forEach((indexCalculator) =>
+        checkAndShowWarningsInLine(squares, currentMove, indexCalculator, WARNING_PATTERNS)
+    );
 }
 
 export default function Board() {
@@ -395,7 +400,7 @@ export default function Board() {
         }
         setHistory(history);
         takeTurn();
-        setWinner(calculateWinner(currentSquares));
+        setWinner(calculateWinner(currentSquares, currentIndex));
     }
 
     function rollbackStep() {

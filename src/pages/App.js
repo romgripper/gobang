@@ -369,7 +369,7 @@ function mark4InLineWarningsSubScope(squares, currentIndex) {
         (current, n) => current + n,
         (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
         (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + 4 + n * (VIRTUAL_COLUMN_COUNT - 1)
+        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
     ];
     for (let i = 0; i < indexCalculators.length; i++) {
         const winner = check4InLine(squares, currentIndex, indexCalculators[i]);

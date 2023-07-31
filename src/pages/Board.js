@@ -283,8 +283,6 @@ function clearWarnings(squares) {
 }
 
 function markWarnings(squares, currentMove) {
-    clearWarnings(squares);
-
     INDEX_CALCULATORS.forEach((indexCalculator) =>
         checkAndShowWarningsInLine(squares, currentMove, indexCalculator, WARNING_PATTERNS)
     );
@@ -306,22 +304,30 @@ export default function Board() {
             return;
         }
         const currentSquares = squares.slice();
+        clearWarnings(squares);
+
         currentSquares[currentIndex] = new PlayerSquare(isNextBlack);
+
         currentSquares[currentIndex].setCurrentMove(true);
         const lastMove = currentMove;
         if (lastMove) {
             currentSquares[lastMove].setCurrentMove(false);
         }
-        markWarnings(currentSquares, currentIndex);
         setSquares(currentSquares);
         setCurrentMove(currentIndex);
+
+        const currentWinner = calculateWinner(currentSquares, currentIndex);
+        setWinner(currentWinner);
+        if (currentWinner) {
+            return;
+        }
+        markWarnings(currentSquares, currentIndex);
         history.unshift([squares, currentMove]);
         if (history.length > HISTORY_COUNT) {
             history.pop();
         }
         setHistory(history);
         takeTurn();
-        setWinner(calculateWinner(currentSquares, currentIndex));
     }
 
     function rollbackStep() {
@@ -330,6 +336,7 @@ export default function Board() {
             if (lastMove) {
                 lastSquares[lastMove].setCurrentMove(true);
             }
+            clearWarnings(lastSquares);
             markWarnings(lastSquares, lastMove);
             setCurrentMove(lastMove);
             setSquares(lastSquares);
@@ -344,9 +351,12 @@ export default function Board() {
                 {(winner ? "Winner: " + getPlayer(winner.isBlack) : "Next player: " + getPlayer(isNextBlack)) +
                     "; History: " +
                     history.length}
-                <button onClick={rollbackStep} style={{ marginLeft: 20 }}>
-                    Back
-                </button>
+
+                {!winner && (
+                    <button onClick={rollbackStep} style={{ marginLeft: 20 }}>
+                        Back
+                    </button>
+                )}
             </div>
             {range(ROW_COUNT).map((row) => (
                 <Row

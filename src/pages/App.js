@@ -171,9 +171,7 @@ function calculateWinner(squares) {
 }
 
 function checkInLine(squares, currentIndex, indexCalculate, patterns) {
-    console.log("checkInLine", squares[currentIndex]);
     function getNthInLine(n) {
-        console.log("getNthInLine", getCoordinate(indexCalculate(currentIndex, n)));
         const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
         return isOutOfBoard(row, column)
             ? new EmptySquareData(true) // virtual
@@ -182,7 +180,6 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
 
     function playerMarkersMatchPattern(playerIndexPattern) {
         const first = getNthInLine(playerIndexPattern[0]);
-        console.log("playerMarkersMatchPattern first", first);
         for (let i = 1; i < playerIndexPattern.length; i++) {
             if (!playerSquareAndEquals(first, getNthInLine(playerIndexPattern[i]))) return false;
         }
@@ -207,8 +204,7 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
             playerMarkersMatchPattern(patterns[i].playerIndexes) &&
             emptySquaresMatchPattern(patterns[i].emptyIndexes)
         ) {
-            markWarningsInLine(patterns[i].warningIndexes);
-            break;
+            markWarningsInLine(patterns[i].emptyIndexes);
         }
     }
 }
@@ -217,50 +213,41 @@ const THREE_IN_LINE_PATTERNS = [
     // OXXXO
     {
         playerIndexes: [0, 1, 2],
-        emptyIndexes: [-1, 3],
-        warningIndexes: [-1, 3]
+        emptyIndexes: [-1, 3]
     },
     {
         playerIndexes: [-1, 0, 1],
-        emptyIndexes: [-2, 2],
-        warningIndexes: [-2, 2]
+        emptyIndexes: [-2, 2]
     },
     {
         playerIndexes: [-2, -1, 0],
-        emptyIndexes: [-3, 1],
-        warningIndexes: [-3, 1]
+        emptyIndexes: [-3, 1]
     },
     // OXOXXO
     {
         playerIndexes: [0, 2, 3],
-        emptyIndexes: [-1, 1, 4],
-        warningIndexes: [-1, 1, 4]
+        emptyIndexes: [-1, 1, 4]
     },
     {
         playerIndexes: [-2, 0, 1],
-        emptyIndexes: [-3, -1, 2],
-        warningIndexes: [-3, -1, 2]
+        emptyIndexes: [-3, -1, 2]
     },
     {
         playerIndexes: [-3, -1, 0],
-        emptyIndexes: [-4, -2, 1],
-        warningIndexes: [-4, -2, 1]
+        emptyIndexes: [-4, -2, 1]
     },
     // OXXOXO
     {
         playerIndexes: [0, 1, 3],
-        emptyIndexes: [-1, 2, 4],
-        warningIndexes: [-1, 2, 4]
+        emptyIndexes: [-1, 2, 4]
     },
     {
         playerIndexes: [-1, 0, 2],
-        emptyIndexes: [-2, 1, 3],
-        warningIndexes: [-2, 1, 3]
+        emptyIndexes: [-2, 1, 3]
     },
     {
         playerIndexes: [-3, -2, 0],
-        emptyIndexes: [-4, -1, 1],
-        warningIndexes: [-4, -1, 1]
+        emptyIndexes: [-4, -1, 1]
     }
 ];
 
@@ -269,7 +256,6 @@ function check3InLine(squares, currentIndex, indexCalculate) {
 }
 
 function mark3InLineWarnings4Directions(squares, currentIndex) {
-    console.log("mark3InLineWarnings4Directions", currentIndex);
     const indexCalculators = [
         (current, n) => current + n,
         (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
@@ -284,30 +270,93 @@ function mark3InLineWarnings4Directions(squares, currentIndex) {
 }
 
 const FOUR_IN_LINE_PATTERNS = [
+    // OXXXX
     {
-        playerIndexes: [1, 2, 3, 4],
-        emptyIndexes: [0],
-        warningIndexes: [0]
+        playerIndexes: [0, 1, 2, 3],
+        emptyIndexes: [-1]
     },
     {
+        playerIndexes: [-1, 0, 1, 2],
+        emptyIndexes: [-2]
+    },
+    {
+        playerIndexes: [-2, -1, 0, 1],
+        emptyIndexes: [-3]
+    },
+    {
+        playerIndexes: [-3, -2, -1, 0],
+        emptyIndexes: [-4]
+    },
+    // XOXXX
+    {
         playerIndexes: [0, 2, 3, 4],
+        emptyIndexes: [1]
+    },
+    {
+        playerIndexes: [-2, 0, 1, 2],
+        emptyIndexes: [-1],
+        warningIndexes: [-1]
+    },
+    {
+        playerIndexes: [-3, -1, 0, 1],
+        emptyIndexes: [-2]
+    },
+    {
+        playerIndexes: [-4, -2, -1, 0],
+        emptyIndexes: [-3]
+    },
+    // XXOXX
+    {
+        playerIndexes: [0, 1, 3, 4],
+        emptyIndexes: [2]
+    },
+    {
+        playerIndexes: [-1, 0, 2, 3],
         emptyIndexes: [1],
         warningIndexes: [1]
     },
     {
-        playerIndexes: [0, 1, 3, 4],
+        playerIndexes: [-3, -2, 0, 1],
+        emptyIndexes: [-1]
+    },
+    {
+        playerIndexes: [-4, -3, -1, 0],
+        emptyIndexes: [-2]
+    },
+    // XXXOX
+    {
+        playerIndexes: [0, 1, 2, 4],
+        emptyIndexes: [3]
+    },
+    {
+        playerIndexes: [-1, 0, 1, 3],
         emptyIndexes: [2],
         warningIndexes: [2]
     },
     {
-        playerIndexes: [0, 1, 2, 4],
-        emptyIndexes: [3],
-        warningIndexes: [3]
+        playerIndexes: [-2, -1, 0, 2],
+        emptyIndexes: [1]
     },
     {
+        playerIndexes: [-4, -3, -2, 0],
+        emptyIndexes: [-1]
+    },
+    // XXXXO
+    {
         playerIndexes: [0, 1, 2, 3],
-        emptyIndexes: [4],
-        warningIndexes: [4]
+        emptyIndexes: [4]
+    },
+    {
+        playerIndexes: [-1, 0, 1, 2],
+        emptyIndexes: [3]
+    },
+    {
+        playerIndexes: [-2, -1, 0, 1],
+        emptyIndexes: [2]
+    },
+    {
+        playerIndexes: [-3, -2, -1, 0],
+        emptyIndexes: [1]
     }
 ];
 
@@ -368,7 +417,6 @@ export default function Board() {
         if (lastMove) {
             currentSquares[lastMove].isCurrentMove = false;
         }
-        console.log("handleClick" + currentIndex);
         markWarnings(currentSquares, currentIndex);
         setSquares(currentSquares);
         setCurrentMove(currentIndex);

@@ -16,7 +16,7 @@ class PlayerSquareData {
         this.type = SQUARE_TYPE_PLAYER;
         this.isBlack = isBlack; // black or white
         this.isIn5 = false;
-        this.isLastMove = false;
+        this.isCurrentMove = false;
     }
 }
 
@@ -51,12 +51,13 @@ function isOutOfBoard(row, column) {
     return row < 0 || row >= ROW_COUNT || column < 0 || column >= COLUMN_COUNT;
 }
 
-function isEmpty(squareData) {
-    return squareData.type === SQUARE_TYPE_EMPTY;
+// is a shown empty square (not virtual or out of board)
+function isEmptyAndNotVirtual(squareData) {
+    return squareData.type === SQUARE_TYPE_EMPTY && !squareData.isVirtual;
 }
 
 function isWarning(squareData) {
-    return isEmpty(squareData) && squareData.showWarning;
+    return isEmptyAndNotVirtual(squareData) && squareData.showWarning;
 }
 
 function isSquareMarkedByPlayer(squareData) {
@@ -67,8 +68,8 @@ function isIn5(squareData) {
     return isSquareMarkedByPlayer(squareData) && squareData.isIn5;
 }
 
-function isLastMove(squareData) {
-    return isSquareMarkedByPlayer(squareData) && squareData.isLastMove;
+function isCurrentMove(squareData) {
+    return isSquareMarkedByPlayer(squareData) && squareData.isCurrentMove;
 }
 
 function Square({ squareData, onSquareClick }) {
@@ -78,7 +79,7 @@ function Square({ squareData, onSquareClick }) {
         className = "warning";
     } else if (isIn5(squareData)) {
         className = "win";
-    } else if (isLastMove(squareData)) {
+    } else if (isCurrentMove(squareData)) {
         className = "last-move";
     }
 
@@ -170,13 +171,18 @@ function calculateWinner(squares) {
 }
 
 function checkInLine(squares, currentIndex, indexCalculate, patterns) {
+    console.log("checkInLine", squares[currentIndex]);
     function getNthInLine(n) {
-        return squares[indexCalculate(currentIndex, n)];
+        console.log("getNthInLine", getCoordinate(indexCalculate(currentIndex, n)));
+        const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
+        return isOutOfBoard(row, column)
+            ? new EmptySquareData(true) // virtual
+            : squares[indexCalculate(currentIndex, n)];
     }
 
     function playerMarkersMatchPattern(playerIndexPattern) {
         const first = getNthInLine(playerIndexPattern[0]);
-        if (!isSquareMarkedByPlayer(first)) return false;
+        console.log("playerMarkersMatchPattern first", first);
         for (let i = 1; i < playerIndexPattern.length; i++) {
             if (!playerSquareAndEquals(first, getNthInLine(playerIndexPattern[i]))) return false;
         }
@@ -185,7 +191,7 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
 
     function emptySquaresMatchPattern(emptyIndexPattern) {
         for (let i = 0; i < emptyIndexPattern.length; i++) {
-            if (!isEmpty(getNthInLine(emptyIndexPattern[i]))) return false;
+            if (!isEmptyAndNotVirtual(getNthInLine(emptyIndexPattern[i]))) return false;
         }
         return true;
     }
@@ -208,20 +214,53 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
 }
 
 const THREE_IN_LINE_PATTERNS = [
+    // OXXXO
     {
-        playerIndexes: [1, 3, 4],
-        emptyIndexes: [0, 2, 5],
-        warningIndexes: [0, 2, 5]
+        playerIndexes: [0, 1, 2],
+        emptyIndexes: [-1, 3],
+        warningIndexes: [-1, 3]
     },
     {
-        playerIndexes: [1, 2, 4],
-        emptyIndexes: [0, 3, 5],
-        warningIndexes: [0, 3, 5]
+        playerIndexes: [-1, 0, 1],
+        emptyIndexes: [-2, 2],
+        warningIndexes: [-2, 2]
     },
     {
-        playerIndexes: [1, 2, 3],
-        emptyIndexes: [0, 4],
-        warningIndexes: [0, 4]
+        playerIndexes: [-2, -1, 0],
+        emptyIndexes: [-3, 1],
+        warningIndexes: [-3, 1]
+    },
+    // OXOXXO
+    {
+        playerIndexes: [0, 2, 3],
+        emptyIndexes: [-1, 1, 4],
+        warningIndexes: [-1, 1, 4]
+    },
+    {
+        playerIndexes: [-2, 0, 1],
+        emptyIndexes: [-3, -1, 2],
+        warningIndexes: [-3, -1, 2]
+    },
+    {
+        playerIndexes: [-3, -1, 0],
+        emptyIndexes: [-4, -2, 1],
+        warningIndexes: [-4, -2, 1]
+    },
+    // OXXOXO
+    {
+        playerIndexes: [0, 1, 3],
+        emptyIndexes: [-1, 2, 4],
+        warningIndexes: [-1, 2, 4]
+    },
+    {
+        playerIndexes: [-1, 0, 2],
+        emptyIndexes: [-2, 1, 3],
+        warningIndexes: [-2, 1, 3]
+    },
+    {
+        playerIndexes: [-3, -2, 0],
+        emptyIndexes: [-4, -1, 1],
+        warningIndexes: [-4, -1, 1]
     }
 ];
 
@@ -229,12 +268,13 @@ function check3InLine(squares, currentIndex, indexCalculate) {
     checkInLine(squares, currentIndex, indexCalculate, THREE_IN_LINE_PATTERNS);
 }
 
-function mark3InLineWarningsSubScope(squares, currentIndex) {
+function mark3InLineWarnings4Directions(squares, currentIndex) {
+    console.log("mark3InLineWarnings4Directions", currentIndex);
     const indexCalculators = [
         (current, n) => current + n,
         (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
         (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + 5 + n * (VIRTUAL_COLUMN_COUNT - 1)
+        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
     ];
     for (let i = 0; i < indexCalculators.length; i++) {
         const winner = check3InLine(squares, currentIndex, indexCalculators[i]);
@@ -300,23 +340,16 @@ function clearWarnings(squares) {
     }
 }
 
-function markWarnings(squares, lastMove) {
+function markWarnings(squares, currentMove) {
     clearWarnings(squares);
-    const [row, column] = getCoordinate(lastMove);
-    for (let i = row - 5; i <= row + 5; i++) {
-        for (let j = column - 5; j <= column + 5; j++) {
-            if (isOutOfBoard(i, j)) continue;
-            let current = getIndex(i, j);
-            mark3InLineWarningsSubScope(squares, current);
-            mark4InLineWarningsSubScope(squares, current);
-        }
-    }
+    mark3InLineWarnings4Directions(squares, currentMove);
+    mark4InLineWarningsSubScope(squares, currentMove);
 }
 
 export default function Board() {
     const [isNextBlack, setNextBlack] = useState(true);
     const [squares, setSquares] = useState(INITIAL_SQAURES);
-    const [lastMove, setLastMove] = useState(null);
+    const [currentMove, setCurrentMove] = useState(null);
     const [winner, setWinner] = useState(null);
     const [history, setHistory] = useState([]);
 
@@ -324,34 +357,40 @@ export default function Board() {
         setNextBlack(!isNextBlack);
     }
 
-    function handleClick(i) {
-        if (winner || isSquareMarkedByPlayer(squares[i])) {
+    function handleClick(currentIndex) {
+        if (winner || isSquareMarkedByPlayer(squares[currentIndex])) {
             return;
         }
-        const nextSquares = squares.slice();
-        nextSquares[i] = new PlayerSquareData(isNextBlack);
-        nextSquares[i].isLastMove = true;
+        const currentSquares = squares.slice();
+        currentSquares[currentIndex] = new PlayerSquareData(isNextBlack);
+        currentSquares[currentIndex].isCurrentMove = true;
+        const lastMove = currentMove;
         if (lastMove) {
-            nextSquares[lastMove].isLastMove = false;
+            currentSquares[lastMove].isCurrentMove = false;
         }
-        markWarnings(nextSquares, lastMove);
-        setSquares(nextSquares);
-        setLastMove(i);
-        history.unshift([squares, lastMove]);
+        console.log("handleClick" + currentIndex);
+        markWarnings(currentSquares, currentIndex);
+        setSquares(currentSquares);
+        setCurrentMove(currentIndex);
+        history.unshift([squares, currentMove]);
         if (history.length > HISTORY_COUNT) {
             history.pop();
         }
         setHistory(history);
         takeTurn();
-        setWinner(calculateWinner(nextSquares));
+        setWinner(calculateWinner(currentSquares));
     }
 
     function rollbackStep() {
         if (history.length > 0) {
-            const [nextSquares, lastMove] = history.shift();
-            markWarnings(nextSquares, lastMove);
-            setLastMove(lastMove);
-            setSquares(nextSquares);
+            const [lastSquares, lastMove] = history.shift();
+            if (lastMove) {
+                lastSquares[lastMove].isCurrentMove = true;
+            }
+            lastSquares[currentMove].isCurrentMove = false;
+            markWarnings(lastSquares, lastMove);
+            setCurrentMove(lastMove);
+            setSquares(lastSquares);
             setHistory(history);
             takeTurn();
         }

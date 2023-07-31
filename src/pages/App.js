@@ -11,6 +11,139 @@ const HISTORY_COUNT = 9;
 const SQUARE_TYPE_PLAYER = "PLAYER";
 const SQUARE_TYPE_EMPTY = "EMPTY";
 
+const WARNING_PATTERNS = [
+    // 3 in line
+    // OXXXO
+    {
+        playerIndexes: [0, 1, 2],
+        emptyIndexes: [-1, 3]
+    },
+    {
+        playerIndexes: [-1, 0, 1],
+        emptyIndexes: [-2, 2]
+    },
+    {
+        playerIndexes: [-2, -1, 0],
+        emptyIndexes: [-3, 1]
+    },
+    // OXOXXO
+    {
+        playerIndexes: [0, 2, 3],
+        emptyIndexes: [-1, 1, 4]
+    },
+    {
+        playerIndexes: [-2, 0, 1],
+        emptyIndexes: [-3, -1, 2]
+    },
+    {
+        playerIndexes: [-3, -1, 0],
+        emptyIndexes: [-4, -2, 1]
+    },
+    // OXXOXO
+    {
+        playerIndexes: [0, 1, 3],
+        emptyIndexes: [-1, 2, 4]
+    },
+    {
+        playerIndexes: [-1, 0, 2],
+        emptyIndexes: [-2, 1, 3]
+    },
+    {
+        playerIndexes: [-3, -2, 0],
+        emptyIndexes: [-4, -1, 1]
+    },
+
+    // 4 in line
+    // OXXXX
+    {
+        playerIndexes: [0, 1, 2, 3],
+        emptyIndexes: [-1]
+    },
+    {
+        playerIndexes: [-1, 0, 1, 2],
+        emptyIndexes: [-2]
+    },
+    {
+        playerIndexes: [-2, -1, 0, 1],
+        emptyIndexes: [-3]
+    },
+    {
+        playerIndexes: [-3, -2, -1, 0],
+        emptyIndexes: [-4]
+    },
+    // XOXXX
+    {
+        playerIndexes: [0, 2, 3, 4],
+        emptyIndexes: [1]
+    },
+    {
+        playerIndexes: [-2, 0, 1, 2],
+        emptyIndexes: [-1],
+        warningIndexes: [-1]
+    },
+    {
+        playerIndexes: [-3, -1, 0, 1],
+        emptyIndexes: [-2]
+    },
+    {
+        playerIndexes: [-4, -2, -1, 0],
+        emptyIndexes: [-3]
+    },
+    // XXOXX
+    {
+        playerIndexes: [0, 1, 3, 4],
+        emptyIndexes: [2]
+    },
+    {
+        playerIndexes: [-1, 0, 2, 3],
+        emptyIndexes: [1],
+        warningIndexes: [1]
+    },
+    {
+        playerIndexes: [-3, -2, 0, 1],
+        emptyIndexes: [-1]
+    },
+    {
+        playerIndexes: [-4, -3, -1, 0],
+        emptyIndexes: [-2]
+    },
+    // XXXOX
+    {
+        playerIndexes: [0, 1, 2, 4],
+        emptyIndexes: [3]
+    },
+    {
+        playerIndexes: [-1, 0, 1, 3],
+        emptyIndexes: [2],
+        warningIndexes: [2]
+    },
+    {
+        playerIndexes: [-2, -1, 0, 2],
+        emptyIndexes: [1]
+    },
+    {
+        playerIndexes: [-4, -3, -2, 0],
+        emptyIndexes: [-1]
+    },
+    // XXXXO
+    {
+        playerIndexes: [0, 1, 2, 3],
+        emptyIndexes: [4]
+    },
+    {
+        playerIndexes: [-1, 0, 1, 2],
+        emptyIndexes: [3]
+    },
+    {
+        playerIndexes: [-2, -1, 0, 1],
+        emptyIndexes: [2]
+    },
+    {
+        playerIndexes: [-3, -2, -1, 0],
+        emptyIndexes: [1]
+    }
+];
+
 class PlayerSquareData {
     constructor(isBlack) {
         this.type = SQUARE_TYPE_PLAYER;
@@ -170,7 +303,7 @@ function calculateWinner(squares) {
     return null;
 }
 
-function checkInLine(squares, currentIndex, indexCalculate, patterns) {
+function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patterns) {
     function getNthInLine(n) {
         const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
         return isOutOfBoard(row, column)
@@ -209,175 +342,6 @@ function checkInLine(squares, currentIndex, indexCalculate, patterns) {
     }
 }
 
-const THREE_IN_LINE_PATTERNS = [
-    // OXXXO
-    {
-        playerIndexes: [0, 1, 2],
-        emptyIndexes: [-1, 3]
-    },
-    {
-        playerIndexes: [-1, 0, 1],
-        emptyIndexes: [-2, 2]
-    },
-    {
-        playerIndexes: [-2, -1, 0],
-        emptyIndexes: [-3, 1]
-    },
-    // OXOXXO
-    {
-        playerIndexes: [0, 2, 3],
-        emptyIndexes: [-1, 1, 4]
-    },
-    {
-        playerIndexes: [-2, 0, 1],
-        emptyIndexes: [-3, -1, 2]
-    },
-    {
-        playerIndexes: [-3, -1, 0],
-        emptyIndexes: [-4, -2, 1]
-    },
-    // OXXOXO
-    {
-        playerIndexes: [0, 1, 3],
-        emptyIndexes: [-1, 2, 4]
-    },
-    {
-        playerIndexes: [-1, 0, 2],
-        emptyIndexes: [-2, 1, 3]
-    },
-    {
-        playerIndexes: [-3, -2, 0],
-        emptyIndexes: [-4, -1, 1]
-    }
-];
-
-function check3InLine(squares, currentIndex, indexCalculate) {
-    checkInLine(squares, currentIndex, indexCalculate, THREE_IN_LINE_PATTERNS);
-}
-
-function mark3InLineWarnings4Directions(squares, currentIndex) {
-    const indexCalculators = [
-        (current, n) => current + n,
-        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
-    ];
-    for (let i = 0; i < indexCalculators.length; i++) {
-        const winner = check3InLine(squares, currentIndex, indexCalculators[i]);
-        if (winner) return winner;
-    }
-    return null;
-}
-
-const FOUR_IN_LINE_PATTERNS = [
-    // OXXXX
-    {
-        playerIndexes: [0, 1, 2, 3],
-        emptyIndexes: [-1]
-    },
-    {
-        playerIndexes: [-1, 0, 1, 2],
-        emptyIndexes: [-2]
-    },
-    {
-        playerIndexes: [-2, -1, 0, 1],
-        emptyIndexes: [-3]
-    },
-    {
-        playerIndexes: [-3, -2, -1, 0],
-        emptyIndexes: [-4]
-    },
-    // XOXXX
-    {
-        playerIndexes: [0, 2, 3, 4],
-        emptyIndexes: [1]
-    },
-    {
-        playerIndexes: [-2, 0, 1, 2],
-        emptyIndexes: [-1],
-        warningIndexes: [-1]
-    },
-    {
-        playerIndexes: [-3, -1, 0, 1],
-        emptyIndexes: [-2]
-    },
-    {
-        playerIndexes: [-4, -2, -1, 0],
-        emptyIndexes: [-3]
-    },
-    // XXOXX
-    {
-        playerIndexes: [0, 1, 3, 4],
-        emptyIndexes: [2]
-    },
-    {
-        playerIndexes: [-1, 0, 2, 3],
-        emptyIndexes: [1],
-        warningIndexes: [1]
-    },
-    {
-        playerIndexes: [-3, -2, 0, 1],
-        emptyIndexes: [-1]
-    },
-    {
-        playerIndexes: [-4, -3, -1, 0],
-        emptyIndexes: [-2]
-    },
-    // XXXOX
-    {
-        playerIndexes: [0, 1, 2, 4],
-        emptyIndexes: [3]
-    },
-    {
-        playerIndexes: [-1, 0, 1, 3],
-        emptyIndexes: [2],
-        warningIndexes: [2]
-    },
-    {
-        playerIndexes: [-2, -1, 0, 2],
-        emptyIndexes: [1]
-    },
-    {
-        playerIndexes: [-4, -3, -2, 0],
-        emptyIndexes: [-1]
-    },
-    // XXXXO
-    {
-        playerIndexes: [0, 1, 2, 3],
-        emptyIndexes: [4]
-    },
-    {
-        playerIndexes: [-1, 0, 1, 2],
-        emptyIndexes: [3]
-    },
-    {
-        playerIndexes: [-2, -1, 0, 1],
-        emptyIndexes: [2]
-    },
-    {
-        playerIndexes: [-3, -2, -1, 0],
-        emptyIndexes: [1]
-    }
-];
-
-function check4InLine(squares, currentIndex, indexCalculate) {
-    checkInLine(squares, currentIndex, indexCalculate, FOUR_IN_LINE_PATTERNS);
-}
-
-function mark4InLineWarningsSubScope(squares, currentIndex) {
-    const indexCalculators = [
-        (current, n) => current + n,
-        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
-    ];
-    for (let i = 0; i < indexCalculators.length; i++) {
-        const winner = check4InLine(squares, currentIndex, indexCalculators[i]);
-        if (winner) return winner;
-    }
-    return null;
-}
-
 function clearWarnings(squares) {
     for (let i = 0; i < ROW_COUNT; i++) {
         for (let j = 0; j < COLUMN_COUNT; j++) {
@@ -391,8 +355,13 @@ function clearWarnings(squares) {
 
 function markWarnings(squares, currentMove) {
     clearWarnings(squares);
-    mark3InLineWarnings4Directions(squares, currentMove);
-    mark4InLineWarningsSubScope(squares, currentMove);
+
+    [
+        (current, n) => current + n,
+        (current, n) => current + VIRTUAL_COLUMN_COUNT * n,
+        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
+        (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
+    ].forEach((indexCalculator) => checkAndShowWarningsInLine(squares, currentMove, indexCalculator, WARNING_PATTERNS));
 }
 
 export default function Board() {

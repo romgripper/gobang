@@ -1,20 +1,11 @@
-import { isSquareMarkedByPlayer, isWarning, getPlayer } from "./SquareData";
-function isIn5(squareData) {
-    return isSquareMarkedByPlayer(squareData) && squareData.isIn5;
-}
-
-function isCurrentMove(squareData) {
-    return isSquareMarkedByPlayer(squareData) && squareData.isCurrentMove;
-}
-
-function Square({ squareData, onSquareClick }) {
+function Square({ data, onSquareClick }) {
     let className = "square";
-    const value = isSquareMarkedByPlayer(squareData) ? getPlayer(squareData.isBlack) : "";
-    if (isWarning(squareData)) {
+    const value = data.getPlayer();
+    if (data.showWarning()) {
         className = "warning";
-    } else if (isIn5(squareData)) {
+    } else if (data.isIn5()) {
         className = "win";
-    } else if (isCurrentMove(squareData)) {
+    } else if (data.isCurrentMove()) {
         className = "last-move";
     }
 
@@ -31,7 +22,7 @@ export default function Row({ squares, startIndex, columnCount, handleClick }) {
         const squareIndex = startIndex + i;
         columns.push(
             <Square
-                squareData={squares[squareIndex]}
+                data={squares[squareIndex]}
                 key={"square" + squareIndex}
                 onSquareClick={() => handleClick(squareIndex)}
             />

@@ -1,14 +1,7 @@
 import { useState } from "react";
 
 import Row from "./Row";
-import {
-    PlayerSquareData,
-    EmptySquareData,
-    isSquareMarkedByPlayer,
-    isEmptyAndNotVirtual,
-    isWarning,
-    getPlayer
-} from "./SquareData";
+import { PlayerSquare, EmptySquare, VirtualSquare, getPlayer } from "./SquareData";
 
 const ROW_COUNT = 19;
 const COLUMN_COUNT = 19;
@@ -177,7 +170,7 @@ function getCoordinate(index) {
 let INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
 for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
     for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
-        INITIAL_SQAURES[getIndex(i, j)] = new EmptySquareData(isOutOfBoard(i, j));
+        INITIAL_SQAURES[getIndex(i, j)] = isOutOfBoard(i, j) ? new VirtualSquare() : new EmptySquare();
     }
 }
 
@@ -197,7 +190,7 @@ function check5Inline(squares, currentIndex, indexCalculate) {
     function getNthInLine(n) {
         const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
         return isOutOfBoard(row, column)
-            ? new EmptySquareData(true) // virtual
+            ? new VirtualSquare() // virtual
             : squares[indexCalculate(currentIndex, n)];
     }
 
@@ -211,7 +204,7 @@ function check5Inline(squares, currentIndex, indexCalculate) {
 
     function mark5InLine(indexPattern) {
         for (let i = 0; i < indexPattern.length; i++) {
-            getNthInLine(indexPattern[i]).isIn5 = true;
+            getNthInLine(indexPattern[i]).setIn5();
         }
         return true;
     }
@@ -225,12 +218,8 @@ function check5Inline(squares, currentIndex, indexCalculate) {
     return false;
 }
 
-function playerSquareAndEquals(squareData1, squareData2) {
-    return (
-        isSquareMarkedByPlayer(squareData1) &&
-        isSquareMarkedByPlayer(squareData2) &&
-        squareData1.isBlack === squareData2.isBlack
-    );
+function playerSquareAndEquals(square1, square2) {
+    return square1.isMarkedByPlayer() && square2.isMarkedByPlayer() && square1.isBlack() === square2.isBlack();
 }
 
 function calculateWinner(squares, currentMove) {
@@ -247,7 +236,7 @@ function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patte
     function getNthInLine(n) {
         const [row, column] = getCoordinate(indexCalculate(currentIndex, n));
         return isOutOfBoard(row, column)
-            ? new EmptySquareData(true) // virtual
+            ? new VirtualSquare() // virtual
             : squares[indexCalculate(currentIndex, n)];
     }
 
@@ -261,14 +250,14 @@ function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patte
 
     function emptySquaresMatchPattern(indexPattern) {
         for (let i = 0; i < indexPattern.length; i++) {
-            if (!isEmptyAndNotVirtual(getNthInLine(indexPattern[i]))) return false;
+            if (!getNthInLine(indexPattern[i]).isEmpty()) return false;
         }
         return true;
     }
 
     function markWarningsInLine(warningIndexPattern) {
         for (let i = 0; i < warningIndexPattern.length; i++) {
-            getNthInLine(warningIndexPattern[i]).showWarning = true;
+            getNthInLine(warningIndexPattern[i]).setShowWarning(true);
         }
     }
 
@@ -286,8 +275,8 @@ function clearWarnings(squares) {
     for (let i = 0; i < ROW_COUNT; i++) {
         for (let j = 0; j < COLUMN_COUNT; j++) {
             let current = getIndex(i, j);
-            if (isWarning(squares[current])) {
-                squares[current].showWarning = false;
+            if (squares[current].showWarning()) {
+                squares[current].setShowWarning(false);
             }
         }
     }
@@ -313,15 +302,15 @@ export default function Board() {
     }
 
     function handleClick(currentIndex) {
-        if (winner || isSquareMarkedByPlayer(squares[currentIndex])) {
+        if (winner || squares[currentIndex].isMarkedByPlayer()) {
             return;
         }
         const currentSquares = squares.slice();
-        currentSquares[currentIndex] = new PlayerSquareData(isNextBlack);
-        currentSquares[currentIndex].isCurrentMove = true;
+        currentSquares[currentIndex] = new PlayerSquare(isNextBlack);
+        currentSquares[currentIndex].setCurrentMove(true);
         const lastMove = currentMove;
         if (lastMove) {
-            currentSquares[lastMove].isCurrentMove = false;
+            currentSquares[lastMove].setCurrentMove(false);
         }
         markWarnings(currentSquares, currentIndex);
         setSquares(currentSquares);
@@ -339,9 +328,9 @@ export default function Board() {
         if (history.length > 0) {
             const [lastSquares, lastMove] = history.shift();
             if (lastMove) {
-                lastSquares[lastMove].isCurrentMove = true;
+                lastSquares[lastMove].setCurrentMove(true);
             }
-            lastSquares[currentMove].isCurrentMove = false;
+            lastSquares[currentMove].setCurrentMove(false);
             markWarnings(lastSquares, lastMove);
             setCurrentMove(lastMove);
             setSquares(lastSquares);

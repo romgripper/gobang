@@ -1,34 +1,93 @@
-const SQUARE_TYPE_PLAYER = "PLAYER";
-const SQUARE_TYPE_EMPTY = "EMPTY";
+export class PlayerSquare {
+    #isBlack;
+    #isIn5 = false;
+    #isCurrentMove = false;
 
-export class PlayerSquareData {
     constructor(isBlack) {
-        this.type = SQUARE_TYPE_PLAYER;
-        this.isBlack = isBlack; // black or white
-        this.isIn5 = false;
-        this.isCurrentMove = false;
+        this.#isBlack = isBlack; // black or white
+    }
+
+    isMarkedByPlayer() {
+        return true;
+    }
+
+    isEmpty() {
+        return false;
+    }
+
+    showWarning() {
+        return false;
+    }
+
+    isBlack() {
+        return this.#isBlack;
+    }
+
+    getPlayer() {
+        return this.#isBlack ? "X" : "O";
+    }
+
+    isIn5() {
+        return this.#isIn5;
+    }
+
+    setIn5() {
+        this.#isIn5 = true;
+    }
+
+    isCurrentMove() {
+        return this.#isCurrentMove;
+    }
+
+    setCurrentMove(isCurrentMove) {
+        this.#isCurrentMove = isCurrentMove;
     }
 }
 
-export class EmptySquareData {
-    constructor(isVirtual) {
-        this.type = SQUARE_TYPE_EMPTY;
-        this.isVirtual = isVirtual;
-        this.showWarning = false;
+export class EmptySquare {
+    #showWarning = false;
+
+    isMarkedByPlayer() {
+        return false;
+    }
+
+    isEmpty() {
+        return true;
+    }
+
+    showWarning() {
+        return this.#showWarning;
+    }
+
+    setShowWarning(showWarning) {
+        this.#showWarning = showWarning;
+    }
+
+    isCurrentMove() {
+        return false;
+    }
+
+    getPlayer() {
+        return null;
+    }
+
+    isIn5() {
+        return false;
     }
 }
 
-// is a shown empty square (not virtual or out of board)
-export function isEmptyAndNotVirtual(squareData) {
-    return squareData.type === SQUARE_TYPE_EMPTY && !squareData.isVirtual;
-}
+export class VirtualSquare {
+    isMarkedByPlayer() {
+        return false;
+    }
 
-export function isWarning(squareData) {
-    return isEmptyAndNotVirtual(squareData) && squareData.showWarning;
-}
+    isEmpty() {
+        return false;
+    }
 
-export function isSquareMarkedByPlayer(squareData) {
-    return squareData.type === SQUARE_TYPE_PLAYER;
+    showWarning() {
+        return false;
+    }
 }
 
 export function getPlayer(isBlack) {

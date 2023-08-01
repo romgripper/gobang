@@ -4,6 +4,7 @@ import Row from "./Row";
 import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
 import calculateWinner from "./WinnerChecker";
+import { markWarnings } from "./WarningMarker";
 
 const MAX_HISTORY_COUNT = 9;
 
@@ -46,7 +47,7 @@ export default function Board() {
         if (currentWinner) {
             return;
         }
-        Gobang.markWarnings(nextSquares, index);
+        markWarnings(nextSquares, index);
         history.unshift([squares, latestMove]);
         if (history.length > MAX_HISTORY_COUNT) {
             history.pop();

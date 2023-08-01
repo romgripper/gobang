@@ -2,11 +2,11 @@ function Square({ data, onSquareClick }) {
     let className = "square";
     const value = data.getPlayer();
     if (data.showWarning()) {
-        className = "warning";
+        className += " warning";
     } else if (data.isIn5()) {
-        className = "win";
+        className += " win";
     } else if (data.isLatestMove()) {
-        className = "last-move";
+        className += " last-move";
     }
 
     return (

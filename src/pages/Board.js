@@ -9,7 +9,7 @@ const COLUMN_COUNT = 19;
 const VIRTUAL_ROW_COUNT = ROW_COUNT + 4;
 const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
 
-const HISTORY_COUNT = 9;
+const MAX_HISTORY_COUNT = 9;
 
 const INDEX_CALCULATORS = [
     (current, n) => current + n,
@@ -303,15 +303,15 @@ export default function Board() {
         if (winner || squares[currentIndex].isMarkedByPlayer()) {
             return;
         }
-        const currentSquares = squares.slice();
-        clearWarnings(squares);
+        const currentSquares = squares.map((square) => square.clone());
+        clearWarnings(currentSquares);
 
         currentSquares[currentIndex] = new PlayerSquare(isNextBlack);
-
         currentSquares[currentIndex].setCurrentMove(true);
-        const lastMove = currentMove;
-        if (lastMove) {
-            currentSquares[lastMove].setCurrentMove(false);
+
+        if (currentMove) {
+            // currentMove is actually last move
+            currentSquares[currentMove].setCurrentMove(false);
         }
         setSquares(currentSquares);
         setCurrentMove(currentIndex);
@@ -323,7 +323,7 @@ export default function Board() {
         }
         markWarnings(currentSquares, currentIndex);
         history.unshift([squares, currentMove]);
-        if (history.length > HISTORY_COUNT) {
+        if (history.length > MAX_HISTORY_COUNT) {
             history.pop();
         }
         setHistory(history);
@@ -333,11 +333,6 @@ export default function Board() {
     function rollbackStep() {
         if (history.length > 0) {
             const [lastSquares, lastMove] = history.shift();
-            if (lastMove) {
-                lastSquares[lastMove].setCurrentMove(true);
-            }
-            clearWarnings(lastSquares);
-            markWarnings(lastSquares, lastMove);
             setCurrentMove(lastMove);
             setSquares(lastSquares);
             setHistory(history);

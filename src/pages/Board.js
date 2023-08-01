@@ -48,26 +48,32 @@ export default function Board() {
             return;
         }
         markWarnings(nextSquares, index);
-        history.unshift([squares, latestMove]);
-        if (history.length > MAX_HISTORY_COUNT) {
-            history.pop();
-        }
-        setHistory(history);
+        updateHistory();
         takeTurn();
+    }
+
+    function updateHistory() {
+        const nextHistory = history.slice();
+        nextHistory.unshift([squares, latestMove]);
+        if (nextHistory.length > MAX_HISTORY_COUNT) {
+            nextHistory.pop();
+        }
+        setHistory(nextHistory);
     }
 
     function rollbackStep() {
         if (history.length > 0) {
-            const [lastSquares, lastMove] = history.shift();
+            const nextHistory = history.slice();
+            const [lastSquares, lastMove] = nextHistory.shift();
             setLatestMove(lastMove);
             setSquares(lastSquares);
-            setHistory(history);
+            setHistory(nextHistory);
             takeTurn();
         }
     }
 
     return (
-        <>
+        <div className="center">
             <div className="status">
                 {(winner ? "Winner: " + squares[latestMove].getPlayer() : "Next player: " + nextSquare.getPlayer()) +
                     "; History: " +
@@ -88,6 +94,6 @@ export default function Board() {
                     handleClick={handleClick}
                 />
             ))}
-        </>
+        </div>
     );
 }

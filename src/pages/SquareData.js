@@ -102,8 +102,4 @@ export class VirtualSquare {
     showWarning() {
         return false;
     }
-
-    clone() {
-        return new VirtualSquare();
-    }
 }

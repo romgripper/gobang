@@ -3,14 +3,15 @@ import { EmptySquare, VirtualSquare } from "./SquareData";
 const ROW_COUNT = 19;
 const COLUMN_COUNT = 19;
 
-const VIRTUAL_ROW_COUNT = ROW_COUNT + 4;
-const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
+const INITIAL_SQAURES = Array(ROW_COUNT * COLUMN_COUNT)
+    .fill(null)
+    .map(() => new EmptySquare());
 
 const INDEX_CALCULATORS = [
     (current, n) => current + n,
-    (current, n) => current + n * VIRTUAL_COLUMN_COUNT,
-    (current, n) => current + n * (VIRTUAL_COLUMN_COUNT + 1),
-    (current, n) => current + n * (VIRTUAL_COLUMN_COUNT - 1)
+    (current, n) => current + n * COLUMN_COUNT,
+    (current, n) => current + n * (COLUMN_COUNT + 1),
+    (current, n) => current + n * (COLUMN_COUNT - 1)
 ];
 
 const WINNING_PATTERNS = [
@@ -155,19 +156,11 @@ const WARNING_PATTERNS = [
 ];
 
 function getIndex(row, col) {
-    return row * VIRTUAL_COLUMN_COUNT + col;
+    return row * COLUMN_COUNT + col;
 }
 
 function getCoordinate(index) {
-    return [Math.floor(index / VIRTUAL_COLUMN_COUNT), index % VIRTUAL_COLUMN_COUNT];
-}
-
-const INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
-
-for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
-    for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
-        INITIAL_SQAURES[getIndex(i, j)] = isOutOfBoard(i, j) ? new VirtualSquare() : new EmptySquare();
-    }
+    return [Math.floor(index / COLUMN_COUNT), index % COLUMN_COUNT];
 }
 
 function isOutOfBoard(row, column) {
@@ -279,8 +272,6 @@ function markWarnings(squares, latestMove) {
 const Gobang = {
     ROW_COUNT,
     COLUMN_COUNT,
-    VIRTUAL_ROW_COUNT,
-    VIRTUAL_COLUMN_COUNT,
     INITIAL_SQAURES,
     calculateWinner,
     clearWarnings,

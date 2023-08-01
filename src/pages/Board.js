@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Row from "./Row";
-import { PlayerSquare, getPlayer } from "./SquareData";
+import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
 
 const MAX_HISTORY_COUNT = 9;
@@ -80,7 +80,7 @@ export default function Board() {
             {range(Gobang.ROW_COUNT).map((row) => (
                 <Row
                     squares={squares}
-                    startIndex={row * Gobang.VIRTUAL_COLUMN_COUNT}
+                    startIndex={row * Gobang.COLUMN_COUNT}
                     key={"row" + row}
                     columnCount={Gobang.COLUMN_COUNT}
                     handleClick={handleClick}

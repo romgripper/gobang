@@ -3,6 +3,7 @@ import { useState } from "react";
 import Row from "./Row";
 import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
+import calculateWinner from "./WinnerChecker";
 
 const MAX_HISTORY_COUNT = 9;
 
@@ -40,7 +41,7 @@ export default function Board() {
         setSquares(nextSquares);
         setLatestMove(index);
 
-        const currentWinner = Gobang.calculateWinner(nextSquares, index);
+        const currentWinner = calculateWinner(nextSquares, index);
         setWinner(currentWinner);
         if (currentWinner) {
             return;

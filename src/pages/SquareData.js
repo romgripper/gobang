@@ -21,6 +21,8 @@ export class PlayerSquare {
         return false;
     }
 
+    setShowWarning() {}
+
     isBlack() {
         return this.#isBlack;
     }

@@ -5,7 +5,7 @@ function Square({ data, onSquareClick }) {
         className = "warning";
     } else if (data.isIn5()) {
         className = "win";
-    } else if (data.isCurrentMove()) {
+    } else if (data.isLatestMove()) {
         className = "last-move";
     }
 

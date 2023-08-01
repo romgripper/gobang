@@ -1,12 +1,12 @@
 export class PlayerSquare {
     #isBlack;
     #isIn5 = false;
-    #isCurrentMove = false;
+    #isLatestMove = false;
 
-    constructor(isBlack, isIn5 = false, isCurrentMove = false) {
+    constructor(isBlack, isIn5 = false, isLatestMove = false) {
         this.#isBlack = isBlack; // black or white
         this.#isIn5 = isIn5;
-        this.#isCurrentMove = isCurrentMove;
+        this.#isLatestMove = isLatestMove;
     }
 
     isMarkedByPlayer() {
@@ -37,16 +37,16 @@ export class PlayerSquare {
         this.#isIn5 = true;
     }
 
-    isCurrentMove() {
-        return this.#isCurrentMove;
+    isLatestMove() {
+        return this.#isLatestMove;
     }
 
-    setCurrentMove(isCurrentMove) {
-        this.#isCurrentMove = isCurrentMove;
+    setLatestMove(isLatestMove) {
+        this.#isLatestMove = isLatestMove;
     }
 
     clone() {
-        return new PlayerSquare(this.#isBlack, this.#isIn5, this.#isCurrentMove);
+        return new PlayerSquare(this.#isBlack, this.#isIn5, this.#isLatestMove);
     }
 }
 
@@ -73,7 +73,7 @@ export class EmptySquare {
         this.#showWarning = showWarning;
     }
 
-    isCurrentMove() {
+    isLatestMove() {
         return false;
     }
 

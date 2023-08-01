@@ -1,10 +1,10 @@
 import { EmptySquare, VirtualSquare } from "./SquareData";
 
-export const ROW_COUNT = 19;
-export const COLUMN_COUNT = 19;
+const ROW_COUNT = 19;
+const COLUMN_COUNT = 19;
 
-export const VIRTUAL_ROW_COUNT = ROW_COUNT + 4;
-export const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
+const VIRTUAL_ROW_COUNT = ROW_COUNT + 4;
+const VIRTUAL_COLUMN_COUNT = COLUMN_COUNT + 4;
 
 const INDEX_CALCULATORS = [
     (current, n) => current + n,
@@ -162,15 +162,13 @@ function getCoordinate(index) {
     return [Math.floor(index / VIRTUAL_COLUMN_COUNT), index % VIRTUAL_COLUMN_COUNT];
 }
 
-const initialSquares = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
+const INITIAL_SQAURES = Array(VIRTUAL_ROW_COUNT * VIRTUAL_COLUMN_COUNT);
 
 for (let i = 0; i < VIRTUAL_ROW_COUNT; i++) {
     for (let j = 0; j < VIRTUAL_COLUMN_COUNT; j++) {
-        initialSquares[getIndex(i, j)] = isOutOfBoard(i, j) ? new VirtualSquare() : new EmptySquare();
+        INITIAL_SQAURES[getIndex(i, j)] = isOutOfBoard(i, j) ? new VirtualSquare() : new EmptySquare();
     }
 }
-
-export const INITIAL_SQAURES = initialSquares;
 
 function isOutOfBoard(row, column) {
     return row < 0 || row >= ROW_COUNT || column < 0 || column >= COLUMN_COUNT;
@@ -212,7 +210,7 @@ function playerSquareAndEquals(square1, square2) {
     return square1.isMarkedByPlayer() && square2.isMarkedByPlayer() && square1.isBlack() === square2.isBlack();
 }
 
-export function calculateWinner(squares, latestMove) {
+function calculateWinner(squares, latestMove) {
     for (let i = 0; i < INDEX_CALCULATORS.length; i++) {
         const winning = check5Inline(squares, latestMove, INDEX_CALCULATORS[i]);
         if (winning) {
@@ -261,7 +259,7 @@ function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patte
     }
 }
 
-export function clearWarnings(squares) {
+function clearWarnings(squares) {
     for (let i = 0; i < ROW_COUNT; i++) {
         for (let j = 0; j < COLUMN_COUNT; j++) {
             let current = getIndex(i, j);
@@ -272,8 +270,21 @@ export function clearWarnings(squares) {
     }
 }
 
-export function markWarnings(squares, latestMove) {
+function markWarnings(squares, latestMove) {
     INDEX_CALCULATORS.forEach((indexCalculator) =>
         checkAndShowWarningsInLine(squares, latestMove, indexCalculator, WARNING_PATTERNS)
     );
 }
+
+const Gobang = {
+    ROW_COUNT,
+    COLUMN_COUNT,
+    VIRTUAL_ROW_COUNT,
+    VIRTUAL_COLUMN_COUNT,
+    INITIAL_SQAURES,
+    calculateWinner,
+    clearWarnings,
+    markWarnings
+};
+
+export default Gobang;

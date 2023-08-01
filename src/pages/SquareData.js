@@ -107,7 +107,3 @@ export class VirtualSquare {
         return new VirtualSquare();
     }
 }
-
-export function getPlayer(isBlack) {
-    return isBlack ? "X" : "O";
-}

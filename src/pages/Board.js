@@ -2,15 +2,7 @@ import { useState } from "react";
 
 import Row from "./Row";
 import { PlayerSquare, getPlayer } from "./SquareData";
-import {
-    INITIAL_SQAURES,
-    ROW_COUNT,
-    COLUMN_COUNT,
-    VIRTUAL_COLUMN_COUNT,
-    calculateWinner,
-    markWarnings,
-    clearWarnings
-} from "./Gobang";
+import Gobang from "./Gobang";
 
 const MAX_HISTORY_COUNT = 9;
 
@@ -23,14 +15,14 @@ function range(size) {
 }
 
 export default function Board() {
-    const [isNextBlack, setNextBlack] = useState(true);
-    const [squares, setSquares] = useState(INITIAL_SQAURES);
+    const [nextSquare, setNextSquare] = useState(new PlayerSquare(true, false, true)); // black and last move
+    const [squares, setSquares] = useState(Gobang.INITIAL_SQAURES);
     const [latestMove, setLatestMove] = useState(null);
     const [winner, setWinner] = useState(null);
     const [history, setHistory] = useState([]);
 
     function takeTurn() {
-        setNextBlack(!isNextBlack);
+        setNextSquare(new PlayerSquare(!nextSquare.isBlack(), false, true));
     }
 
     function handleClick(index) {
@@ -38,10 +30,9 @@ export default function Board() {
             return;
         }
         const nextSquares = squares.map((square) => square.clone());
-        clearWarnings(nextSquares);
+        Gobang.clearWarnings(nextSquares);
 
-        nextSquares[index] = new PlayerSquare(isNextBlack);
-        nextSquares[index].setLatestMove(true);
+        nextSquares[index] = nextSquare;
 
         if (latestMove) {
             nextSquares[latestMove].setLatestMove(false);
@@ -49,12 +40,12 @@ export default function Board() {
         setSquares(nextSquares);
         setLatestMove(index);
 
-        const currentWinner = calculateWinner(nextSquares, index);
+        const currentWinner = Gobang.calculateWinner(nextSquares, index);
         setWinner(currentWinner);
         if (currentWinner) {
             return;
         }
-        markWarnings(nextSquares, index);
+        Gobang.markWarnings(nextSquares, index);
         history.unshift([squares, latestMove]);
         if (history.length > MAX_HISTORY_COUNT) {
             history.pop();
@@ -76,7 +67,7 @@ export default function Board() {
     return (
         <>
             <div className="status">
-                {(winner ? "Winner: " + getPlayer(winner.isBlack) : "Next player: " + getPlayer(isNextBlack)) +
+                {(winner ? "Winner: " + squares[latestMove].getPlayer() : "Next player: " + nextSquare.getPlayer()) +
                     "; History: " +
                     history.length}
 
@@ -86,12 +77,12 @@ export default function Board() {
                     </button>
                 )}
             </div>
-            {range(ROW_COUNT).map((row) => (
+            {range(Gobang.ROW_COUNT).map((row) => (
                 <Row
                     squares={squares}
-                    startIndex={row * VIRTUAL_COLUMN_COUNT}
+                    startIndex={row * Gobang.VIRTUAL_COLUMN_COUNT}
                     key={"row" + row}
-                    columnCount={COLUMN_COUNT}
+                    columnCount={Gobang.COLUMN_COUNT}
                     handleClick={handleClick}
                 />
             ))}

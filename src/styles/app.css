@@ -31,12 +31,12 @@
     vertical-align:middle;
   }
   .black{
-    background: url('/black.png') no-repeat;
+    background: url('/black-with-grid.png') no-repeat;
     background-size: contain;
   }
 
   .white {
-    background: url('/white.png') no-repeat;
+    background: url('/white-with-grid.png') no-repeat;
     background-size: contain;
   }
   

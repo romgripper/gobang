@@ -133,15 +133,19 @@ const WARNING_PATTERNS = [
     }
 ];
 
-export function markWarnings(squares, latestMove) {
-    Gobang.INDEX_CALCULATORS.forEach((indexCalculator) =>
-        checkAndShowWarningsInLine(squares, latestMove, indexCalculator, WARNING_PATTERNS)
+export function markWarnings(squares, currentCoordinate) {
+    Gobang.COORDINATE_CALCULATORS.forEach((coordinateCalculate) =>
+        checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, WARNING_PATTERNS)
     );
 }
 
-function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patterns) {
+function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, patterns) {
     function getNth(n) {
-        return Gobang.getNthInLine(squares, currentIndex, n, indexCalculate);
+        return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+    }
+
+    function setNth(n, square) {
+        Gobang.setSquare(squares, Gobang.getNthCoordinateInLine(currentCoordinate, n, coordinateCalculate), square);
     }
 
     function emptySquaresMatchPattern(indexPattern) {
@@ -152,9 +156,7 @@ function checkAndShowWarningsInLine(squares, currentIndex, indexCalculate, patte
     }
 
     function markWarningsInLine(warningIndexPattern) {
-        for (let i = 0; i < warningIndexPattern.length; i++) {
-            getNth(warningIndexPattern[i]).setShowWarning(true);
-        }
+        warningIndexPattern.forEach((i) => setNth(i, getNth(i).clone().setShowWarning(true)));
     }
 
     for (let i = 0; i < patterns.length; i++) {

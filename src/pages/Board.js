@@ -27,27 +27,27 @@ export default function Board() {
         setNextSquare(new PlayerSquare(!nextSquare.isBlack(), false, true));
     }
 
-    function handleClick(index) {
-        if (winner || squares[index].isMarkedByPlayer()) {
+    function handleClick(coordinate) {
+        if (winner || Gobang.getSquare(squares, coordinate).isMarkedByPlayer()) {
             return;
         }
-        const nextSquares = squares.map((square) => square.clone());
+        const nextSquares = squares.slice();
         Gobang.clearWarnings(nextSquares);
 
-        nextSquares[index] = nextSquare;
+        Gobang.setSquare(nextSquares, coordinate, nextSquare);
 
         if (latestMove) {
-            nextSquares[latestMove].setLatestMove(false);
+            Gobang.getSquare(nextSquares, latestMove).setLatestMove(false);
         }
         setSquares(nextSquares);
-        setLatestMove(index);
+        setLatestMove(coordinate);
 
-        const currentWinner = calculateWinner(nextSquares, index);
+        const currentWinner = calculateWinner(nextSquares, coordinate);
         setWinner(currentWinner);
         if (currentWinner) {
             return;
         }
-        markWarnings(nextSquares, index);
+        markWarnings(nextSquares, coordinate);
         updateHistory();
         takeTurn();
     }
@@ -75,7 +75,9 @@ export default function Board() {
     return (
         <div className="center">
             <div className="status">
-                {(winner ? "Winner: " + squares[latestMove].getPlayer() : "Next player: " + nextSquare.getPlayer()) +
+                {(winner
+                    ? "Winner: " + Gobang.getSquare(squares, latestMove).getPlayer()
+                    : "Next player: " + nextSquare.getPlayer()) +
                     "; History: " +
                     history.length}
 
@@ -87,8 +89,8 @@ export default function Board() {
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
                 <Row
-                    squares={squares}
-                    startIndex={row * Gobang.COLUMN_COUNT}
+                    squares={Gobang.getRow(squares, row)}
+                    row={row}
                     key={"row" + row}
                     columnCount={Gobang.COLUMN_COUNT}
                     handleClick={handleClick}

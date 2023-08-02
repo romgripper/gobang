@@ -16,17 +16,10 @@ function Square({ data, onSquareClick }) {
     );
 }
 
-export default function Row({ squares, startIndex, columnCount, handleClick }) {
-    let columns = [];
+export default function Row({ squares, row, columnCount, handleClick }) {
+    const columns = [];
     for (let i = 0; i < columnCount; i++) {
-        const squareIndex = startIndex + i;
-        columns.push(
-            <Square
-                data={squares[squareIndex]}
-                key={"square" + squareIndex}
-                onSquareClick={() => handleClick(squareIndex)}
-            />
-        );
+        columns.push(<Square data={squares[i]} key={"square" + i} onSquareClick={() => handleClick([row, i])} />);
     }
     return <div className="board-row">{columns}</div>;
 }

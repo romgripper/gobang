@@ -10,31 +10,32 @@ const WINNING_PATTERNS = [
     [-4, -3, -2, -1, 0]
 ];
 
-function calculateWinner(squares, latestMove) {
-    for (let i = 0; i < Gobang.INDEX_CALCULATORS.length; i++) {
-        const winning = check5Inline(squares, latestMove, Gobang.INDEX_CALCULATORS[i]);
+function calculateWinner(squares, currentCoordinate) {
+    for (let coordinateCalculator of Gobang.COORDINATE_CALCULATORS) {
+        const winning = check5Inline(squares, currentCoordinate, coordinateCalculator);
         if (winning) {
-            return squares[latestMove];
+            return Gobang.getSquare(squares, currentCoordinate);
         }
     }
     return null;
 }
 
-function check5Inline(squares, currentIndex, indexCalculate) {
+function check5Inline(squares, currentCoordinate, coordinateCalculate) {
     function getNth(n) {
-        return Gobang.getNthInLine(squares, currentIndex, n, indexCalculate);
+        return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+    }
+
+    function setNth(n, square) {
+        Gobang.setSquare(squares, Gobang.getNthCoordinateInLine(currentCoordinate, n, coordinateCalculate), square);
     }
 
     function mark5InLine(indexPattern) {
-        for (let i = 0; i < indexPattern.length; i++) {
-            getNth(indexPattern[i]).setIn5();
-        }
-        return true;
+        indexPattern.forEach((i) => setNth(i, getNth(i).setIn5()));
     }
 
-    for (let i = 0; i < WINNING_PATTERNS.length; i++) {
-        if (Gobang.playerMarkersMatchPattern(WINNING_PATTERNS[i], getNth)) {
-            mark5InLine(WINNING_PATTERNS[i]);
+    for (let winningPattern of WINNING_PATTERNS) {
+        if (Gobang.playerMarkersMatchPattern(winningPattern, getNth)) {
+            mark5InLine(winningPattern);
             return true;
         }
     }

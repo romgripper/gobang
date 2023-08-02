@@ -1,7 +1,7 @@
 export class PlayerSquare {
     #isBlack;
-    #isIn5 = false;
-    #isLatestMove = false;
+    #isIn5;
+    #isLatestMove;
 
     constructor(isBlack, isIn5 = false, isLatestMove = false) {
         this.#isBlack = isBlack; // black or white
@@ -21,7 +21,9 @@ export class PlayerSquare {
         return false;
     }
 
-    setShowWarning() {}
+    setShowWarning() {
+        return this;
+    }
 
     isBlack() {
         return this.#isBlack;
@@ -37,6 +39,7 @@ export class PlayerSquare {
 
     setIn5() {
         this.#isIn5 = true;
+        return this;
     }
 
     isLatestMove() {
@@ -53,7 +56,7 @@ export class PlayerSquare {
 }
 
 export class EmptySquare {
-    #showWarning = false;
+    #showWarning;
 
     constructor(showWarning = false) {
         this.#showWarning = showWarning;
@@ -73,6 +76,7 @@ export class EmptySquare {
 
     setShowWarning(showWarning) {
         this.#showWarning = showWarning;
+        return this;
     }
 
     isLatestMove() {

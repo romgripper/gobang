@@ -75,26 +75,22 @@ export default function Board() {
     return (
         <div className="center">
             <div className="status">
-                <div>
-                    {winner && "Winner: "}
-                    {winner && (
+                {winner && (
+                    <div>
+                        Winner:{" "}
                         <img src={Gobang.getSquare(squares, latestMove).isBlack() ? "/black.png" : "/white.png"} />
-                    )}
-                    {!winner && "Next player: "}
-                    {!winner && <img src={nextSquare.isBlack() ? "/black.png" : "/white.png"} />}
-                </div>
+                    </div>
+                )}
                 {!winner && (
-                    <>
-                        <br />
-                        <div>
-                            History: {history.length}{" "}
-                            {history.length > 0 && (
-                                <button onClick={rollbackStep} style={{ marginLeft: 20, heigth: 40 }}>
-                                    Back
-                                </button>
-                            )}
-                        </div>
-                    </>
+                    <div>
+                        Next player: <img src={nextSquare.isBlack() ? "/black.png" : "/white.png"} /> &nbsp; &nbsp;
+                        History: {history.length}{" "}
+                        {history.length > 0 && (
+                            <button onClick={rollbackStep} style={{ marginLeft: 20, heigth: 40 }}>
+                                Back
+                            </button>
+                        )}
+                    </div>
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (

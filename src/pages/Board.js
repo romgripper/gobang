@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Row from "./Row";
+import { Square, Row } from "./Row";
 import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
 import calculateWinner from "./WinnerChecker";
@@ -75,16 +75,26 @@ export default function Board() {
     return (
         <div className="center">
             <div className="status">
-                {(winner
-                    ? "Winner: " + Gobang.getSquare(squares, latestMove).getPlayer()
-                    : "Next player: " + nextSquare.getPlayer()) +
-                    "; History: " +
-                    history.length}
-
+                <div>
+                    {winner && "Winner: "}
+                    {winner && (
+                        <img src={Gobang.getSquare(squares, latestMove).isBlack() ? "/black.png" : "/white.png"} />
+                    )}
+                    {!winner && "Next player: "}
+                    {!winner && <img src={nextSquare.isBlack() ? "/black.png" : "/white.png"} />}
+                </div>
                 {!winner && (
-                    <button onClick={rollbackStep} style={{ marginLeft: 20 }}>
-                        Back
-                    </button>
+                    <>
+                        <br />
+                        <div>
+                            History: {history.length}{" "}
+                            {history.length > 0 && (
+                                <button onClick={rollbackStep} style={{ marginLeft: 20, heigth: 40 }}>
+                                    Back
+                                </button>
+                            )}
+                        </div>
+                    </>
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (

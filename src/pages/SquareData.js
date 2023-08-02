@@ -29,10 +29,6 @@ export class PlayerSquare {
         return this.#isBlack;
     }
 
-    getPlayer() {
-        return this.#isBlack ? "X" : "O";
-    }
-
     isIn5() {
         return this.#isIn5;
     }
@@ -81,10 +77,6 @@ export class EmptySquare {
 
     isLatestMove() {
         return false;
-    }
-
-    getPlayer() {
-        return null;
     }
 
     isIn5() {

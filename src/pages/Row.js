@@ -1,25 +1,23 @@
-function Square({ data, onSquareClick }) {
+export function Square({ square, onSquareClick }) {
     let className = "square";
-    const value = data.getPlayer();
-    if (data.showWarning()) {
+    if (square.showWarning()) {
         className += " warning";
-    } else if (data.isIn5()) {
+    } else if (square.isIn5()) {
         className += " win";
-    } else if (data.isLatestMove()) {
+    } else if (square.isLatestMove()) {
         className += " last-move";
     }
+    if (square.isMarkedByPlayer()) {
+        className += square.isBlack() ? " black" : " white";
+    }
 
-    return (
-        <button className={className} onClick={onSquareClick}>
-            {value}
-        </button>
-    );
+    return <button className={className} onClick={onSquareClick} />;
 }
 
-export default function Row({ squares, row, columnCount, handleClick }) {
+export function Row({ squares, row, columnCount, handleClick }) {
     const columns = [];
     for (let i = 0; i < columnCount; i++) {
-        columns.push(<Square data={squares[i]} key={"square" + i} onSquareClick={() => handleClick([row, i])} />);
+        columns.push(<Square square={squares[i]} key={"square" + i} onSquareClick={() => handleClick([row, i])} />);
     }
     return <div className="board-row">{columns}</div>;
 }

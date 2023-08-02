@@ -1,4 +1,4 @@
-export function Square({ square, onSquareClick }) {
+function Square({ square, onSquareClick }) {
     let className = "square";
     if (square.showWarning()) {
         className += " warning";

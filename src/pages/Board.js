@@ -1,12 +1,14 @@
 import { useState } from "react";
 
-import { Square, Row } from "./Row";
+import { Row } from "./Row";
 import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
 import calculateWinner from "./WinnerChecker";
 import { markWarnings } from "./WarningMarker";
 
 const MAX_HISTORY_COUNT = 9;
+
+const FIRST_PLAYER_SQUARE = new PlayerSquare(true, false, true);
 
 function range(size) {
     const a = [];
@@ -17,7 +19,7 @@ function range(size) {
 }
 
 export default function Board() {
-    const [nextSquare, setNextSquare] = useState(new PlayerSquare(true, false, true)); // black and last move
+    const [nextSquare, setNextSquare] = useState(FIRST_PLAYER_SQUARE); // black and last move
     const [squares, setSquares] = useState(Gobang.INITIAL_SQAURES);
     const [latestMove, setLatestMove] = useState(null);
     const [winner, setWinner] = useState(null);
@@ -31,7 +33,8 @@ export default function Board() {
         if (winner || Gobang.getSquare(squares, coordinate).isMarkedByPlayer()) {
             return;
         }
-        const nextSquares = squares.slice();
+
+        const nextSquares = squares.map((row) => row.map((square) => square.clone()));
         Gobang.clearWarnings(nextSquares);
 
         Gobang.setSquare(nextSquares, coordinate, nextSquare);
@@ -61,7 +64,7 @@ export default function Board() {
         setHistory(nextHistory);
     }
 
-    function rollbackStep() {
+    function rollback() {
         if (history.length > 0) {
             const nextHistory = history.slice();
             const [lastSquares, lastMove] = nextHistory.shift();
@@ -86,7 +89,7 @@ export default function Board() {
                         Next player: <img src={nextSquare.isBlack() ? "/black.png" : "/white.png"} /> &nbsp; &nbsp;
                         History: {history.length}{" "}
                         {history.length > 0 && (
-                            <button onClick={rollbackStep} style={{ marginLeft: 20, heigth: 40 }}>
+                            <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
                                 Back
                             </button>
                         )}

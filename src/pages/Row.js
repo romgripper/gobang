@@ -1,6 +1,6 @@
 function Square({ square, onSquareClick }) {
     function shouldBlink(square) {
-        return square.isLatestMove();
+        return square.isLatestMove() || square.isIn5();
     }
 
     let className = "square";

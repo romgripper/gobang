@@ -30,6 +30,7 @@
     height: 40px;
     vertical-align:middle;
   }
+
   .black{
     background: url('/black-with-grid.png') no-repeat;
     background-size: contain;
@@ -60,12 +61,5 @@
     margin-bottom: 10px;
     font-size: 24px;
   }
-  .game {
-    display: flex;
-    flex-direction: row;
-  }
   
-  .game-info {
-    margin-left: 20px;
-  }
   

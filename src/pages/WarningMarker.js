@@ -144,10 +144,6 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
         return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
-    function setNth(n, square) {
-        Gobang.setSquare(squares, Gobang.getNthCoordinateInLine(currentCoordinate, n, coordinateCalculate), square);
-    }
-
     function emptySquaresMatchPattern(indexPattern) {
         for (let i = 0; i < indexPattern.length; i++) {
             if (!getNth(indexPattern[i]).isEmpty()) return false;
@@ -156,7 +152,7 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
     }
 
     function markWarningsInLine(warningIndexPattern) {
-        warningIndexPattern.forEach((i) => setNth(i, getNth(i).clone().setShowWarning(true)));
+        warningIndexPattern.forEach((i) => getNth(i).setShowWarning(true));
     }
 
     for (let i = 0; i < patterns.length; i++) {

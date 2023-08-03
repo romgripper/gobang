@@ -30,16 +30,11 @@ export function setSquare(squares, [row, column], square) {
     squares[row][column] = square;
 }
 
+const VIRTUAL_SQUARE = new VirtualSquare();
 // return a virtual square if out of board
 function getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculator) {
-    const coordinate = getNthCoordinateInLine(currentCoordinate, n, coordinateCalculator);
-    return isOutOfBoard(coordinate)
-        ? new VirtualSquare() // virtual
-        : getSquare(squares, coordinate);
-}
-
-function getNthCoordinateInLine(currentCoordinate, n, coordinateCalculator) {
-    return coordinateCalculator(currentCoordinate, n);
+    const coordinate = coordinateCalculator(currentCoordinate, n);
+    return isOutOfBoard(coordinate) ? VIRTUAL_SQUARE : getSquare(squares, coordinate);
 }
 
 function isOutOfBoard([row, column]) {
@@ -77,7 +72,6 @@ const Gobang = {
     getRow,
     playerMarkersMatchPattern,
     getNthSquareInLine,
-    getNthCoordinateInLine,
     clearWarnings
 };
 

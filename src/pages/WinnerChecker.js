@@ -25,12 +25,8 @@ function check5Inline(squares, currentCoordinate, coordinateCalculate) {
         return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
-    function setNth(n, square) {
-        Gobang.setSquare(squares, Gobang.getNthCoordinateInLine(currentCoordinate, n, coordinateCalculate), square);
-    }
-
     function mark5InLine(indexPattern) {
-        indexPattern.forEach((i) => setNth(i, getNth(i).setIn5()));
+        indexPattern.forEach((i) => getNth(i).setIn5());
     }
 
     for (let winningPattern of WINNING_PATTERNS) {

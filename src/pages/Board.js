@@ -8,7 +8,11 @@ import { markWarnings } from "./WarningMarker";
 
 const MAX_HISTORY_COUNT = 9;
 
-const FIRST_PLAYER_SQUARE = new PlayerSquare(true, false, true);
+function createLatestMoveSquare(isBlack) {
+    return new PlayerSquare(isBlack).setLatestMove(true);
+}
+
+const FIRST_PLAYER_SQUARE = createLatestMoveSquare(true);
 
 function range(size) {
     const a = [];
@@ -26,7 +30,7 @@ export default function Board() {
     const [history, setHistory] = useState([]);
 
     function takeTurn() {
-        setNextSquare(new PlayerSquare(!nextSquare.isBlack()).setLatestMove(true));
+        setNextSquare(createLatestMoveSquare(!nextSquare.isBlack()));
     }
 
     function handleClick(coordinate) {

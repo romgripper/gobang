@@ -39,19 +39,21 @@
     background: url('/white-with-grid.png') no-repeat;
     background-size: contain;
   }
+
+  .black-blink{
+    background: url('/black-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-blink {
+    background: url('/white-blink.gif') no-repeat;
+    background-size: contain;
+  }
   
   .warning {
     background: #e8f67f74;
   }
 
-  .last-move {
-    color: rgb(25, 213, 43);
-  }
-  
-  .win {
-    color: rgb(218, 12, 12);
-  }
-  
   .board-row:after {
     clear: both;
     content: '';

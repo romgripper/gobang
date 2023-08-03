@@ -151,8 +151,11 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
         return true;
     }
 
-    function markWarningsInLine(warningIndexPattern) {
-        warningIndexPattern.forEach((i) => getNth(i).setShowWarning(true));
+    function markWarningsInLine(playerIndexes) {
+        playerIndexes.forEach((i) => {
+            if (playerIndexes.length === 3) getNth(i).setInOpen3();
+            else getNth(i).setInOpen4();
+        });
     }
 
     for (let i = 0; i < patterns.length; i++) {
@@ -160,7 +163,7 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
             Gobang.playerMarkersMatchPattern(patterns[i].playerIndexes, getNth) &&
             emptySquaresMatchPattern(patterns[i].emptyIndexes)
         ) {
-            markWarningsInLine(patterns[i].emptyIndexes);
+            markWarningsInLine(patterns[i].playerIndexes);
         }
     }
 }

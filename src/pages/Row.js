@@ -1,14 +1,12 @@
 function Square({ square, onSquareClick }) {
     function shouldBlink(square) {
-        return square.isLatestMove() || square.isIn5();
+        return square.isLatestMove() || square.isIn5() || square.isInOpen3() || square.isInOpen4();
     }
 
     let className = "square";
     if (square.isMarkedByPlayer()) {
         className += square.isBlack() ? " black" : " white";
         if (shouldBlink(square)) className += "-blink";
-    } else if (square.showWarning()) {
-        className += " warning";
     }
 
     return <button className={className} onClick={onSquareClick} />;

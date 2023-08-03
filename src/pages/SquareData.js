@@ -1,7 +1,9 @@
 export class PlayerSquare {
     #isBlack;
-    #isIn5 = false;
     #isLatestMove = false;
+    #isInOpen3 = false; // OXXXO
+    #isInOpen4 = false; // XXXXXO or OXXXX or OXXXXO
+    #isIn5 = false;
 
     constructor(isBlack) {
         this.#isBlack = isBlack; // black or white
@@ -15,14 +17,6 @@ export class PlayerSquare {
         return false;
     }
 
-    showWarning() {
-        return false;
-    }
-
-    setShowWarning() {
-        return this;
-    }
-
     isBlack() {
         return this.#isBlack;
     }
@@ -33,6 +27,24 @@ export class PlayerSquare {
 
     setIn5() {
         this.#isIn5 = true;
+        return this;
+    }
+
+    isInOpen3() {
+        return this.#isInOpen3;
+    }
+
+    setInOpen3() {
+        this.#isInOpen3 = true;
+        return this;
+    }
+
+    isInOpen4() {
+        return this.#isInOpen4;
+    }
+
+    setInOpen4() {
+        this.#isInOpen4 = true;
         return this;
     }
 
@@ -52,23 +64,12 @@ export class PlayerSquare {
 }
 
 export class EmptySquare {
-    #showWarning = false;
-
     isMarkedByPlayer() {
         return false;
     }
 
     isEmpty() {
         return true;
-    }
-
-    showWarning() {
-        return this.#showWarning;
-    }
-
-    setShowWarning(showWarning) {
-        this.#showWarning = showWarning;
-        return this;
     }
 
     isLatestMove() {
@@ -79,7 +80,6 @@ export class EmptySquare {
         return false;
     }
 
-    // ignore showWarning
     clone() {
         return new EmptySquare();
     }
@@ -94,7 +94,7 @@ export class VirtualSquare {
         return false;
     }
 
-    showWarning() {
-        return false;
+    clone() {
+        return new VirtualSquare();
     }
 }

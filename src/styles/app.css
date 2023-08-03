@@ -50,10 +50,6 @@
     background-size: contain;
   }
   
-  .warning {
-    background: #e8f67f74;
-  }
-
   .board-row:after {
     clear: both;
     content: '';

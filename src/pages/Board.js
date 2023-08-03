@@ -26,7 +26,7 @@ export default function Board() {
     const [history, setHistory] = useState([]);
 
     function takeTurn() {
-        setNextSquare(new PlayerSquare(!nextSquare.isBlack(), false, true));
+        setNextSquare(new PlayerSquare(!nextSquare.isBlack()).setLatestMove(true));
     }
 
     function handleClick(coordinate) {
@@ -35,13 +35,8 @@ export default function Board() {
         }
 
         const nextSquares = squares.map((row) => row.map((square) => square.clone()));
-        Gobang.clearWarnings(nextSquares);
 
         Gobang.setSquare(nextSquares, coordinate, nextSquare);
-
-        if (latestMove) {
-            Gobang.getSquare(nextSquares, latestMove).setLatestMove(false);
-        }
         setSquares(nextSquares);
         setLatestMove(coordinate);
 

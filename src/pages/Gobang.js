@@ -53,14 +53,6 @@ function playerSquareAndEquals(square1, square2) {
     return square1.isMarkedByPlayer() && square2.isMarkedByPlayer() && square1.isBlack() === square2.isBlack();
 }
 
-function clearWarnings(squares) {
-    for (let i = 0; i < ROW_COUNT; i++) {
-        for (let j = 0; j < COLUMN_COUNT; j++) {
-            getSquare(squares, [i, j]).setShowWarning(false);
-        }
-    }
-}
-
 const Gobang = {
     ROW_COUNT,
     COLUMN_COUNT,
@@ -71,8 +63,7 @@ const Gobang = {
     setSquare,
     getRow,
     playerMarkersMatchPattern,
-    getNthSquareInLine,
-    clearWarnings
+    getNthSquareInLine
 };
 
 export default Gobang;

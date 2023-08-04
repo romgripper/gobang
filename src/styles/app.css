@@ -160,30 +160,102 @@
     background: url('/white-bottom-right.png') no-repeat;
     background-size: contain;
   }
-  
+
   img {
     width: 40px;
     height: 40px;
     vertical-align:middle;
   }
 
-  .black{
-    background: url('/black.png') no-repeat;
-    background-size: contain;
-  }
-
-  .white {
-    background: url('/white.png') no-repeat;
-    background-size: contain;
-  }
-
+  /* black-blink */
   .black-blink{
     background: url('/black-blink.gif') no-repeat;
     background-size: contain;
   }
 
+  .black-top-blink {
+    background: url('/black-top-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom-blink {
+    background: url('/black-bottom-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-left-blink {
+    background: url('/black-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-right-blink {
+    background: url('/black-right-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-top-left-blink {
+    background: url('/black-top-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-top-right-blink {
+    background: url('/black-top-right-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom-left-blink {
+    background: url('/black-bottom-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom-right-blink {
+    background: url('/black-bottom-right-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  /* white blink */
   .white-blink {
     background: url('/white-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top-blink {
+    background: url('/white-top-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom-blink {
+    background: url('/white-bottom-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-left-blink {
+    background: url('/white-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-right-blink {
+    background: url('/white-right-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top-left-blink {
+    background: url('/white-top-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top-right-blink {
+    background: url('/white-top-right-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom-left-blink {
+    background: url('/white-bottom-left-blink.gif') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom-right-blink {
+    background: url('/white-bottom-right-blink.gif') no-repeat;
     background-size: contain;
   }
   

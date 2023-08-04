@@ -9,7 +9,7 @@ function Square({ square, positionStyle, onSquareClick }) {
     if (square.isMarkedByPlayer()) {
         className += square.isBlack() ? " black" : " white";
         className += positionStyle;
-        //if (shouldBlink(square)) className += "-blink";
+        if (shouldBlink(square)) className += "-blink";
     } else {
         className += " empty" + positionStyle;
     }

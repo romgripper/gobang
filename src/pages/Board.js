@@ -96,13 +96,7 @@ export default function Board() {
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
-                <Row
-                    squares={Gobang.getRow(squares, row)}
-                    row={row}
-                    key={"row" + row}
-                    columnCount={Gobang.COLUMN_COUNT}
-                    handleClick={handleClick}
-                />
+                <Row squares={Gobang.getRow(squares, row)} row={row} key={"row" + row} handleClick={handleClick} />
             ))}
         </div>
     );

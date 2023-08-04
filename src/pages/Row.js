@@ -1,4 +1,6 @@
-function Square({ square, onSquareClick }) {
+import Gobang from "./Gobang";
+
+function Square({ square, positionStyle, onSquareClick }) {
     function shouldBlink(square) {
         return square.isLatestMove() || square.isIn5() || square.isInOpen3() || square.isInOpen4();
     }
@@ -7,15 +9,36 @@ function Square({ square, onSquareClick }) {
     if (square.isMarkedByPlayer()) {
         className += square.isBlack() ? " black" : " white";
         if (shouldBlink(square)) className += "-blink";
+    } else {
+        className += " empty" + positionStyle;
     }
 
     return <button className={className} onClick={onSquareClick} />;
 }
 
-export function Row({ squares, row, columnCount, handleClick }) {
+export function Row({ squares, row, handleClick }) {
     const columns = [];
-    for (let i = 0; i < columnCount; i++) {
-        columns.push(<Square square={squares[i]} key={"square" + i} onSquareClick={() => handleClick([row, i])} />);
+    let rowStyle = "";
+    if (row === 0) {
+        rowStyle += "-top";
+    } else if (row === Gobang.ROW_COUNT - 1) {
+        rowStyle += "-bottom";
+    }
+    for (let i = 0; i < Gobang.COLUMN_COUNT; i++) {
+        let columnStyle = "";
+        if (i === 0) {
+            columnStyle = "-left";
+        } else if (i === Gobang.COLUMN_COUNT - 1) {
+            columnStyle = "-right";
+        }
+        columns.push(
+            <Square
+                square={squares[i]}
+                key={"square" + i}
+                positionStyle={rowStyle + columnStyle}
+                onSquareClick={() => handleClick([row, i])}
+            />
+        );
     }
     return <div className="board-row">{columns}</div>;
 }

@@ -12,8 +12,6 @@
   }
   
   .square {
-    background: url('/empty.png') no-repeat;
-    background-size: contain;
     border: 0px solid;
     float: left;
     font-size: 24px;
@@ -24,6 +22,52 @@
     width: 40px;
     height: 40px;
   }
+
+  .empty {
+    background: url('/empty.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-top {
+    background: url('/empty-top.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-bottom {
+    background: url('/empty-bottom.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-left {
+    background: url('/empty-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-right {
+    background: url('/empty-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-top-left {
+    background: url('/empty-top-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-top-right {
+    background: url('/empty-top-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-bottom-left {
+    background: url('/empty-bottom-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .empty-bottom-right {
+    background: url('/empty-bottom-right.png') no-repeat;
+    background-size: contain;
+  }
+
 
   img {
     width: 40px;

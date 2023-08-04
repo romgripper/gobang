@@ -8,7 +8,8 @@ function Square({ square, positionStyle, onSquareClick }) {
     let className = "square";
     if (square.isMarkedByPlayer()) {
         className += square.isBlack() ? " black" : " white";
-        if (shouldBlink(square)) className += "-blink";
+        className += positionStyle;
+        //if (shouldBlink(square)) className += "-blink";
     } else {
         className += " empty" + positionStyle;
     }

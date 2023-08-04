@@ -23,6 +23,7 @@
     height: 40px;
   }
 
+  /* empty squares*/
   .empty {
     background: url('/empty.png') no-repeat;
     background-size: contain;
@@ -68,7 +69,98 @@
     background-size: contain;
   }
 
+  /* black squares */
+  .black {
+    background: url('/black.png') no-repeat;
+    background-size: contain;
+  }
 
+  .black-top {
+    background: url('/black-top.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom {
+    background: url('/black-bottom.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-left {
+    background: url('/black-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-right {
+    background: url('/black-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-top-left {
+    background: url('/black-top-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-top-right {
+    background: url('/black-top-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom-left {
+    background: url('/black-bottom-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .black-bottom-right {
+    background: url('/black-bottom-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  /* white squares */
+  .white {
+    background: url('/white.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top {
+    background: url('/white-top.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom {
+    background: url('/white-bottom.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-left {
+    background: url('/white-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-right {
+    background: url('/white-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top-left {
+    background: url('/white-top-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-top-right {
+    background: url('/white-top-right.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom-left {
+    background: url('/white-bottom-left.png') no-repeat;
+    background-size: contain;
+  }
+
+  .white-bottom-right {
+    background: url('/white-bottom-right.png') no-repeat;
+    background-size: contain;
+  }
+  
   img {
     width: 40px;
     height: 40px;
@@ -76,12 +168,12 @@
   }
 
   .black{
-    background: url('/black-with-grid.png') no-repeat;
+    background: url('/black.png') no-repeat;
     background-size: contain;
   }
 
   .white {
-    background: url('/white-with-grid.png') no-repeat;
+    background: url('/white.png') no-repeat;
     background-size: contain;
   }
 

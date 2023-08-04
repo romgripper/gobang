@@ -85,8 +85,8 @@ export default function Board() {
                 )}
                 {!winner && (
                     <div>
-                        Next player: <img src={nextSquare.isBlack() ? "/black.png" : "/white.png"} /> &nbsp; &nbsp;
-                        History: {history.length}{" "}
+                        Next player: <img src={nextSquare.isBlack() ? "/black-no-grid.png" : "/white-no-grid.png"} />{" "}
+                        &nbsp; &nbsp; History: {history.length}{" "}
                         {history.length > 0 && (
                             <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
                                 Back

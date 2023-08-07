@@ -71,94 +71,94 @@
 
   /* black squares */
   .black {
-    background: url('/black.png') no-repeat;
-    background-size: contain;
+    background: url('/black.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-top {
-    background: url('/black-top.png') no-repeat;
-    background-size: contain;
+    background: url('/black-top.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-bottom {
-    background: url('/black-bottom.png') no-repeat;
-    background-size: contain;
+    background: url('/black-bottom.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-left {
-    background: url('/black-left.png') no-repeat;
-    background-size: contain;
+    background: url('/black-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-right {
-    background: url('/black-right.png') no-repeat;
-    background-size: contain;
+    background: url('/black-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-top-left {
-    background: url('/black-top-left.png') no-repeat;
-    background-size: contain;
+    background: url('/black-top-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-top-right {
-    background: url('/black-top-right.png') no-repeat;
-    background-size: contain;
+    background: url('/black-top-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-bottom-left {
-    background: url('/black-bottom-left.png') no-repeat;
-    background-size: contain;
+    background: url('/black-bottom-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .black-bottom-right {
-    background: url('/black-bottom-right.png') no-repeat;
-    background-size: contain;
+    background: url('/black-bottom-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   /* white squares */
   .white {
-    background: url('/white.png') no-repeat;
-    background-size: contain;
+    background: url('/white.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-top {
-    background: url('/white-top.png') no-repeat;
-    background-size: contain;
+    background: url('/white-top.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-bottom {
-    background: url('/white-bottom.png') no-repeat;
-    background-size: contain;
+    background: url('/white-bottom.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-left {
-    background: url('/white-left.png') no-repeat;
-    background-size: contain;
+    background: url('/white-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-right {
-    background: url('/white-right.png') no-repeat;
-    background-size: contain;
+    background: url('/white-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-top-left {
-    background: url('/white-top-left.png') no-repeat;
-    background-size: contain;
+    background: url('/white-top-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-top-right {
-    background: url('/white-top-right.png') no-repeat;
-    background-size: contain;
+    background: url('/white-top-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-bottom-left {
-    background: url('/white-bottom-left.png') no-repeat;
-    background-size: contain;
+    background: url('/white-bottom-left.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   .white-bottom-right {
-    background: url('/white-bottom-right.png') no-repeat;
-    background-size: contain;
+    background: url('/white-bottom-right.png') 0 0 no-repeat;
+    background-size: 200%;
   }
 
   img {
@@ -167,98 +167,11 @@
     vertical-align:middle;
   }
 
-  /* black-blink */
-  .black-blink{
-    background: url('/black-blink.gif') no-repeat;
-    background-size: contain;
+  .blink {
+    animation: anim-blink steps(2) 1.5s infinite;
   }
+  @keyframes anim-blink { 0% {background-position: 0%;} 100% {background-position: 200%;} }
 
-  .black-top-blink {
-    background: url('/black-top-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-bottom-blink {
-    background: url('/black-bottom-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-left-blink {
-    background: url('/black-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-right-blink {
-    background: url('/black-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-top-left-blink {
-    background: url('/black-top-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-top-right-blink {
-    background: url('/black-top-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-bottom-left-blink {
-    background: url('/black-bottom-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .black-bottom-right-blink {
-    background: url('/black-bottom-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  /* white blink */
-  .white-blink {
-    background: url('/white-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-top-blink {
-    background: url('/white-top-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-bottom-blink {
-    background: url('/white-bottom-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-left-blink {
-    background: url('/white-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-right-blink {
-    background: url('/white-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-top-left-blink {
-    background: url('/white-top-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-top-right-blink {
-    background: url('/white-top-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-bottom-left-blink {
-    background: url('/white-bottom-left-blink.gif') no-repeat;
-    background-size: contain;
-  }
-
-  .white-bottom-right-blink {
-    background: url('/white-bottom-right-blink.gif') no-repeat;
-    background-size: contain;
-  }
-  
   .board-row:after {
     clear: both;
     content: '';

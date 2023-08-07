@@ -20,7 +20,7 @@ export function Row({ squares, row, handleClick }) {
         columns.push(
             <Square
                 square={squares[i]}
-                key={"square" + i}
+                key={`square(${row}, ${i})`}
                 positionStyle={rowStyle + columnStyle}
                 onSquareClick={() => handleClick([row, i])}
             />

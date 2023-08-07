@@ -24,11 +24,21 @@ function range(size) {
 
 const INITIAL_STATE = {
     nextSquare: FIRST_PLAYER_SQUARE,
-    squares: Gobang.INITIAL_SQAURES,
-    lastestMove: null,
     winner: null,
-    history: []
+    history: [[Gobang.INITIAL_SQAURES, null]]
 };
+
+function getLatestSquares(state) {
+    if (state.history.length > 0) {
+        return state.history[0][0];
+    }
+}
+
+function getLatestMove(state) {
+    if (state.history.length > 0) {
+        return state.history[0][1];
+    }
+}
 
 export default function Board() {
     const [state, setState] = useState(INITIAL_STATE);
@@ -38,36 +48,36 @@ export default function Board() {
     }
 
     function handleClick(coordinate) {
-        if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
+        if (state.winner || Gobang.getSquare(getLatestSquares(state), coordinate).isMarkedByPlayer()) {
             return;
         }
 
+        const squares = getLatestSquares(state);
         const nextState = {};
+        const nextSquares = squares.map((row) => row.map((square) => square.clone()));
 
-        nextState.squares = state.squares.map((row) => row.map((square) => square.clone()));
+        Gobang.setSquare(nextSquares, coordinate, state.nextSquare);
 
-        Gobang.setSquare(nextState.squares, coordinate, state.nextSquare);
-        nextState.latestMove = coordinate;
-
-        nextState.winner = calculateWinner(nextState.squares, coordinate);
+        nextState.winner = calculateWinner(nextSquares, coordinate);
         if (!nextState.winner) {
-            markWarnings(nextState.squares, coordinate);
+            markWarnings(nextSquares, coordinate);
         }
-        updateHistory(nextState);
+        updateHistory(nextState, nextSquares, coordinate);
         takeTurn(nextState);
         setState(nextState);
     }
 
-    function updateHistory(nextState) {
+    function updateHistory(nextState, nextSquares, currentMove) {
         nextState.history = state.history.slice();
-        nextState.history.unshift([state.squares, state.latestMove]);
-        if (nextState.history.length > MAX_HISTORY_COUNT) {
+        nextState.history.unshift([nextSquares, currentMove]);
+        if (nextState.history.length > MAX_HISTORY_COUNT + 1) {
             nextState.history.pop();
         }
     }
 
     function rollback() {
-        if (history.length > 0) {
+        if (history.length > 1) {
+            // the initial history must stay
             const nextState = {};
             nextState.history = state.history.slice();
             [nextState.squares, nextState.lastMove] = nextState.history.shift();
@@ -84,7 +94,7 @@ export default function Board() {
                         Winner:{" "}
                         <img
                             src={
-                                Gobang.getSquare(state.squares, state.latestMove).isBlack()
+                                Gobang.getSquare(getLatestSquares(state), getLatestMove(state)).isBlack()
                                     ? "/black-no-grid.png"
                                     : "/white-no-grid.png"
                             }
@@ -95,7 +105,7 @@ export default function Board() {
                     <div>
                         Next player:{" "}
                         <img src={state.nextSquare.isBlack() ? "/black-no-grid.png" : "/white-no-grid.png"} /> &nbsp;
-                        &nbsp; History: {state.history.length}{" "}
+                        &nbsp; History: {state.history.length - 1}{" "}
                         {state.history.length > 0 && (
                             <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
                                 Back
@@ -106,7 +116,7 @@ export default function Board() {
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
                 <Row
-                    squares={Gobang.getRow(state.squares, row)}
+                    squares={Gobang.getRow(state.history[0][0], row)}
                     row={row}
                     key={"row" + row}
                     handleClick={handleClick}

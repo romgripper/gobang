@@ -8,12 +8,6 @@ import { markWarnings } from "./WarningMarker";
 
 const MAX_HISTORY_COUNT = 9;
 
-function createLatestMoveSquare(isBlack) {
-    return new PlayerSquare(isBlack).setLatestMove(true);
-}
-
-const FIRST_PLAYER_SQUARE = createLatestMoveSquare(true);
-
 function range(size) {
     const a = [];
     for (let i = 0; i < size; i++) {
@@ -23,7 +17,7 @@ function range(size) {
 }
 
 const INITIAL_STATE = {
-    nextSquare: FIRST_PLAYER_SQUARE,
+    isNextBlack: true,
     winner: null,
     history: [[Gobang.INITIAL_SQAURES, null]]
 };
@@ -44,7 +38,7 @@ export default function Board() {
     const [state, setState] = useState(INITIAL_STATE);
 
     function takeTurn(nextState) {
-        nextState.nextSquare = createLatestMoveSquare(!state.nextSquare.isBlack());
+        nextState.isNextBlack = !state.isNextBlack;
     }
 
     function handleClick(coordinate) {
@@ -56,7 +50,7 @@ export default function Board() {
         const nextState = {};
         const nextSquares = squares.map((row) => row.map((square) => square.clone()));
 
-        Gobang.setSquare(nextSquares, coordinate, state.nextSquare);
+        Gobang.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
 
         nextState.winner = calculateWinner(nextSquares, coordinate);
         if (!nextState.winner) {
@@ -104,7 +98,7 @@ export default function Board() {
                 {!state.winner && (
                     <div>
                         Next player:{" "}
-                        <img src={state.nextSquare.isBlack() ? "/black-no-grid.png" : "/white-no-grid.png"} /> &nbsp;
+                        <img src={state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png"} /> &nbsp;
                         &nbsp; History: {state.history.length - 1}{" "}
                         {state.history.length > 0 && (
                             <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>

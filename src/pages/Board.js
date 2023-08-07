@@ -22,72 +22,81 @@ function range(size) {
     return a;
 }
 
-export default function Board() {
-    const [nextSquare, setNextSquare] = useState(FIRST_PLAYER_SQUARE); // black and last move
-    const [squares, setSquares] = useState(Gobang.INITIAL_SQAURES);
-    const [latestMove, setLatestMove] = useState(null);
-    const [winner, setWinner] = useState(null);
-    const [history, setHistory] = useState([]);
+const INITIAL_STATE = {
+    nextSquare: FIRST_PLAYER_SQUARE,
+    squares: Gobang.INITIAL_SQAURES,
+    lastestMove: null,
+    winner: null,
+    history: []
+};
 
-    function takeTurn() {
-        setNextSquare(createLatestMoveSquare(!nextSquare.isBlack()));
+export default function Board() {
+    const [state, setState] = useState(INITIAL_STATE);
+
+    function takeTurn(nextState) {
+        nextState.nextSquare = createLatestMoveSquare(!state.nextSquare.isBlack());
     }
 
     function handleClick(coordinate) {
-        if (winner || Gobang.getSquare(squares, coordinate).isMarkedByPlayer()) {
+        if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
             return;
         }
 
-        const nextSquares = squares.map((row) => row.map((square) => square.clone()));
+        const nextState = {};
 
-        Gobang.setSquare(nextSquares, coordinate, nextSquare);
-        setSquares(nextSquares);
-        setLatestMove(coordinate);
+        nextState.squares = state.squares.map((row) => row.map((square) => square.clone()));
 
-        const currentWinner = calculateWinner(nextSquares, coordinate);
-        setWinner(currentWinner);
-        if (currentWinner) {
-            return;
+        Gobang.setSquare(nextState.squares, coordinate, state.nextSquare);
+        nextState.latestMove = coordinate;
+
+        nextState.winner = calculateWinner(nextState.squares, coordinate);
+        if (!nextState.winner) {
+            markWarnings(nextState.squares, coordinate);
         }
-        markWarnings(nextSquares, coordinate);
-        updateHistory();
-        takeTurn();
+        updateHistory(nextState);
+        takeTurn(nextState);
+        setState(nextState);
     }
 
-    function updateHistory() {
-        const nextHistory = history.slice();
-        nextHistory.unshift([squares, latestMove]);
-        if (nextHistory.length > MAX_HISTORY_COUNT) {
-            nextHistory.pop();
+    function updateHistory(nextState) {
+        nextState.history = state.history.slice();
+        nextState.history.unshift([state.squares, state.latestMove]);
+        if (nextState.history.length > MAX_HISTORY_COUNT) {
+            nextState.history.pop();
         }
-        setHistory(nextHistory);
     }
 
     function rollback() {
         if (history.length > 0) {
-            const nextHistory = history.slice();
-            const [lastSquares, lastMove] = nextHistory.shift();
-            setLatestMove(lastMove);
-            setSquares(lastSquares);
-            setHistory(nextHistory);
-            takeTurn();
+            const nextState = {};
+            nextState.history = state.history.slice();
+            [nextState.squares, nextState.lastMove] = nextState.history.shift();
+            takeTurn(nextState);
+            setState(nextState);
         }
     }
 
     return (
         <div className="center">
             <div className="status">
-                {winner && (
+                {state.winner && (
                     <div>
                         Winner:{" "}
-                        <img src={Gobang.getSquare(squares, latestMove).isBlack() ? "/black.png" : "/white.png"} />
+                        <img
+                            src={
+                                Gobang.getSquare(state.squares, state.latestMove).isBlack()
+                                    ? "/black-no-grid.png"
+                                    : "/white-no-grid.png"
+                            }
+                        />
                     </div>
                 )}
-                {!winner && (
+                {!state.winner && (
                     <div>
-                        Next player: <img src={nextSquare.isBlack() ? "/black-no-grid.png" : "/white-no-grid.png"} />{" "}
-                        &nbsp; &nbsp; History: {history.length}{" "}
-                        {history.length > 0 && (
+                        Next player:{" "}
+                        <img src={state.nextSquare.isBlack() ? "/black-no-grid.png" : "/white-no-grid.png"} /> &nbsp;
+                        &nbsp; History: {state.history.length}{" "}
+                        {state.history.length > 0 && (
                             <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
                                 Back
                             </button>
@@ -96,7 +105,12 @@ export default function Board() {
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
-                <Row squares={Gobang.getRow(squares, row)} row={row} key={"row" + row} handleClick={handleClick} />
+                <Row
+                    squares={Gobang.getRow(state.squares, row)}
+                    row={row}
+                    key={"row" + row}
+                    handleClick={handleClick}
+                />
             ))}
         </div>
     );

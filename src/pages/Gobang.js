@@ -3,7 +3,7 @@ import { EmptySquare, VirtualSquare } from "./SquareData";
 const ROW_COUNT = 15;
 const COLUMN_COUNT = 15;
 
-const INITIAL_SQAURES = Array(ROW_COUNT)
+const INITIAL_SQUARES = Array(ROW_COUNT)
     .fill(null)
     .map(() =>
         Array(COLUMN_COUNT)
@@ -56,7 +56,7 @@ function playerSquareAndEquals(square1, square2) {
 const Gobang = {
     ROW_COUNT,
     COLUMN_COUNT,
-    INITIAL_SQAURES,
+    INITIAL_SQUARES,
     COORDINATE_CALCULATORS,
 
     getSquare,

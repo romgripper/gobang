@@ -24,10 +24,6 @@ const INITIAL_STATE = {
 export default function Board() {
     const [state, setState] = useState(INITIAL_STATE);
 
-    function takeTurn(nextState) {
-        nextState.isNextBlack = !state.isNextBlack;
-    }
-
     function handleClick(coordinate) {
         if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
             return;

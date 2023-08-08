@@ -1,10 +1,6 @@
-import { useState } from "react";
-
 import { Row } from "./Row";
-import { PlayerSquare } from "./SquareData";
 import Gobang from "./Gobang";
-import calculateWinner from "./WinnerChecker";
-import { markWarnings } from "./WarningMarker";
+import { useState, useDispatch } from "./StateContext";
 
 function range(size) {
     const a = [];
@@ -14,57 +10,31 @@ function range(size) {
     return a;
 }
 
-const INITIAL_STATE = {
-    isNextBlack: true,
-    winner: null,
-    squares: Gobang.INITIAL_SQAURES,
-    previousState: null
-};
-
 export default function Board() {
-    const [state, setState] = useState(INITIAL_STATE);
+    const state = useState();
+    const hasWinner = state.winner !== null;
+    const currentPlayerImage = state.isNextBlack ? "/white-no-grid.png" : "/black-no-grid.png";
+    const nextPlayerImage = state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png";
+    const couldRollback = state.previousState;
 
-    function handleClick(coordinate) {
-        if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
-            return;
-        }
-
-        const nextSquares = state.squares.map((row) => row.map((square) => square.clone()));
-
-        Gobang.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
-
-        const winner = calculateWinner(nextSquares, coordinate);
-        if (!winner) {
-            markWarnings(nextSquares, coordinate);
-        }
-
-        setState({
-            isNextBlack: !state.isNextBlack,
-            winner: winner,
-            squares: nextSquares,
-            previousState: state
-        });
-    }
-
-    function rollback() {
-        if (state.previousState) {
-            setState(state.previousState);
-        }
-    }
+    const dispatch = useDispatch();
 
     return (
         <div className="center">
             <div className="status">
-                {state.winner && (
+                {hasWinner && (
                     <div>
-                        Winner: <img src={state.isNextBlack ? "/white-no-grid.png" : "/black-no-grid.png"} />
+                        Winner: <img src={currentPlayerImage} />
                     </div>
                 )}
-                {!state.winner && (
+                {!hasWinner && (
                     <div>
-                        Next player: <img src={state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png"} />
-                        {state.previousState && (
-                            <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
+                        Next player: <img src={nextPlayerImage} />
+                        {couldRollback && (
+                            <button
+                                onClick={() => dispatch({ type: "rollback" })}
+                                style={{ marginLeft: 20, heigth: 40 }}
+                            >
                                 Back
                             </button>
                         )}
@@ -72,12 +42,7 @@ export default function Board() {
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
-                <Row
-                    squares={Gobang.getRow(state.squares, row)}
-                    row={row}
-                    key={"row" + row}
-                    handleClick={handleClick}
-                />
+                <Row row={row} key={"row" + row} />
             ))}
         </div>
     );

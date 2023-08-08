@@ -1,6 +1,10 @@
 import Gobang from "./Gobang";
+import { useSquares, useDispatch } from "./StateContext";
 
-export default function Square({ square, row, column, handleClick }) {
+export default function Square({ row, column }) {
+    const square = Gobang.getSquare(useSquares(), [row, column]);
+    const dispatch = useDispatch();
+
     function getPositionStyle() {
         let positionStyle = "";
         if (row === 0) {
@@ -17,7 +21,7 @@ export default function Square({ square, row, column, handleClick }) {
         return positionStyle;
     }
 
-    function shouldBlink(square) {
+    function shouldBlink() {
         return (
             square.isMarkedByPlayer() &&
             (square.isLatestMove() || square.isIn5() || square.isInOpen3() || square.isInOpen4())
@@ -33,5 +37,15 @@ export default function Square({ square, row, column, handleClick }) {
     className += getPositionStyle();
     if (shouldBlink(square)) className += " blink";
 
-    return <button className={className} onClick={() => handleClick([row, column])} />;
+    return (
+        <button
+            className={className}
+            onClick={() =>
+                dispatch({
+                    type: "click",
+                    coordinate: [row, column]
+                })
+            }
+        />
+    );
 }

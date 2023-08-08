@@ -76,10 +76,6 @@ export class EmptySquare {
         return false;
     }
 
-    isIn5() {
-        return false;
-    }
-
     clone() {
         return new EmptySquare();
     }

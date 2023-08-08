@@ -1,7 +1,7 @@
 import { EmptySquare, VirtualSquare } from "./SquareData";
 
-const ROW_COUNT = 19;
-const COLUMN_COUNT = 19;
+const ROW_COUNT = 15;
+const COLUMN_COUNT = 15;
 
 const INITIAL_SQAURES = Array(ROW_COUNT)
     .fill(null)

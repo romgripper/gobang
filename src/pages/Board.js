@@ -6,8 +6,6 @@ import Gobang from "./Gobang";
 import calculateWinner from "./WinnerChecker";
 import { markWarnings } from "./WarningMarker";
 
-const MAX_HISTORY_COUNT = 9;
-
 function range(size) {
     const a = [];
     for (let i = 0; i < size; i++) {
@@ -19,7 +17,8 @@ function range(size) {
 const INITIAL_STATE = {
     isNextBlack: true,
     winner: null,
-    history: [Gobang.INITIAL_SQAURES]
+    squares: Gobang.INITIAL_SQAURES,
+    previousState: null
 };
 
 export default function Board() {
@@ -30,45 +29,33 @@ export default function Board() {
     }
 
     function handleClick(coordinate) {
-        const squares = state.history[0];
-        if (state.winner || Gobang.getSquare(squares, coordinate).isMarkedByPlayer()) {
+        if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
             return;
         }
 
-        const nextState = {};
-        const nextSquares = squares.map((row) => row.map((square) => square.clone()));
+        const nextSquares = state.squares.map((row) => row.map((square) => square.clone()));
 
         Gobang.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
 
-        nextState.winner = calculateWinner(nextSquares, coordinate);
-        if (!nextState.winner) {
+        const winner = calculateWinner(nextSquares, coordinate);
+        if (!winner) {
             markWarnings(nextSquares, coordinate);
         }
-        updateHistory(nextState, nextSquares, coordinate);
-        takeTurn(nextState);
-        setState(nextState);
-    }
 
-    function updateHistory(nextState, nextSquares) {
-        nextState.history = state.history.slice();
-        nextState.history.unshift(nextSquares);
-        if (nextState.history.length > MAX_HISTORY_COUNT + 1) {
-            nextState.history.pop();
-        }
+        setState({
+            isNextBlack: !state.isNextBlack,
+            winner: winner,
+            squares: nextSquares,
+            previousState: state
+        });
     }
 
     function rollback() {
-        if (history.length > 1) {
-            // the initial history must stay
-            const nextState = {};
-            nextState.history = state.history.slice();
-            nextState.squares = nextState.history.shift();
-            takeTurn(nextState);
-            setState(nextState);
+        if (state.previousState) {
+            setState(state.previousState);
         }
     }
 
-    const squares = state.history[0];
     return (
         <div className="center">
             <div className="status">
@@ -79,9 +66,8 @@ export default function Board() {
                 )}
                 {!state.winner && (
                     <div>
-                        Next player: <img src={state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png"} />{" "}
-                        &nbsp; &nbsp; History: {state.history.length - 1}{" "}
-                        {state.history.length > 0 && (
+                        Next player: <img src={state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png"} />
+                        {state.previousState && (
                             <button onClick={rollback} style={{ marginLeft: 20, heigth: 40 }}>
                                 Back
                             </button>
@@ -90,7 +76,12 @@ export default function Board() {
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (
-                <Row squares={Gobang.getRow(squares, row)} row={row} key={"row" + row} handleClick={handleClick} />
+                <Row
+                    squares={Gobang.getRow(state.squares, row)}
+                    row={row}
+                    key={"row" + row}
+                    handleClick={handleClick}
+                />
             ))}
         </div>
     );

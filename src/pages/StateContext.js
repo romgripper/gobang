@@ -2,12 +2,12 @@ import { createContext, useContext, useReducer } from "react";
 
 import Gobang from "./Gobang";
 import { PlayerSquare } from "./SquareData";
-import calculateWinner from "./WinnerChecker";
+import checkWinner from "./WinnerChecker";
 import { markWarnings } from "./WarningMarker";
 
 const INITIAL_STATE = {
     isNextBlack: true,
-    winner: null,
+    hasWinner: false,
     squares: Gobang.INITIAL_SQUARES,
     previousState: null
 };
@@ -28,22 +28,22 @@ export default function StateProvider({ children }) {
 function process(state, action) {
     if (action.type === "click") {
         const coordinate = action.coordinate;
-        if (state.winner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
-            return;
+        if (state.hasWinner || Gobang.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
+            return state;
         }
 
         const nextSquares = state.squares.map((row) => row.map((square) => square.clone()));
 
         Gobang.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
 
-        const winner = calculateWinner(nextSquares, coordinate);
-        if (!winner) {
+        const hasWinner = checkWinner(nextSquares, coordinate);
+        if (!hasWinner) {
             markWarnings(nextSquares, coordinate);
         }
 
         return {
             isNextBlack: !state.isNextBlack,
-            winner: winner,
+            hasWinner: hasWinner,
             squares: nextSquares,
             previousState: state
         };

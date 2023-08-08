@@ -12,25 +12,23 @@ function range(size) {
 
 export default function Board() {
     const state = useState();
-    const hasWinner = state.winner !== null;
+    const dispatch = useDispatch();
+
     const currentPlayerImage = state.isNextBlack ? "/white-no-grid.png" : "/black-no-grid.png";
     const nextPlayerImage = state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png";
-    const couldRollback = state.previousState;
-
-    const dispatch = useDispatch();
 
     return (
         <div className="center">
             <div className="status">
-                {hasWinner && (
+                {state.hasWinner && (
                     <div>
                         Winner: <img src={currentPlayerImage} />
                     </div>
                 )}
-                {!hasWinner && (
+                {!state.hasWinner && (
                     <div>
                         Next player: <img src={nextPlayerImage} />
-                        {couldRollback && (
+                        {state.previousState && (
                             <button
                                 onClick={() => dispatch({ type: "rollback" })}
                                 style={{ marginLeft: 20, heigth: 40 }}

@@ -10,14 +10,14 @@ const WINNING_PATTERNS = [
     [-4, -3, -2, -1, 0]
 ];
 
-function calculateWinner(squares, currentCoordinate) {
+function checkWinner(squares, currentCoordinate) {
     for (let coordinateCalculator of Gobang.COORDINATE_CALCULATORS) {
         const winning = check5Inline(squares, currentCoordinate, coordinateCalculator);
         if (winning) {
-            return Gobang.getSquare(squares, currentCoordinate);
+            return true;
         }
     }
-    return null;
+    return false;
 }
 
 function check5Inline(squares, currentCoordinate, coordinateCalculate) {
@@ -38,4 +38,4 @@ function check5Inline(squares, currentCoordinate, coordinateCalculate) {
     return false;
 }
 
-export default calculateWinner;
+export default checkWinner;

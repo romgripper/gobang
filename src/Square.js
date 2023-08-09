@@ -1,4 +1,4 @@
-import Gobang from "../js/Gobang";
+import Gobang from "./Gobang";
 import { useSquares, useDispatch } from "./GameStateContext";
 
 export default function Square({ row, column }) {

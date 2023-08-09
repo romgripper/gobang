@@ -1,9 +1,9 @@
 import { createContext, useContext, useReducer } from "react";
 
-import Gobang from "../js/Gobang";
-import { PlayerSquare } from "../js/SquareData";
-import checkWinner from "../js/WinnerChecker";
-import { markWarnings } from "../js/WarningMarker";
+import Gobang from "./Gobang";
+import { PlayerSquare } from "./SquareData";
+import checkWinner from "./WinnerChecker";
+import { markWarnings } from "./WarningMarker";
 
 const INITIAL_STATE = {
     isNextBlack: true,

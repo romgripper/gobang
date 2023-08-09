@@ -1,5 +1,5 @@
-import { Row } from "./Row";
-import Gobang from "../js/Gobang";
+import Row from "./Row";
+import Gobang from "./Gobang";
 import { useGameState, useDispatch } from "./GameStateContext";
 
 function range(size) {
@@ -10,28 +10,47 @@ function range(size) {
     return a;
 }
 
+const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black-no-grid.png`;
+const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white-no-grid.png`;
+const BLACK_PLAYER = "Black";
+const WHITE_PLAYER = "White";
+
 export default function Board() {
     const state = useGameState();
     const dispatch = useDispatch();
 
-    const currentPlayerImage = state.isNextBlack ? "/white-no-grid.png" : "/black-no-grid.png";
-    const nextPlayerImage = state.isNextBlack ? "/black-no-grid.png" : "/white-no-grid.png";
+    let currentPlayerImage;
+    let currentPlayer;
+    let nextPlayerImage;
+    let nextPlayer;
+
+    if (state.isNextBlack) {
+        currentPlayerImage = WHITE_PLAYER_IMAGE;
+        currentPlayer = WHITE_PLAYER;
+        nextPlayerImage = BLACK_PLAYER_IMAGE;
+        nextPlayer = BLACK_PLAYER;
+    } else {
+        currentPlayerImage = BLACK_PLAYER_IMAGE;
+        currentPlayer = BLACK_PLAYER;
+        nextPlayerImage = WHITE_PLAYER_IMAGE;
+        nextPlayer = WHITE_PLAYER;
+    }
 
     return (
         <div className="center">
             <div className="status">
                 {state.hasWinner && (
                     <div>
-                        Winner: <img src={currentPlayerImage} />
+                        Winner: <img src={currentPlayerImage} alt={currentPlayer} />
                     </div>
                 )}
                 {!state.hasWinner && (
                     <div>
-                        Next player: <img src={nextPlayerImage} />
+                        Next player: <img src={nextPlayerImage} alt={nextPlayer} />
                         {state.previousState && (
                             <button
                                 onClick={() => dispatch({ type: "rollback" })}
-                                style={{ marginLeft: 20, heigth: 40 }}
+                                style={{ marginLeft: 20 }}
                             >
                                 Back
                             </button>

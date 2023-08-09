@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/gobang/static/css/main.9918afe3.css",
+    "main.js": "/gobang/static/js/main.5954a2f0.js",
+    "static/media/black-bottom.png": "/gobang/static/media/black-bottom.467ddffe6161f7563082.png",
+    "static/media/white-bottom.png": "/gobang/static/media/white-bottom.2320aa8cb08dae2f761f.png",
+    "static/media/black.png": "/gobang/static/media/black.8be441a27975efff29ec.png",
+    "static/media/black-left.png": "/gobang/static/media/black-left.74e09de13556d5e3bc59.png",
+    "static/media/black-right.png": "/gobang/static/media/black-right.e024407dcbb37743e2ca.png",
+    "static/media/black-top.png": "/gobang/static/media/black-top.ba650746b78e44953317.png",
+    "static/media/black-top-left.png": "/gobang/static/media/black-top-left.982df45c3d1de1bf746e.png",
+    "static/media/black-top-right.png": "/gobang/static/media/black-top-right.d55815f7dee30a043236.png",
+    "static/media/black-bottom-left.png": "/gobang/static/media/black-bottom-left.44a755c35425ca652614.png",
+    "static/media/black-bottom-right.png": "/gobang/static/media/black-bottom-right.1525f833d016e022d424.png",
+    "static/media/white.png": "/gobang/static/media/white.d7fb417a1872603609d0.png",
+    "static/media/white-left.png": "/gobang/static/media/white-left.4a4f8fb136db8bf1f29b.png",
+    "static/media/white-top.png": "/gobang/static/media/white-top.1aff567fe85b55e0c32e.png",
+    "static/media/white-right.png": "/gobang/static/media/white-right.c90cdd7a76d89f26bbbc.png",
+    "static/media/white-top-left.png": "/gobang/static/media/white-top-left.4cec13637102da5a624d.png",
+    "static/media/white-top-right.png": "/gobang/static/media/white-top-right.d6932cf6e2c2505c342e.png",
+    "static/media/white-bottom-left.png": "/gobang/static/media/white-bottom-left.12320fc10345afe4e8bf.png",
+    "static/media/white-bottom-right.png": "/gobang/static/media/white-bottom-right.3b3e1248ae2ace8f33e3.png",
+    "index.html": "/gobang/index.html",
+    "main.9918afe3.css.map": "/gobang/static/css/main.9918afe3.css.map",
+    "main.5954a2f0.js.map": "/gobang/static/js/main.5954a2f0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9918afe3.css",
+    "static/js/main.5954a2f0.js"
+  ]
+}

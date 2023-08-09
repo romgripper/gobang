@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/gobang/static/css/main.9918afe3.css",
+    "main.css": "/gobang/static/css/main.5a73c78b.css",
     "main.js": "/gobang/static/js/main.5954a2f0.js",
     "static/media/black-bottom.png": "/gobang/static/media/black-bottom.467ddffe6161f7563082.png",
     "static/media/white-bottom.png": "/gobang/static/media/white-bottom.2320aa8cb08dae2f761f.png",
@@ -21,11 +21,11 @@
     "static/media/white-bottom-left.png": "/gobang/static/media/white-bottom-left.12320fc10345afe4e8bf.png",
     "static/media/white-bottom-right.png": "/gobang/static/media/white-bottom-right.3b3e1248ae2ace8f33e3.png",
     "index.html": "/gobang/index.html",
-    "main.9918afe3.css.map": "/gobang/static/css/main.9918afe3.css.map",
+    "main.5a73c78b.css.map": "/gobang/static/css/main.5a73c78b.css.map",
     "main.5954a2f0.js.map": "/gobang/static/js/main.5954a2f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.9918afe3.css",
+    "static/css/main.5a73c78b.css",
     "static/js/main.5954a2f0.js"
   ]
 }

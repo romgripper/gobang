@@ -1,6 +1,6 @@
 import { Row } from "./Row";
-import Gobang from "./Gobang";
-import { useState, useDispatch } from "./StateContext";
+import Gobang from "../js/Gobang";
+import { useGameState, useDispatch } from "./GameStateContext";
 
 function range(size) {
     const a = [];
@@ -11,7 +11,7 @@ function range(size) {
 }
 
 export default function Board() {
-    const state = useState();
+    const state = useGameState();
     const dispatch = useDispatch();
 
     const currentPlayerImage = state.isNextBlack ? "/white-no-grid.png" : "/black-no-grid.png";

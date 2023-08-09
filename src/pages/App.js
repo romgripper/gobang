@@ -1,4 +1,4 @@
-import StateProvider from "./StateContext";
+import StateProvider from "./GameStateContext";
 import Board from "./Board";
 
 export default function App() {

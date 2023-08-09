@@ -1,5 +1,5 @@
-import Gobang from "./Gobang";
-import { useSquares, useDispatch } from "./StateContext";
+import Gobang from "../js/Gobang";
+import { useSquares, useDispatch } from "./GameStateContext";
 
 export default function Square({ row, column }) {
     const square = Gobang.getSquare(useSquares(), [row, column]);

@@ -1,9 +1,9 @@
 import { createContext, useContext, useReducer } from "react";
 
-import Gobang from "./Gobang";
-import { PlayerSquare } from "./SquareData";
-import checkWinner from "./WinnerChecker";
-import { markWarnings } from "./WarningMarker";
+import Gobang from "../js/Gobang";
+import { PlayerSquare } from "../js/SquareData";
+import checkWinner from "../js/WinnerChecker";
+import { markWarnings } from "../js/WarningMarker";
 
 const INITIAL_STATE = {
     isNextBlack: true,
@@ -54,10 +54,10 @@ function process(state, action) {
 }
 
 export function useSquares() {
-    return useState().squares;
+    return useGameState().squares;
 }
 
-export function useState() {
+export function useGameState() {
     return useContext(StateContext);
 }
 

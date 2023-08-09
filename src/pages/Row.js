@@ -1,4 +1,4 @@
-import Gobang from "./Gobang";
+import Gobang from "../js/Gobang";
 import Square from "./Square";
 
 export function Row({ row }) {

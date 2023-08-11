@@ -40,22 +40,30 @@ export default function Board() {
         <div className="center">
             <div className="status">
                 {state.hasWinner && (
-                    <div>
-                        Winner: <img src={currentPlayerImage} alt={currentPlayer} />
-                        <button onClick={() => dispatch({ type: "restart" })} style={{ marginLeft: 20 }}>
-                            Restart
-                        </button>
-                    </div>
+                    <>
+                        <div>
+                            Winner: <img src={currentPlayerImage} alt={currentPlayer} />
+                        </div>
+                        <div>
+                            <button onClick={() => dispatch({ type: "restart" })} style={{ marginLeft: 20 }}>
+                                Restart
+                            </button>
+                        </div>
+                    </>
                 )}
                 {!state.hasWinner && (
-                    <div>
-                        Next player: <img src={nextPlayerImage} alt={nextPlayer} />
+                    <>
+                        <div>
+                            Next player: <img src={nextPlayerImage} alt={nextPlayer} />
+                        </div>
                         {state.previousState && (
-                            <button onClick={() => dispatch({ type: "rollback" })} style={{ marginLeft: 20 }}>
-                                Back
-                            </button>
+                            <div>
+                                <button onClick={() => dispatch({ type: "rollback" })} style={{ marginLeft: 20 }}>
+                                    Back
+                                </button>
+                            </div>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
             {range(Gobang.ROW_COUNT).map((row) => (

@@ -42,16 +42,16 @@ export default function Board() {
                 {state.hasWinner && (
                     <div>
                         Winner: <img src={currentPlayerImage} alt={currentPlayer} />
+                        <button onClick={() => dispatch({ type: "restart" })} style={{ marginLeft: 20 }}>
+                            Restart
+                        </button>
                     </div>
                 )}
                 {!state.hasWinner && (
                     <div>
                         Next player: <img src={nextPlayerImage} alt={nextPlayer} />
                         {state.previousState && (
-                            <button
-                                onClick={() => dispatch({ type: "rollback" })}
-                                style={{ marginLeft: 20 }}
-                            >
+                            <button onClick={() => dispatch({ type: "rollback" })} style={{ marginLeft: 20 }}>
                                 Back
                             </button>
                         )}

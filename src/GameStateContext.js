@@ -49,6 +49,8 @@ function process(state, action) {
         };
     } else if (action.type === "rollback" && state.previousState) {
         return state.previousState;
+    } else if (action.type === "restart") {
+        return INITIAL_STATE;
     }
     return state;
 }

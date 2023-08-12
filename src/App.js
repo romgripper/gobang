@@ -1,11 +1,16 @@
 import StateProvider from "./GameStateContext";
 import Board from "./Board";
-import './App.css';
+import "./App.css";
+import PreloadImageBoard from "./PreloadImageBoard";
 
 export default function App() {
     return (
-        <StateProvider>
-            <Board />
-        </StateProvider>
+        <>
+            <PreloadImageBoard isBlack={true} />
+            <PreloadImageBoard isBlack={false} />
+            <StateProvider>
+                <Board />
+            </StateProvider>
+        </>
     );
 }

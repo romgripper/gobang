@@ -43,8 +43,19 @@ export default function Board() {
     const horizontalMargin = Math.floor((windowWidth - squareSize * Gobang.COLUMN_COUNT) / 2);
     const verticalMargin = Math.floor((windowHeight - squareSize * Gobang.ROW_COUNT) / 4);
     const boardWidth = windowWidth - 2 * horizontalMargin;
-    const fontSize = squareSize / 2.4;
-    const playerImageSize = fontSize * 2;
+    const fontSize = squareSize / 2.2;
+    const statusHeight = squareSize * 0.8;
+
+    const restartButton = (
+        <button
+            style={{ fontSize: fontSize, marginLeft: squareSize / 2, width: squareSize * 3, height: statusHeight }}
+            onClick={() => {
+                if (window.confirm("Restart the game?")) dispatch({ type: "restart" });
+            }}
+        >
+            Restart
+        </button>
+    );
 
     return (
         <div
@@ -56,43 +67,38 @@ export default function Board() {
                 marginBottom: verticalMargin
             }}
         >
-            <div className="status" style={{ width: boardWidth, fontSize: fontSize, marginBottom: fontSize / 4 }}>
+            <div className="status" style={{ width: boardWidth, fontSize: fontSize, marginBottom: fontSize }}>
                 {state.hasWinner && (
-                    <>
-                        <div>
-                            Winner:{" "}
-                            <img
-                                src={currentPlayerImage}
-                                alt={currentPlayer}
-                                style={{ width: playerImageSize, height: playerImageSize }}
-                            />
-                        </div>
-                        <div>
-                            <button style={{ fontSize: fontSize }} onClick={() => dispatch({ type: "restart" })}>
-                                Restart
-                            </button>
-                        </div>
-                    </>
+                    <div>
+                        Winner:{" "}
+                        <img
+                            src={currentPlayerImage}
+                            alt={currentPlayer}
+                            style={{ width: statusHeight, height: statusHeight }}
+                        />
+                    </div>
                 )}
                 {!state.hasWinner && (
-                    <>
-                        <div>
-                            Next player:{" "}
-                            <img
-                                src={nextPlayerImage}
-                                alt={nextPlayer}
-                                style={{ width: playerImageSize, height: playerImageSize }}
-                            />
-                        </div>
-                        {state.previousState && (
-                            <div>
-                                <button style={{ fontSize: fontSize }} onClick={() => dispatch({ type: "rollback" })}>
-                                    Back
-                                </button>
-                            </div>
-                        )}
-                    </>
+                    <div>
+                        Player:{" "}
+                        <img
+                            src={nextPlayerImage}
+                            alt={nextPlayer}
+                            style={{ width: statusHeight, height: statusHeight }}
+                        />
+                    </div>
                 )}
+                <div>
+                    {state.previousState && !state.hasWinner && (
+                        <button
+                            style={{ fontSize: fontSize, width: squareSize * 5, height: statusHeight }}
+                            onClick={() => dispatch({ type: "rollback" })}
+                        >
+                            Back
+                        </button>
+                    )}
+                    {state.previousState && restartButton}
+                </div>
             </div>
             <div style={{ width: boardWidth }}>
                 {range(Gobang.ROW_COUNT).map((row) => (

@@ -1,7 +1,7 @@
 import Gobang from "./Gobang";
 import { useSquares, useDispatch } from "./GameStateContext";
 
-export default function Square({ row, column }) {
+export default function Square({ row, column, size }) {
     const square = Gobang.getSquare(useSquares(), [row, column]);
     const dispatch = useDispatch();
 
@@ -40,6 +40,7 @@ export default function Square({ row, column }) {
     return (
         <button
             className={className}
+            style={{ width: size, height: size }}
             onClick={() =>
                 dispatch({
                     type: "click",

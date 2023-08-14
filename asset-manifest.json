@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/gobang/static/css/main.3ba216b1.css",
-    "main.js": "/gobang/static/js/main.fedc89ec.js",
+    "main.css": "/gobang/static/css/main.66be9e10.css",
+    "main.js": "/gobang/static/js/main.bfd76c82.js",
     "static/media/black-bottom.png": "/gobang/static/media/black-bottom.467ddffe6161f7563082.png",
     "static/media/white-bottom.png": "/gobang/static/media/white-bottom.2320aa8cb08dae2f761f.png",
     "static/media/black.png": "/gobang/static/media/black.8be441a27975efff29ec.png",
@@ -21,11 +21,11 @@
     "static/media/white-bottom-left.png": "/gobang/static/media/white-bottom-left.12320fc10345afe4e8bf.png",
     "static/media/white-bottom-right.png": "/gobang/static/media/white-bottom-right.3b3e1248ae2ace8f33e3.png",
     "index.html": "/gobang/index.html",
-    "main.3ba216b1.css.map": "/gobang/static/css/main.3ba216b1.css.map",
-    "main.fedc89ec.js.map": "/gobang/static/js/main.fedc89ec.js.map"
+    "main.66be9e10.css.map": "/gobang/static/css/main.66be9e10.css.map",
+    "main.bfd76c82.js.map": "/gobang/static/js/main.bfd76c82.js.map"
   },
   "entrypoints": [
-    "static/css/main.3ba216b1.css",
-    "static/js/main.fedc89ec.js"
+    "static/css/main.66be9e10.css",
+    "static/js/main.bfd76c82.js"
   ]
 }

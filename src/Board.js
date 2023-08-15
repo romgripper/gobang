@@ -38,11 +38,12 @@ export default function Board() {
     }
 
     const squareSize = Math.floor(
-        Math.min(windowWidth / (Gobang.COLUMN_COUNT + 3), windowHeight / (Gobang.ROW_COUNT + 3))
-    ); // 2 for margins, 1 for paddings
-    const boardSize = Math.floor(squareSize * (Gobang.COLUMN_COUNT + 1)); // 1 for paddings
+        Math.min(windowWidth / (Gobang.COLUMN_COUNT + 2.5), windowHeight / (Gobang.ROW_COUNT + 2.5))
+    ); // 2 for margins, 0.5 for paddings
+    const boardSize = Math.ceil(squareSize * (Gobang.COLUMN_COUNT + 0.5)); // 0.5 for paddings
     const horizontalMargin = Math.floor((windowWidth - boardSize) / 2);
-    const verticalMargin = Math.floor((windowHeight - boardSize) / 4);
+    const verticalMargin = Math.floor((windowHeight - boardSize) / 4.5);
+    const boardPadding = squareSize / 4;
     const fontSize = squareSize / 2.2;
     const statusHeight = squareSize * 0.8;
 
@@ -101,7 +102,7 @@ export default function Board() {
                     {state.previousState && restartButton}
                 </div>
             </div>
-            <div className="board" style={{ width: boardSize, padding: squareSize / 2 }}>
+            <div className="board" style={{ width: boardSize, padding: boardPadding }}>
                 {range(Gobang.ROW_COUNT).map((row) => (
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}

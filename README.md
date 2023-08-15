@@ -1,1 +1,1 @@
-Visit https://romgripper.github.io/gobang/ and have fun
+Visit https://romgripper.github.io/gobang/ and have fun!

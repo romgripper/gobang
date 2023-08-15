@@ -176,6 +176,9 @@ img {
 body:after {
   position: absolute; 
   z-index: -1;
+  top: -9999rem;
+  left: -9999rem;
+  opacity: 0;
   content: url('../public/black.png') 
     url('../public/black-top.png')
     url('../public/black-bottom.png')

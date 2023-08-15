@@ -4,6 +4,10 @@
   display: table;
 }
 
+.board {
+  background: #FFCF26;
+}
+
 .status {
   display: flex;
   justify-content: space-between;

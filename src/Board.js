@@ -38,11 +38,11 @@ export default function Board() {
     }
 
     const squareSize = Math.floor(
-        Math.min(windowWidth / (Gobang.COLUMN_COUNT + 2), windowHeight / (Gobang.ROW_COUNT + 2))
-    ); // 2 for margins
-    const horizontalMargin = Math.floor((windowWidth - squareSize * Gobang.COLUMN_COUNT) / 2);
-    const verticalMargin = Math.floor((windowHeight - squareSize * Gobang.ROW_COUNT) / 4);
-    const boardWidth = windowWidth - 2 * horizontalMargin;
+        Math.min(windowWidth / (Gobang.COLUMN_COUNT + 3), windowHeight / (Gobang.ROW_COUNT + 3))
+    ); // 2 for margins, 1 for paddings
+    const boardSize = Math.floor(squareSize * (Gobang.COLUMN_COUNT + 1)); // 1 for paddings
+    const horizontalMargin = Math.floor((windowWidth - boardSize) / 2);
+    const verticalMargin = Math.floor((windowHeight - boardSize) / 4);
     const fontSize = squareSize / 2.2;
     const statusHeight = squareSize * 0.8;
 
@@ -61,13 +61,14 @@ export default function Board() {
         <div
             className="center"
             style={{
+                width: boardSize,
                 marginLeft: horizontalMargin,
                 marginRight: horizontalMargin,
                 marginTop: verticalMargin,
                 marginBottom: verticalMargin
             }}
         >
-            <div className="status" style={{ width: boardWidth, fontSize: fontSize, marginBottom: fontSize }}>
+            <div className="status" style={{ width: boardSize, fontSize: fontSize, marginBottom: fontSize }}>
                 {state.hasWinner && (
                     <div>
                         Winner:{" "}
@@ -100,7 +101,7 @@ export default function Board() {
                     {state.previousState && restartButton}
                 </div>
             </div>
-            <div style={{ width: boardWidth }}>
+            <div className="board" style={{ width: boardSize, padding: squareSize / 2 }}>
                 {range(Gobang.ROW_COUNT).map((row) => (
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}

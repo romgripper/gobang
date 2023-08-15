@@ -171,3 +171,27 @@ img {
 }
 
 @keyframes anim-blink { 0% {background-position: 0%;} 100% {background-position: 200%;} }
+
+/* preload images for black and white */
+body:after {
+  position: absolute; 
+  z-index: -1;
+  content: url('../public/black.png') 
+    url('../public/black-top.png')
+    url('../public/black-bottom.png')
+    url('../public/black-left.png')
+    url('../public/black-right.png') 
+    url('../public/black-top-left.png')
+    url('../public/black-top-right.png')
+    url('../public/black-bottom-left.png')
+    url('../public/black-bottom-right.png')
+    url('../public/white.png') 
+    url('../public/white-top.png')
+    url('../public/white-bottom.png')
+    url('../public/white-left.png')
+    url('../public/white-right.png')
+    url('../public/white-top-left.png')
+    url('../public/white-top-right.png')
+    url('../public/white-bottom-left.png')
+    url('../public/white-bottom-right.png');
+}

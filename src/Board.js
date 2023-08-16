@@ -51,7 +51,7 @@ export default function Board() {
         <button
             style={{ fontSize: fontSize, marginLeft: squareSize / 2, width: squareSize * 3, height: statusHeight }}
             onClick={() => {
-                if (window.confirm("Restart the game?")) dispatch({ type: "restart" });
+                if (state.hasWinner || window.confirm("Restart the game?")) dispatch({ type: "restart" });
             }}
         >
             Restart

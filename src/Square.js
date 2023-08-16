@@ -22,20 +22,15 @@ export default function Square({ row, column, size }) {
     }
 
     function shouldBlink() {
-        return (
-            square.isMarkedByPlayer() &&
-            (square.isLatestMove() || square.isIn5() || square.isInOpen3() || square.isInOpen4())
-        );
+        return square.isLatestMove() || square.isIn5() || square.isInOpen3() || square.isInOpen4();
     }
 
     let className = "square";
     if (square.isMarkedByPlayer()) {
         className += square.isBlack() ? " black" : " white";
-    } else {
-        className += " empty";
+        className += getPositionStyle();
+        if (shouldBlink(square)) className += " blink";
     }
-    className += getPositionStyle();
-    if (shouldBlink(square)) className += " blink";
 
     return (
         <button

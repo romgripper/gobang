@@ -5,7 +5,8 @@
 }
 
 .board {
-  background: #FFCF26;
+  background: url('../public/background.png') no-repeat;
+  background-size: contain;
   box-shadow:  0 0 10px 5px rgba(0,0,0,0.6);
   -moz-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
   -webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
@@ -21,57 +22,12 @@
 .square {
   border: 0px;
   float: left;
-  padding: 0;
+  padding: 0px;
+  background-color: transparent;
 }
 
 .center {
   margin: auto;
-}
-
-/* empty squares*/
-.empty {
-  background: url('../public/empty.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-top {
-  background: url('../public/empty-top.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-bottom {
-  background: url('../public/empty-bottom.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-left {
-  background: url('../public/empty-left.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-right {
-  background: url('../public/empty-right.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-top-left {
-  background: url('../public/empty-top-left.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-top-right {
-  background: url('../public/empty-top-right.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-bottom-left {
-  background: url('../public/empty-bottom-left.png') no-repeat;
-  background-size: contain;
-}
-
-.empty-bottom-right {
-  background: url('../public/empty-bottom-right.png') no-repeat;
-  background-size: contain;
 }
 
 /* black squares */

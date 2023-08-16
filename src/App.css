@@ -5,7 +5,7 @@
 }
 
 .board {
-  background: url('../public/background.png') no-repeat;
+  background: url('../public/background.png');
   background-size: contain;
   box-shadow:  0 0 10px 5px rgba(0,0,0,0.6);
   -moz-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
@@ -30,96 +30,16 @@
   margin: auto;
 }
 
-/* black squares */
+
 .black {
-  background: url('../public/black.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-top {
-  background: url('../public/black-top.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-bottom {
-  background: url('../public/black-bottom.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-left {
-  background: url('../public/black-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-right {
-  background: url('../public/black-right.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-top-left {
-  background: url('../public/black-top-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-top-right {
-  background: url('../public/black-top-right.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-bottom-left {
-  background: url('../public/black-bottom-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.black-bottom-right {
-  background: url('../public/black-bottom-right.png') 0 0 no-repeat;
-  background-size: 200%;
+  background: url('../public/black.png');
+  background-size: contain;
 }
 
 /* white squares */
 .white {
-  background: url('../public/white.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-top {
-  background: url('../public/white-top.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-bottom {
-  background: url('../public/white-bottom.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-left {
-  background: url('../public/white-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-right {
-  background: url('../public/white-right.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-top-left {
-  background: url('../public/white-top-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-top-right {
-  background: url('../public/white-top-right.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-bottom-left {
-  background: url('../public/white-bottom-left.png') 0 0 no-repeat;
-  background-size: 200%;
-}
-
-.white-bottom-right {
-  background: url('../public/white-bottom-right.png') 0 0 no-repeat;
-  background-size: 200%;
+  background: url('../public/white.png');
+  background-size: contain;
 }
 
 img {
@@ -131,34 +51,15 @@ img {
 }
 
 .blink {
-  animation: anim-blink steps(2) 1.5s infinite;
+  animation: anim-blink steps(1) 1.5s infinite;
+  -webkit-animation: anim-blink steps(1) 1.5s infinite;
+  -moz-animation: anim-blink steps(1) 1.5s infinite;
+  -o-animation: anim-blink steps(1) 1.5s infinite;
+  -ms-animation: anim-blink steps(1) 1.5s infinite;
 }
 
-@keyframes anim-blink { 0% {background-position: 0%;} 100% {background-position: 200%;} }
-
-/* preload images for black and white */
-body:after {
-  position: absolute; 
-  z-index: -1;
-  top: -9999rem;
-  left: -9999rem;
-  opacity: 0;
-  content: url('../public/black.png') 
-    url('../public/black-top.png')
-    url('../public/black-bottom.png')
-    url('../public/black-left.png')
-    url('../public/black-right.png') 
-    url('../public/black-top-left.png')
-    url('../public/black-top-right.png')
-    url('../public/black-bottom-left.png')
-    url('../public/black-bottom-right.png')
-    url('../public/white.png') 
-    url('../public/white-top.png')
-    url('../public/white-bottom.png')
-    url('../public/white-left.png')
-    url('../public/white-right.png')
-    url('../public/white-top-left.png')
-    url('../public/white-top-right.png')
-    url('../public/white-bottom-left.png')
-    url('../public/white-bottom-right.png');
-}
+@keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@-webkit-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@-moz-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@-o-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@-ms-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }

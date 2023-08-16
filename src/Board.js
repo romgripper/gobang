@@ -10,8 +10,8 @@ function range(size) {
     return a;
 }
 
-const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black-no-grid.png`;
-const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white-no-grid.png`;
+const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black.png`;
+const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
 const BLACK_PLAYER = "Black";
 const WHITE_PLAYER = "White";
 

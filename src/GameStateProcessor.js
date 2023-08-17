@@ -4,7 +4,7 @@ export function createInitialState(game) {
     return {
         isNextBlack: true,
         hasWinner: false,
-        squares: game.INITIAL_SQUARES,
+        squares: game.createInitialSquares(),
         previousState: null
     };
 }

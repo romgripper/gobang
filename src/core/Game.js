@@ -17,7 +17,7 @@ const Game = {
         name: "go",
         ROW_COUNT: GoUtils.ROW_COUNT,
         COLUMN_COUNT: GoUtils.COLUMN_COUNT,
-        INITIAL_SQUARES: Utils.createInitialSquares(GoUtils.ROW_COUNT, GoUtils.COLUMN_COUNT),
+        createInitialSquares: () => Utils.createInitialSquares(GoUtils.ROW_COUNT, GoUtils.COLUMN_COUNT),
         postProcess: () => false
     },
     gobang: {
@@ -25,7 +25,7 @@ const Game = {
         name: "gobang",
         ROW_COUNT: GobangUtils.ROW_COUNT,
         COLUMN_COUNT: GobangUtils.COLUMN_COUNT,
-        INITIAL_SQUARES: Utils.createInitialSquares(GobangUtils.ROW_COUNT, GobangUtils.ROW_COUNT),
+        createInitialSquares: () => Utils.createInitialSquares(GobangUtils.ROW_COUNT, GobangUtils.ROW_COUNT),
         postProcess: (square, currentCoordinate) => {
             const hasWinner = gobangCheckWinner(square, currentCoordinate);
             if (!hasWinner) {

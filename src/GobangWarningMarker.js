@@ -1,6 +1,4 @@
-import Game from "./Game";
-
-const Gobang = Game.gobang;
+import GobangUtils from "./GobangUtils";
 
 const WARNING_PATTERNS = [
     // 3 in line
@@ -135,15 +133,15 @@ const WARNING_PATTERNS = [
     }
 ];
 
-export function markWarnings(squares, currentCoordinate) {
-    Gobang.COORDINATE_CALCULATORS.forEach((coordinateCalculate) =>
+export default function markWarnings(squares, currentCoordinate) {
+    GobangUtils.COORDINATE_CALCULATORS.forEach((coordinateCalculate) =>
         checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, WARNING_PATTERNS)
     );
 }
 
 function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, patterns) {
     function getNth(n) {
-        return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+        return GobangUtils.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
     function emptySquaresMatchPattern(indexPattern) {
@@ -162,7 +160,7 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
 
     for (let i = 0; i < patterns.length; i++) {
         if (
-            Gobang.playerMarkersMatchPattern(patterns[i].playerIndexes, getNth) &&
+            GobangUtils.playerMarkersMatchPattern(patterns[i].playerIndexes, getNth) &&
             emptySquaresMatchPattern(patterns[i].emptyIndexes)
         ) {
             markWarningsInLine(patterns[i].playerIndexes);

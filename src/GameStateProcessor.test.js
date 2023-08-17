@@ -1,7 +1,10 @@
-import { INITIAL_STATE, makeDispatcher } from "./GameStateProcessor";
+import { createDispatcher, createInitialState } from "./GameStateProcessor";
 import Game from "./Game";
 
-const dispatch = makeDispatcher(Game.gobang);
+const Gobang = Game.gobang;
+
+const dispatch = createDispatcher(Gobang);
+const INITIAL_STATE = createInitialState(Gobang);
 
 it("There is no winner before the black player places the first piece", () => {
     expect(INITIAL_STATE.hasWinner).toBe(false);

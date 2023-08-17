@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useState, useLayoutEffect } from "react";
-import Game from "./Game";
 import { createDispatcher, createInitialState } from "./GameStateProcessor";
+import Game from "./Game";
 
 const GameContext = createContext(null);
 const StateContext = createContext(null);

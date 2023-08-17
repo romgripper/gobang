@@ -1,6 +1,6 @@
 import { PlayerSquare } from "./SquareData";
-import checkWinner from "./WinnerChecker";
-import { markWarnings } from "./WarningMarker";
+import checkWinner from "./GobangWinnerChecker";
+import markWarnings from "./GobangWarningMarker";
 
 export function createInitialState(game) {
     return {

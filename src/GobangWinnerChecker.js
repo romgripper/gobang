@@ -1,6 +1,4 @@
-import Game from "./Game";
-
-const Gobang = Game.gobang;
+import GobangUtils from "./GobangUtils";
 
 // current move's index is 0,
 // 5 possible positions for current move
@@ -13,7 +11,7 @@ const WINNING_PATTERNS = [
 ];
 
 function checkWinner(squares, currentCoordinate) {
-    for (let coordinateCalculator of Gobang.COORDINATE_CALCULATORS) {
+    for (let coordinateCalculator of GobangUtils.COORDINATE_CALCULATORS) {
         const winning = check5Inline(squares, currentCoordinate, coordinateCalculator);
         if (winning) {
             return true;
@@ -24,7 +22,7 @@ function checkWinner(squares, currentCoordinate) {
 
 function check5Inline(squares, currentCoordinate, coordinateCalculate) {
     function getNth(n) {
-        return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+        return GobangUtils.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
     function mark5InLine(indexPattern) {
@@ -32,7 +30,7 @@ function check5Inline(squares, currentCoordinate, coordinateCalculate) {
     }
 
     for (let winningPattern of WINNING_PATTERNS) {
-        if (Gobang.playerMarkersMatchPattern(winningPattern, getNth)) {
+        if (GobangUtils.playerMarkersMatchPattern(winningPattern, getNth)) {
             mark5InLine(winningPattern);
             return true;
         }

@@ -1,6 +1,4 @@
 import { PlayerSquare } from "./core/SquareData";
-import checkWinner from "./core/GobangWinnerChecker";
-import markWarnings from "./core/GobangWarningMarker";
 
 export function createInitialState(game) {
     return {

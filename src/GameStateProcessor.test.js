@@ -1,5 +1,5 @@
 import { createDispatcher, createInitialState } from "./GameStateProcessor";
-import Game from "./Game";
+import Game from "./core/Game";
 
 const Gobang = Game.gobang;
 

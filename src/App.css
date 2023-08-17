@@ -5,12 +5,20 @@
 }
 
 .board {
-  background: url('../public/background.png');
-  background-size: contain;
   box-shadow:  0 0 10px 5px rgba(0,0,0,0.6);
   -moz-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
   -webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
   -o-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
+}
+
+.go {
+  background: url('../public/background19x19.png');
+  background-size: contain;
+}
+
+.gobang {
+  background: url('../public/background15x15.png');
+  background-size: contain;
 }
 
 .status {

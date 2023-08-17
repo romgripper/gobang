@@ -1,6 +1,8 @@
 import Utils from "./Utils";
 import GoUtils from "./GoUtils";
 import GobangUtils from "./GobangUtils";
+import gobangCheckWinner from "./GobangWinnerChecker";
+import gobangMarkWarnings from "./GobangWarningMarker";
 
 // default export
 const common = {
@@ -12,15 +14,25 @@ const common = {
 const Game = {
     go: {
         ...common,
+        name: "go",
         ROW_COUNT: GoUtils.ROW_COUNT,
         COLUMN_COUNT: GoUtils.COLUMN_COUNT,
-        INITIAL_SQUARES: Utils.createInitialSquares(GoUtils.ROW_COUNT, GoUtils.COLUMN_COUNT)
+        INITIAL_SQUARES: Utils.createInitialSquares(GoUtils.ROW_COUNT, GoUtils.COLUMN_COUNT),
+        postProcess: () => false
     },
     gobang: {
         ...common,
+        name: "gobang",
         ROW_COUNT: GobangUtils.ROW_COUNT,
         COLUMN_COUNT: GobangUtils.COLUMN_COUNT,
-        INITIAL_SQUARES: Utils.createInitialSquares(GobangUtils.ROW_COUNT, GobangUtils.ROW_COUNT)
+        INITIAL_SQUARES: Utils.createInitialSquares(GobangUtils.ROW_COUNT, GobangUtils.ROW_COUNT),
+        postProcess: (square, currentCoordinate) => {
+            const hasWinner = gobangCheckWinner(square, currentCoordinate);
+            if (!hasWinner) {
+                gobangMarkWarnings(square, currentCoordinate);
+            }
+            return hasWinner;
+        }
     }
 };
 

@@ -103,7 +103,7 @@ export default function Board() {
                     {state.previousState && restartButton}
                 </div>
             </div>
-            <div className="board" style={{ width: boardSize, padding: boardPadding }}>
+            <div className={game.name + " board"} style={{ width: boardSize, padding: boardPadding }}>
                 {range(game.ROW_COUNT).map((row) => (
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}

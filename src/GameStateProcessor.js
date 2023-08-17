@@ -23,10 +23,7 @@ export function createDispatcher(game) {
 
             game.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
 
-            const hasWinner = checkWinner(nextSquares, coordinate);
-            if (!hasWinner) {
-                markWarnings(nextSquares, coordinate);
-            }
+            const hasWinner = game.postProcess(nextSquares, coordinate);
 
             return {
                 isNextBlack: !state.isNextBlack,

@@ -1,4 +1,6 @@
-import Gobang from "./Gobang";
+import Game from "./Game";
+
+const Gobang = Game.gobang;
 
 // current move's index is 0,
 // 5 possible positions for current move

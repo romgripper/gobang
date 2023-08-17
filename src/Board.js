@@ -1,6 +1,6 @@
 import Row from "./Row";
-import Gobang from "./Gobang";
-import { useGameState, useDispatch, useWindowSize } from "./GameStateContext";
+
+import { useGameState, useDispatch, useWindowSize, useGameContext } from "./GameStateContext";
 
 function range(size) {
     const a = [];
@@ -18,6 +18,7 @@ const WHITE_PLAYER = "White";
 export default function Board() {
     const state = useGameState();
     const dispatch = useDispatch();
+    const game = useGameContext();
     const [windowWidth, windowHeight] = useWindowSize();
 
     let currentPlayerImage;
@@ -38,9 +39,9 @@ export default function Board() {
     }
 
     const squareSize = Math.floor(
-        Math.min(windowWidth / (Gobang.COLUMN_COUNT + 2.5), windowHeight / (Gobang.ROW_COUNT + 2.5))
+        Math.min(windowWidth / (game.COLUMN_COUNT + 2.5), windowHeight / (game.ROW_COUNT + 2.5))
     ); // 2 for margins, 0.5 for paddings
-    const boardSize = Math.ceil(squareSize * (Gobang.COLUMN_COUNT + 0.5)); // 0.5 for paddings
+    const boardSize = Math.ceil(squareSize * (game.COLUMN_COUNT + 0.5)); // 0.5 for paddings
     const horizontalMargin = Math.floor((windowWidth - boardSize) / 2);
     const verticalMargin = Math.floor((windowHeight - boardSize) / 4.5);
     const boardPadding = squareSize / 4;
@@ -103,7 +104,7 @@ export default function Board() {
                 </div>
             </div>
             <div className="board" style={{ width: boardSize, padding: boardPadding }}>
-                {range(Gobang.ROW_COUNT).map((row) => (
+                {range(game.ROW_COUNT).map((row) => (
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}
             </div>

@@ -5,7 +5,7 @@ import "./App.css";
 export default function App() {
     return (
         <>
-            <StateProvider>
+            <StateProvider gameName="gobang">
                 <Board />
             </StateProvider>
         </>

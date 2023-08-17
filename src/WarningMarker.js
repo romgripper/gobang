@@ -1,4 +1,6 @@
-import Gobang from "./Gobang";
+import Game from "./Game";
+
+const Gobang = Game.gobang;
 
 const WARNING_PATTERNS = [
     // 3 in line

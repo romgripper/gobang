@@ -1,8 +1,9 @@
-import Gobang from "./Gobang";
 import { useSquares, useDispatch } from "./GameStateContext";
+import { useGameContext } from "./GameStateContext";
 
 export default function Square({ row, column, size }) {
-    const square = Gobang.getSquare(useSquares(), [row, column]);
+    const game = useGameContext();
+    const square = game.getSquare(useSquares(), [row, column]);
     const dispatch = useDispatch();
 
     function shouldBlink() {

@@ -1,13 +1,16 @@
 import { createContext, useContext, useReducer, useState, useLayoutEffect } from "react";
+import Game from "./Game";
+import { createDispatcher, createInitialState } from "./GameStateProcessor";
 
-import { INITIAL_STATE, process } from "./GameStateProcessor";
-
+const GameContext = createContext(null);
 const StateContext = createContext(null);
 const DispatchContext = createContext(null);
 const WindowSizeContext = createContext(null);
 
-export default function StateProvider({ children }) {
-    const [state, dispatch] = useReducer(process, INITIAL_STATE);
+// game is go or gobang
+export default function StateProvider({ gameName, children }) {
+    const game = Game[gameName];
+    const [state, dispatch] = useReducer(createDispatcher(game), createInitialState(game));
 
     const [windowSize, setWindowSize] = useState([0, 0]);
     useLayoutEffect(() => {
@@ -21,9 +24,11 @@ export default function StateProvider({ children }) {
 
     return (
         <WindowSizeContext.Provider value={windowSize}>
-            <StateContext.Provider value={state}>
-                <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
-            </StateContext.Provider>
+            <GameContext.Provider value={game}>
+                <StateContext.Provider value={state}>
+                    <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
+                </StateContext.Provider>
+            </GameContext.Provider>
         </WindowSizeContext.Provider>
     );
 }
@@ -34,6 +39,10 @@ export function useSquares() {
 
 export function useGameState() {
     return useContext(StateContext);
+}
+
+export function useGameContext() {
+    return useContext(GameContext);
 }
 
 export function useDispatch() {

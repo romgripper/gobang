@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/gobang/static/css/main.0d0b0b85.css",
-    "main.js": "/gobang/static/js/main.154dc1d1.js",
-    "static/media/background.png": "/gobang/static/media/background.b50dd648e74f488a0be9.png",
+    "main.css": "/gobang/static/css/main.a71b89c0.css",
+    "main.js": "/gobang/static/js/main.b7333ff0.js",
+    "static/media/background19x19.png": "/gobang/static/media/background19x19.f32852ba88cdc1d7c7e5.png",
+    "static/media/background15x15.png": "/gobang/static/media/background15x15.b50dd648e74f488a0be9.png",
     "static/media/black.png": "/gobang/static/media/black.a8f6404710fdff422aa2.png",
     "index.html": "/gobang/index.html",
-    "main.0d0b0b85.css.map": "/gobang/static/css/main.0d0b0b85.css.map",
-    "main.154dc1d1.js.map": "/gobang/static/js/main.154dc1d1.js.map"
+    "main.a71b89c0.css.map": "/gobang/static/css/main.a71b89c0.css.map",
+    "main.b7333ff0.js.map": "/gobang/static/js/main.b7333ff0.js.map"
   },
   "entrypoints": [
-    "static/css/main.0d0b0b85.css",
-    "static/js/main.154dc1d1.js"
+    "static/css/main.a71b89c0.css",
+    "static/js/main.b7333ff0.js"
   ]
 }

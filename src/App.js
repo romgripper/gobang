@@ -3,7 +3,10 @@ import Board from "./Board";
 import "./App.css";
 
 export default function App() {
-    const gameName = new URLSearchParams(window.location.search).get("game") ?? "gobang";
+    let gameName = new URLSearchParams(window.location.search).get("game");
+    if (gameName !== "go") {
+        gameName = "gobang";
+    }
     return (
         <>
             <StateProvider gameName={gameName}>

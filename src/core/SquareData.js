@@ -71,14 +71,6 @@ export class EmptySquare {
     isEmpty() {
         return true;
     }
-
-    isLatestMove() {
-        return false;
-    }
-
-    clone() {
-        return new EmptySquare();
-    }
 }
 
 export class VirtualSquare {
@@ -88,9 +80,5 @@ export class VirtualSquare {
 
     isEmpty() {
         return false;
-    }
-
-    clone() {
-        return new VirtualSquare();
     }
 }

@@ -17,7 +17,7 @@ export function createDispatcher(game) {
                 return state;
             }
 
-            const nextSquares = state.squares.map((row) => row.map((square) => square.clone()));
+            const nextSquares = state.squares.map((row) => row.map((square) => (square ? square.clone() : null)));
 
             game.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
 

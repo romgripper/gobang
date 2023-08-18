@@ -1,9 +1,6 @@
 export class Stone {
     #isBlack;
-    #isLatestMove = false;
-    #isInOpen3 = false; // OXXXO
-    #isInOpen4 = false; // XXXXXO or OXXXX or OXXXXO
-    #isIn5 = false;
+    #isBlink = false;
 
     constructor(isBlack) {
         this.#isBlack = isBlack; // black or white
@@ -21,39 +18,12 @@ export class Stone {
         return this.#isBlack;
     }
 
-    isIn5() {
-        return this.#isIn5;
+    isBlink() {
+        return this.#isBlink;
     }
 
-    setIn5() {
-        this.#isIn5 = true;
-        return this;
-    }
-
-    isInOpen3() {
-        return this.#isInOpen3;
-    }
-
-    setInOpen3() {
-        this.#isInOpen3 = true;
-        return this;
-    }
-
-    isInOpen4() {
-        return this.#isInOpen4;
-    }
-
-    setInOpen4() {
-        this.#isInOpen4 = true;
-        return this;
-    }
-
-    isLatestMove() {
-        return this.#isLatestMove;
-    }
-
-    setLatestMove(isLatestMove) {
-        this.#isLatestMove = isLatestMove;
+    setBlink() {
+        this.#isBlink = true;
         return this;
     }
 

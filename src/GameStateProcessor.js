@@ -19,8 +19,8 @@ export function createDispatcher(game) {
             }
 
             const nextSquares = state.squares.map((row) => row.map((square) => (square ? square.clone() : null)));
-            game.setSquare(nextSquares, coordinate, new Stone(state.isNextBlack).setLatestMove(true));
-            
+            game.setSquare(nextSquares, coordinate, new Stone(state.isNextBlack).setBlink());
+
             const newState = {
                 isNextBlack: !state.isNextBlack,
                 squares: nextSquares,

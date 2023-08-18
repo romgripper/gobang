@@ -153,8 +153,8 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
 
     function markWarningsInLine(stoneIndexes) {
         stoneIndexes.forEach((i) => {
-            if (stoneIndexes.length === 3) getNth(i).setInOpen3();
-            else getNth(i).setInOpen4();
+            if (stoneIndexes.length === 3) getNth(i).setBlink();
+            else getNth(i).setBlink();
         });
     }
 

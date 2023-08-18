@@ -30,6 +30,7 @@ it("Game plays as expected", () => {
     const state1 = dispatch(state0, { type: "placeStone", coordinate: [1, 1] });
     expect(state1.squares[1][1].isEmpty()).toBe(false);
     expect(state1.squares[1][1].isBlack()).toBe(true);
+    expect(state1.squares[1][1].isBlink()).toBe(true);
     expect(state1.squares[0][0]).toBe(null);
     expect(state1.isNextBlack).toBe(false);
 
@@ -37,8 +38,10 @@ it("Game plays as expected", () => {
     const state2 = dispatch(state1, { type: "placeStone", coordinate: [1, 2] });
     expect(state2.squares[1][1].isEmpty()).toBe(false);
     expect(state2.squares[1][1].isBlack()).toBe(true);
+    expect(state2.squares[1][1].isBlink()).toBe(false);
     expect(state2.squares[1][1].isEmpty()).toBe(false);
     expect(state2.squares[1][2].isBlack()).toBe(false);
+    expect(state2.squares[1][2].isBlink()).toBe(true);
     expect(state2.squares[0][0]).toBe(null);
     expect(state2.isNextBlack).toBe(true);
 
@@ -62,69 +65,45 @@ it("Game plays as expected", () => {
     state = dispatch(state, { type: "placeStone", coordinate: [2, 2] });
     // black [3,1]
     state = dispatch(state, { type: "placeStone", coordinate: [3, 1] });
-    expect(state.squares[1][1].isInOpen3()).toBe(true);
-    expect(state.squares[2][1].isInOpen3()).toBe(true);
-    expect(state.squares[3][1].isInOpen3()).toBe(true);
-    expect(state.squares[1][1].isInOpen4()).toBe(false);
-    expect(state.squares[2][1].isInOpen4()).toBe(false);
-    expect(state.squares[3][1].isInOpen4()).toBe(false);
+    expect(state.squares[1][1].isBlink()).toBe(true);
+    expect(state.squares[2][1].isBlink()).toBe(true);
+    expect(state.squares[3][1].isBlink()).toBe(true);
 
     // white [3,2]
     state = dispatch(state, { type: "placeStone", coordinate: [3, 2] });
     // open 3 or open 4 only shows for latest move
-    expect(state.squares[1][1].isInOpen3()).toBe(false);
-    expect(state.squares[2][1].isInOpen3()).toBe(false);
-    expect(state.squares[3][1].isInOpen3()).toBe(false);
-    expect(state.squares[1][1].isInOpen4()).toBe(false);
-    expect(state.squares[2][1].isInOpen4()).toBe(false);
-    expect(state.squares[3][1].isInOpen4()).toBe(false);
+    expect(state.squares[1][1].isBlink()).toBe(false);
+    expect(state.squares[2][1].isBlink()).toBe(false);
+    expect(state.squares[3][1].isBlink()).toBe(false);
 
-    expect(state.squares[1][2].isInOpen3()).toBe(true);
-    expect(state.squares[2][2].isInOpen3()).toBe(true);
-    expect(state.squares[3][2].isInOpen3()).toBe(true);
-    expect(state.squares[1][2].isInOpen4()).toBe(false);
-    expect(state.squares[2][2].isInOpen4()).toBe(false);
-    expect(state.squares[3][2].isInOpen4()).toBe(false);
+    expect(state.squares[1][2].isBlink()).toBe(true);
+    expect(state.squares[2][2].isBlink()).toBe(true);
+    expect(state.squares[3][2].isBlink()).toBe(true);
 
     // black [4,1], black gets open 4
     state = dispatch(state, { type: "placeStone", coordinate: [4, 1] });
-    expect(state.squares[1][1].isInOpen3()).toBe(false);
-    expect(state.squares[2][1].isInOpen3()).toBe(false);
-    expect(state.squares[3][1].isInOpen3()).toBe(false);
-    expect(state.squares[4][1].isInOpen3()).toBe(false);
-    expect(state.squares[1][1].isInOpen4()).toBe(true);
-    expect(state.squares[2][1].isInOpen4()).toBe(true);
-    expect(state.squares[3][1].isInOpen4()).toBe(true);
-    expect(state.squares[4][1].isInOpen4()).toBe(true);
+    expect(state.squares[1][1].isBlink()).toBe(true);
+    expect(state.squares[2][1].isBlink()).toBe(true);
+    expect(state.squares[3][1].isBlink()).toBe(true);
+    expect(state.squares[4][1].isBlink()).toBe(true);
 
     // open 3 or open 4 only shows for latest move
-    expect(state.squares[1][2].isInOpen3()).toBe(false);
-    expect(state.squares[2][2].isInOpen3()).toBe(false);
-    expect(state.squares[3][2].isInOpen3()).toBe(false);
-    expect(state.squares[1][2].isInOpen4()).toBe(false);
-    expect(state.squares[2][2].isInOpen4()).toBe(false);
-    expect(state.squares[3][2].isInOpen4()).toBe(false);
+    expect(state.squares[1][2].isBlink()).toBe(false);
+    expect(state.squares[2][2].isBlink()).toBe(false);
+    expect(state.squares[3][2].isBlink()).toBe(false);
 
     // white [4,2], white gets open 4
     state = dispatch(state, { type: "placeStone", coordinate: [4, 2] });
     // open 3 or open 4 only shows for latest move
-    expect(state.squares[1][1].isInOpen3()).toBe(false);
-    expect(state.squares[2][1].isInOpen3()).toBe(false);
-    expect(state.squares[3][1].isInOpen3()).toBe(false);
-    expect(state.squares[4][1].isInOpen3()).toBe(false);
-    expect(state.squares[1][1].isInOpen4()).toBe(false);
-    expect(state.squares[2][1].isInOpen4()).toBe(false);
-    expect(state.squares[3][1].isInOpen4()).toBe(false);
-    expect(state.squares[4][1].isInOpen4()).toBe(false);
+    expect(state.squares[1][1].isBlink()).toBe(false);
+    expect(state.squares[2][1].isBlink()).toBe(false);
+    expect(state.squares[3][1].isBlink()).toBe(false);
+    expect(state.squares[4][1].isBlink()).toBe(false);
 
-    expect(state.squares[1][2].isInOpen3()).toBe(false);
-    expect(state.squares[2][2].isInOpen3()).toBe(false);
-    expect(state.squares[3][2].isInOpen3()).toBe(false);
-    expect(state.squares[4][2].isInOpen3()).toBe(false);
-    expect(state.squares[1][2].isInOpen4()).toBe(true);
-    expect(state.squares[2][2].isInOpen4()).toBe(true);
-    expect(state.squares[3][2].isInOpen4()).toBe(true);
-    expect(state.squares[4][2].isInOpen4()).toBe(true);
+    expect(state.squares[1][2].isBlink()).toBe(true);
+    expect(state.squares[2][2].isBlink()).toBe(true);
+    expect(state.squares[3][2].isBlink()).toBe(true);
+    expect(state.squares[4][2].isBlink()).toBe(true);
 
     // black [5,1], black wins
     state = dispatch(state, { type: "placeStone", coordinate: [5, 1] });
@@ -132,22 +111,11 @@ it("Game plays as expected", () => {
     expect(state.isNextBlack).toBe(false);
     expect(state.squares[5][1].isBlack()).toBe(true);
 
-    expect(state.squares[1][1].isInOpen3()).toBe(false);
-    expect(state.squares[2][1].isInOpen3()).toBe(false);
-    expect(state.squares[3][1].isInOpen3()).toBe(false);
-    expect(state.squares[4][1].isInOpen3()).toBe(false);
-    expect(state.squares[5][1].isInOpen3()).toBe(false);
-    expect(state.squares[1][1].isInOpen4()).toBe(false);
-    expect(state.squares[2][1].isInOpen4()).toBe(false);
-    expect(state.squares[3][1].isInOpen4()).toBe(false);
-    expect(state.squares[4][1].isInOpen4()).toBe(false);
-    expect(state.squares[5][1].isInOpen4()).toBe(false);
-
-    expect(state.squares[1][1].isIn5()).toBe(true);
-    expect(state.squares[2][1].isIn5()).toBe(true);
-    expect(state.squares[3][1].isIn5()).toBe(true);
-    expect(state.squares[4][1].isIn5()).toBe(true);
-    expect(state.squares[5][1].isIn5()).toBe(true);
+    expect(state.squares[1][1].isBlink()).toBe(true);
+    expect(state.squares[2][1].isBlink()).toBe(true);
+    expect(state.squares[3][1].isBlink()).toBe(true);
+    expect(state.squares[4][1].isBlink()).toBe(true);
+    expect(state.squares[5][1].isBlink()).toBe(true);
 
     // restart
     state = dispatch(state, { type: "restart" });

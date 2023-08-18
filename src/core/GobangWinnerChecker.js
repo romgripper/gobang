@@ -25,13 +25,9 @@ function check5Inline(squares, currentCoordinate, coordinateCalculate) {
         return GobangUtils.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
-    function mark5InLine(indexPattern) {
-        indexPattern.forEach((i) => getNth(i).setIn5());
-    }
-
     for (let winningPattern of WINNING_PATTERNS) {
         if (GobangUtils.stonesMatchPattern(winningPattern, getNth)) {
-            mark5InLine(winningPattern);
+            winningPattern.forEach((i) => getNth(i).setBlink());
             return true;
         }
     }

@@ -4,12 +4,20 @@ import GobangUtils from "./GobangUtils";
 import gobangCheckWinner from "./GobangWinnerChecker";
 import gobangMarkWarnings from "./GobangWarningMarker";
 
-// default export
 const common = {
     getSquare: Utils.getSquare,
     getRow: Utils.getRow,
     setSquare: Utils.setSquare
 };
+
+function gobangCheckWinnerAndMarkWarnings(newState) {
+    if (!newState.latestStoneCoordinate) return;
+
+    newState.hasWinner = gobangCheckWinner(newState.squares, newState.latestStoneCoordinate);
+    if (!newState.hasWinner) {
+        gobangMarkWarnings(newState.squares, newState.latestStoneCoordinate);
+    }
+}
 
 const Game = {
     go: {
@@ -18,7 +26,8 @@ const Game = {
         ROW_COUNT: GoUtils.ROW_COUNT,
         COLUMN_COUNT: GoUtils.COLUMN_COUNT,
         createInitialSquares: () => Utils.createInitialSquares(GoUtils.ROW_COUNT, GoUtils.COLUMN_COUNT),
-        postProcess: () => false
+        postProcess: (state) => {},
+        autoPlace: (state) => null
     },
     gobang: {
         ...common,
@@ -26,12 +35,11 @@ const Game = {
         ROW_COUNT: GobangUtils.ROW_COUNT,
         COLUMN_COUNT: GobangUtils.COLUMN_COUNT,
         createInitialSquares: () => Utils.createInitialSquares(GobangUtils.ROW_COUNT, GobangUtils.ROW_COUNT),
-        postProcess: (square, currentCoordinate) => {
-            const hasWinner = gobangCheckWinner(square, currentCoordinate);
-            if (!hasWinner) {
-                gobangMarkWarnings(square, currentCoordinate);
-            }
-            return hasWinner;
+        // called after squares are updated, history is update, and players are switched in newState
+        postProcess: gobangCheckWinnerAndMarkWarnings,
+        autoPlace: (state) => {
+            console.log("autoPlace");
+            return null;
         }
     }
 };

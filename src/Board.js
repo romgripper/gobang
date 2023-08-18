@@ -73,7 +73,7 @@ export default function Board() {
             <div className="status" style={{ width: boardSize, fontSize: fontSize, marginBottom: fontSize }}>
                 {state.hasWinner && (
                     <div>
-                        Winner&nbsp;
+                        Winner is&nbsp;
                         <img
                             src={currentPlayerImage}
                             alt={currentPlayer}

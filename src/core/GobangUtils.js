@@ -25,12 +25,12 @@ function isOutOfBoard([row, column]) {
 function stonesMatchPattern(indexPattern, getNth) {
     const first = getNth(indexPattern[0]);
     for (let i = 1; i < indexPattern.length; i++) {
-        if (!StoneAndEquals(first, getNth(indexPattern[i]))) return false;
+        if (!isSameStone(first, getNth(indexPattern[i]))) return false;
     }
     return true;
 }
 
-function StoneAndEquals(square1, square2) {
+function isSameStone(square1, square2) {
     return square1.hasStone() && square2.hasStone() && square1.isBlack() === square2.isBlack();
 }
 

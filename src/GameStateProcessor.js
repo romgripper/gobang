@@ -5,6 +5,7 @@ export function createInitialState(game) {
         isNextBlack: true,
         hasWinner: false,
         squares: game.createInitialSquares(),
+        latestStoneCoordinate: null,
         previousState: null
     };
 }
@@ -18,17 +19,18 @@ export function createDispatcher(game) {
             }
 
             const nextSquares = state.squares.map((row) => row.map((square) => (square ? square.clone() : null)));
-
             game.setSquare(nextSquares, coordinate, new Stone(state.isNextBlack).setLatestMove(true));
-
-            const hasWinner = game.postProcess(nextSquares, coordinate);
-
-            return {
+            
+            const newState = {
                 isNextBlack: !state.isNextBlack,
-                hasWinner: hasWinner,
                 squares: nextSquares,
+                latestStoneCoordinate: coordinate,
                 previousState: state
             };
+
+            game.postProcess(newState);
+
+            return newState;
         } else if (action.type === "rollback" && state.previousState) {
             return state.previousState;
         } else if (action.type === "restart") {

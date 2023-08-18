@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState, useLayoutEffect } from "react";
+import { createContext, useContext, useReducer, useState, useLayoutEffect, useEffect } from "react";
 import { createDispatcher, createInitialState } from "./GameStateProcessor";
 import Game from "./core/Game";
 
@@ -21,6 +21,14 @@ export default function StateProvider({ gameName, children }) {
         updateSize();
         return () => window.removeEventListener("resize", updateSize);
     }, []);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            const coordinate = game.autoPlace(state);
+            if (coordinate) dispatch({ action: "placeStone", coordinate: coordinate });
+        }, 500);
+        return () => clearTimeout(timeoutId);
+    }, [game, state]);
 
     return (
         <WindowSizeContext.Provider value={windowSize}>

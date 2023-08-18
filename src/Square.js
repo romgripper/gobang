@@ -11,7 +11,7 @@ export default function Square({ row, column, size }) {
     }
 
     let className = "square";
-    if (square.isMarkedByPlayer()) {
+    if (square.hasStone()) {
         className += square.isBlack() ? " black" : " white";
         if (shouldBlink(square)) {
             className += " blink";
@@ -24,7 +24,7 @@ export default function Square({ row, column, size }) {
             style={{ width: size, height: size }}
             onClick={() =>
                 dispatch({
-                    type: "click",
+                    type: "placeStone",
                     coordinate: [row, column]
                 })
             }

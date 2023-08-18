@@ -1,4 +1,4 @@
-import { PlayerSquare } from "./core/SquareData";
+import { Stone } from "./core/SquareData";
 
 export function createInitialState(game) {
     return {
@@ -11,15 +11,15 @@ export function createInitialState(game) {
 
 export function createDispatcher(game) {
     return (state, action) => {
-        if (action.type === "click") {
+        if (action.type === "placeStone") {
             const coordinate = action.coordinate;
-            if (state.hasWinner || game.getSquare(state.squares, coordinate).isMarkedByPlayer()) {
+            if (state.hasWinner || game.getSquare(state.squares, coordinate).hasStone()) {
                 return state;
             }
 
             const nextSquares = state.squares.map((row) => row.map((square) => (square ? square.clone() : null)));
 
-            game.setSquare(nextSquares, coordinate, new PlayerSquare(state.isNextBlack).setLatestMove(true));
+            game.setSquare(nextSquares, coordinate, new Stone(state.isNextBlack).setLatestMove(true));
 
             const hasWinner = game.postProcess(nextSquares, coordinate);
 

@@ -30,7 +30,7 @@ function check5Inline(squares, currentCoordinate, coordinateCalculate) {
     }
 
     for (let winningPattern of WINNING_PATTERNS) {
-        if (GobangUtils.playerMarkersMatchPattern(winningPattern, getNth)) {
+        if (GobangUtils.stonesMatchPattern(winningPattern, getNth)) {
             mark5InLine(winningPattern);
             return true;
         }

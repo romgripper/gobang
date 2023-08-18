@@ -22,16 +22,16 @@ function isOutOfBoard([row, column]) {
     return row < 0 || row >= ROW_COUNT || column < 0 || column >= COLUMN_COUNT;
 }
 
-function playerMarkersMatchPattern(indexPattern, getNth) {
+function stonesMatchPattern(indexPattern, getNth) {
     const first = getNth(indexPattern[0]);
     for (let i = 1; i < indexPattern.length; i++) {
-        if (!playerSquareAndEquals(first, getNth(indexPattern[i]))) return false;
+        if (!StoneAndEquals(first, getNth(indexPattern[i]))) return false;
     }
     return true;
 }
 
-function playerSquareAndEquals(square1, square2) {
-    return square1.isMarkedByPlayer() && square2.isMarkedByPlayer() && square1.isBlack() === square2.isBlack();
+function StoneAndEquals(square1, square2) {
+    return square1.hasStone() && square2.hasStone() && square1.isBlack() === square2.isBlack();
 }
 
 // default export
@@ -40,7 +40,7 @@ const GobangUtils = {
     COLUMN_COUNT,
     COORDINATE_CALCULATORS,
     getNthSquareInLine,
-    playerMarkersMatchPattern
+    stonesMatchPattern
 };
 
 export default GobangUtils;

@@ -1,4 +1,4 @@
-export class PlayerSquare {
+export class Stone {
     #isBlack;
     #isLatestMove = false;
     #isInOpen3 = false; // OXXXO
@@ -9,7 +9,7 @@ export class PlayerSquare {
         this.#isBlack = isBlack; // black or white
     }
 
-    isMarkedByPlayer() {
+    hasStone() {
         return true;
     }
 
@@ -59,12 +59,12 @@ export class PlayerSquare {
 
     // care about #isBlack only
     clone() {
-        return new PlayerSquare(this.#isBlack);
+        return new Stone(this.#isBlack);
     }
 }
 
 export class EmptySquare {
-    isMarkedByPlayer() {
+    hasStone() {
         return false;
     }
 
@@ -74,7 +74,7 @@ export class EmptySquare {
 }
 
 export class VirtualSquare {
-    isMarkedByPlayer() {
+    hasStone() {
         return false;
     }
 

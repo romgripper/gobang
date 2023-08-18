@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useState, useLayoutEffect, useEffect } from "react";
-import { createDispatcher, createInitialState } from "./GameStateProcessor";
+import { createDispatcher } from "./GameStateProcessor";
 import Game from "./core/Game";
 
 const GameContext = createContext(null);
@@ -10,7 +10,7 @@ const WindowSizeContext = createContext(null);
 // game is go or gobang
 export default function StateProvider({ gameName, children }) {
     const game = Game[gameName];
-    const [state, dispatch] = useReducer(createDispatcher(game), createInitialState(game));
+    const [state, dispatch] = useReducer(createDispatcher(game), game.createInitialState());
 
     const [windowSize, setWindowSize] = useState([0, 0]);
     useLayoutEffect(() => {
@@ -23,11 +23,16 @@ export default function StateProvider({ gameName, children }) {
     }, []);
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            const coordinate = game.autoPlace(state);
-            if (coordinate) dispatch({ action: "placeStone", coordinate: coordinate });
-        }, 500);
-        return () => clearTimeout(timeoutId);
+        let timeoutId = null;
+        const coordinate = game.autoPlace(state);
+        if (coordinate) {
+            timeoutId = setTimeout(() => {
+                dispatch({ type: "placeStone", coordinate: coordinate });
+            }, 1000);
+        }
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId);
+        };
     }, [game, state]);
 
     return (

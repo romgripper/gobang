@@ -133,12 +133,22 @@ const WARNING_PATTERNS = [
     }
 ];
 
+// return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default function markWarnings(squares, currentCoordinate) {
-    GobangUtils.COORDINATE_CALCULATORS.forEach((coordinateCalculate) =>
-        checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, WARNING_PATTERNS)
-    );
+    const coordinatesToFixFourInLine = [];
+    GobangUtils.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
+        const fixCoordinates = checkAndShowWarningsInLine(
+            squares,
+            currentCoordinate,
+            coordinateCalculate,
+            WARNING_PATTERNS
+        );
+        fixCoordinates.forEach((c) => coordinatesToFixFourInLine.push(c));
+    });
+    return coordinatesToFixFourInLine;
 }
 
+// return the coordinates which could fix the 4-in-line formed by current stone
 function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, patterns) {
     function getNth(n) {
         return GobangUtils.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
@@ -151,19 +161,18 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
         return true;
     }
 
-    function markWarningsInLine(stoneIndexes) {
-        stoneIndexes.forEach((i) => {
-            if (stoneIndexes.length === 3) getNth(i).setBlink();
-            else getNth(i).setBlink();
-        });
-    }
-
+    const coordinatesToFixFourInLine = [];
     for (let i = 0; i < patterns.length; i++) {
-        if (
-            GobangUtils.stonesMatchPattern(patterns[i].stoneIndexes, getNth) &&
-            emptySquaresMatchPattern(patterns[i].emptyIndexes)
-        ) {
-            markWarningsInLine(patterns[i].stoneIndexes);
+        const stoneIndexes = patterns[i].stoneIndexes;
+        const emptyIndexes = patterns[i].emptyIndexes;
+        if (GobangUtils.stonesMatchPattern(stoneIndexes, getNth) && emptySquaresMatchPattern(emptyIndexes)) {
+            stoneIndexes.forEach((stoneIndexes) => getNth(stoneIndexes).setBlink());
+            if (stoneIndexes.length === 4) {
+                emptyIndexes.forEach((emptyIndex) =>
+                    coordinatesToFixFourInLine.push(coordinateCalculate(currentCoordinate, emptyIndex))
+                );
+            }
         }
     }
+    return coordinatesToFixFourInLine;
 }

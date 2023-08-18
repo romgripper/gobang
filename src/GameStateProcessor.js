@@ -1,15 +1,5 @@
 import { Stone } from "./core/SquareData";
 
-export function createInitialState(game) {
-    return {
-        isNextBlack: true,
-        hasWinner: false,
-        squares: game.createInitialSquares(),
-        latestStoneCoordinate: null,
-        previousState: null
-    };
-}
-
 export function createDispatcher(game) {
     return (state, action) => {
         if (action.type === "placeStone") {
@@ -34,7 +24,7 @@ export function createDispatcher(game) {
         } else if (action.type === "rollback" && state.previousState) {
             return state.previousState;
         } else if (action.type === "restart") {
-            return createInitialState(game);
+            return game.createInitialState();
         }
         return state;
     };

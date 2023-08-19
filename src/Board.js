@@ -1,6 +1,6 @@
 import Row from "./Row";
-
-import { useGameState, useDispatch, useWindowSize, useGameContext } from "./GameStateContext";
+import { useGameState, useDispatch, useGameContext } from "./GameStateContext";
+import { useState, useLayoutEffect, useEffect } from "react";
 
 function range(size) {
     const a = [];
@@ -19,7 +19,35 @@ export default function Board() {
     const state = useGameState();
     const dispatch = useDispatch();
     const game = useGameContext();
-    const [windowWidth, windowHeight] = useWindowSize();
+
+    const [windowSize, setWindowSize] = useState([0, 0]);
+    const [windowWidth, windowHeight] = windowSize;
+    const [autoPlacement, setAutoPlacement] = useState(false);
+    const [autoPlacementDelay, setAutoPlacementDelay] = useState(2000);
+
+    useLayoutEffect(() => {
+        function updateSize() {
+            setWindowSize([window.innerWidth, window.innerHeight]);
+        }
+        window.addEventListener("resize", updateSize);
+        updateSize();
+        return () => window.removeEventListener("resize", updateSize);
+    }, []);
+
+    useEffect(() => {
+        if (!autoPlacement) return;
+
+        let timeoutId = null;
+        const coordinate = game.autoPlace(state);
+        if (coordinate) {
+            timeoutId = setTimeout(() => {
+                dispatch({ type: "placeStone", coordinate: coordinate });
+            }, 2000);
+        }
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, [game, state, dispatch, autoPlacement]);
 
     let currentPlayerImage;
     let currentPlayer;
@@ -88,12 +116,36 @@ export default function Board() {
                             alt={nextPlayer}
                             style={{ width: statusHeight, height: statusHeight }}
                         />
+                        <label style={{ marginLeft: squareSize / 2 }}>
+                            <input
+                                type="checkbox"
+                                checked={autoPlacement}
+                                onChange={(e) => setAutoPlacement(e.target.checked)}
+                            ></input>
+                            Auto
+                        </label>
+                        {autoPlacement && (
+                            <input
+                                type="range"
+                                min="500"
+                                max="5000"
+                                value={autoPlacementDelay}
+                                step="500"
+                                onChange={(e) => setAutoPlacementDelay(e.target.value)}
+                                style={{ marginLeft: squareSize / 2, width: squareSize * 3 }}
+                            ></input>
+                        )}
                     </div>
                 )}
                 <div>
                     {state.previousState && !state.hasWinner && (
                         <button
-                            style={{ fontSize: fontSize, width: squareSize * 5, height: statusHeight }}
+                            style={{
+                                fontSize: fontSize,
+                                width: squareSize * 5,
+                                height: statusHeight,
+                                marginLeft: squareSize / 2
+                            }}
                             onClick={() => dispatch({ type: "rollback" })}
                         >
                             Back

@@ -9,7 +9,6 @@ const games = {
 export default function getGameInstance(gameName) {
     if (!games[gameName]) {
         const game = gameName === "go" ? new Go() : new Gobang();
-        game.init();
         games[gameName] = game;
     }
     return games[gameName];

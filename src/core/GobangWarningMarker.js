@@ -1,180 +1,183 @@
-import { stonesMatchPattern } from "./Gobang";
-import Gobang from "./Gobang";
-import Game from "./Game";
+import GobangUtil from "./GobangUtil";
+import Util from "./Util";
 
 const WARNING_PATTERNS = [
     // 3 in line
     // OXXXO
     {
         stoneIndexes: [0, 1, 2],
-        noStoneIndexes: [-1, 3]
+        nonStoneIndexes: [-1, 3]
     },
     {
         stoneIndexes: [-1, 0, 1],
-        noStoneIndexes: [-2, 2]
+        nonStoneIndexes: [-2, 2]
     },
     {
         stoneIndexes: [-2, -1, 0],
-        noStoneIndexes: [-3, 1]
+        nonStoneIndexes: [-3, 1]
     },
     // OXOXXO
     {
         stoneIndexes: [0, 2, 3],
-        noStoneIndexes: [-1, 1, 4]
+        nonStoneIndexes: [-1, 1, 4]
     },
     {
         stoneIndexes: [-2, 0, 1],
-        noStoneIndexes: [-3, -1, 2]
+        nonStoneIndexes: [-3, -1, 2]
     },
     {
         stoneIndexes: [-3, -1, 0],
-        noStoneIndexes: [-4, -2, 1]
+        nonStoneIndexes: [-4, -2, 1]
     },
     // OXXOXO
     {
         stoneIndexes: [0, 1, 3],
-        noStoneIndexes: [-1, 2, 4]
+        nonStoneIndexes: [-1, 2, 4]
     },
     {
         stoneIndexes: [-1, 0, 2],
-        noStoneIndexes: [-2, 1, 3]
+        nonStoneIndexes: [-2, 1, 3]
     },
     {
         stoneIndexes: [-3, -2, 0],
-        noStoneIndexes: [-4, -1, 1]
+        nonStoneIndexes: [-4, -1, 1]
     },
 
     // 4 in line
     // OXXXX
     {
         stoneIndexes: [0, 1, 2, 3],
-        noStoneIndexes: [-1]
+        nonStoneIndexes: [-1]
     },
     {
         stoneIndexes: [-1, 0, 1, 2],
-        noStoneIndexes: [-2]
+        nonStoneIndexes: [-2]
     },
     {
         stoneIndexes: [-2, -1, 0, 1],
-        noStoneIndexes: [-3]
+        nonStoneIndexes: [-3]
     },
     {
         stoneIndexes: [-3, -2, -1, 0],
-        noStoneIndexes: [-4]
+        nonStoneIndexes: [-4]
     },
     // XOXXX
     {
         stoneIndexes: [0, 2, 3, 4],
-        noStoneIndexes: [1]
+        nonStoneIndexes: [1]
     },
     {
         stoneIndexes: [-2, 0, 1, 2],
-        noStoneIndexes: [-1],
+        nonStoneIndexes: [-1],
         warningIndexes: [-1]
     },
     {
         stoneIndexes: [-3, -1, 0, 1],
-        noStoneIndexes: [-2]
+        nonStoneIndexes: [-2]
     },
     {
         stoneIndexes: [-4, -2, -1, 0],
-        noStoneIndexes: [-3]
+        nonStoneIndexes: [-3]
     },
     // XXOXX
     {
         stoneIndexes: [0, 1, 3, 4],
-        noStoneIndexes: [2]
+        nonStoneIndexes: [2]
     },
     {
         stoneIndexes: [-1, 0, 2, 3],
-        noStoneIndexes: [1],
+        nonStoneIndexes: [1],
         warningIndexes: [1]
     },
     {
         stoneIndexes: [-3, -2, 0, 1],
-        noStoneIndexes: [-1]
+        nonStoneIndexes: [-1]
     },
     {
         stoneIndexes: [-4, -3, -1, 0],
-        noStoneIndexes: [-2]
+        nonStoneIndexes: [-2]
     },
     // XXXOX
     {
         stoneIndexes: [0, 1, 2, 4],
-        noStoneIndexes: [3]
+        nonStoneIndexes: [3]
     },
     {
         stoneIndexes: [-1, 0, 1, 3],
-        noStoneIndexes: [2],
+        nonStoneIndexes: [2],
         warningIndexes: [2]
     },
     {
         stoneIndexes: [-2, -1, 0, 2],
-        noStoneIndexes: [1]
+        nonStoneIndexes: [1]
     },
     {
         stoneIndexes: [-4, -3, -2, 0],
-        noStoneIndexes: [-1]
+        nonStoneIndexes: [-1]
     },
     // XXXXO
     {
         stoneIndexes: [0, 1, 2, 3],
-        noStoneIndexes: [4]
+        nonStoneIndexes: [4]
     },
     {
         stoneIndexes: [-1, 0, 1, 2],
-        noStoneIndexes: [3]
+        nonStoneIndexes: [3]
     },
     {
         stoneIndexes: [-2, -1, 0, 1],
-        noStoneIndexes: [2]
+        nonStoneIndexes: [2]
     },
     {
         stoneIndexes: [-3, -2, -1, 0],
-        noStoneIndexes: [1]
+        nonStoneIndexes: [1]
     }
 ];
 
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
-export default function markWarnings(stones, currentCoordinate) {
-    const coordinatesToFixFourInLine = [];
-    Game.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
-        const fixCoordinates = checkAndShowWarningsInLine(
-            stones,
-            currentCoordinate,
-            coordinateCalculate,
-            WARNING_PATTERNS
-        );
-        fixCoordinates.forEach((c) => coordinatesToFixFourInLine.push(c));
-    });
-    return coordinatesToFixFourInLine;
-}
+export default class GobangWarningMarker {
+    #stones;
+    #currentCoordinate;
 
-// return the coordinates which could fix the 4-in-line formed by current stone
-function checkAndShowWarningsInLine(stones, currentCoordinate, coordinateCalculate, patterns) {
-    function getNth(n) {
-        return Gobang.getNthStoneInLine(stones, currentCoordinate, n, coordinateCalculate);
+    constructor(stones, currentCoordinate) {
+        this.#stones = stones;
+        this.#currentCoordinate = currentCoordinate;
     }
 
-    function noStonesMatchPattern(indexPattern) {
-        for (let i = 0; i < indexPattern.length; i++) {
-            if (!getNth(indexPattern[i]).isNoStone()) return false;
+    markWarnings() {
+        const coordinatesToFixFourInLine = [];
+        Util.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
+            const fixCoordinates = this.#checkAndShowWarningsInLine(coordinateCalculate, WARNING_PATTERNS);
+            fixCoordinates.forEach((c) => coordinatesToFixFourInLine.push(c));
+        });
+        return coordinatesToFixFourInLine;
+    }
+
+    // return the coordinates which could fix the 4-in-line formed by current stone
+    #checkAndShowWarningsInLine(coordinateCalculate, patterns) {
+        const getNth = (n) =>
+            GobangUtil.getNthStoneInLine(this.#stones, this.#currentCoordinate, n, coordinateCalculate);
+
+        function nonStonesMatchPattern(indexPattern) {
+            for (let i = 0; i < indexPattern.length; i++) {
+                if (!getNth(indexPattern[i]).isNonStone()) return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    const coordinatesToFixFourInLine = [];
-    for (let i = 0; i < patterns.length; i++) {
-        const stoneIndexes = patterns[i].stoneIndexes;
-        const noStoneIndexes = patterns[i].noStoneIndexes;
-        if (stonesMatchPattern(stoneIndexes, getNth) && noStonesMatchPattern(noStoneIndexes)) {
-            stoneIndexes.forEach((stoneIndexes) => getNth(stoneIndexes).setBlink());
-            if (stoneIndexes.length === 4) {
-                noStoneIndexes.forEach((emptyIndex) =>
-                    coordinatesToFixFourInLine.push(coordinateCalculate(currentCoordinate, emptyIndex))
-                );
+        const coordinatesToFixFourInLine = [];
+        for (let i = 0; i < patterns.length; i++) {
+            const stoneIndexes = patterns[i].stoneIndexes;
+            const nonStoneIndexes = patterns[i].nonStoneIndexes;
+            if (GobangUtil.stonesMatchPattern(stoneIndexes, getNth) && nonStonesMatchPattern(nonStoneIndexes)) {
+                stoneIndexes.forEach((stoneIndexes) => getNth(stoneIndexes).setBlink());
+                if (stoneIndexes.length === 4) {
+                    nonStoneIndexes.forEach((nonStoneIndex) =>
+                        coordinatesToFixFourInLine.push(coordinateCalculate(this.#currentCoordinate, nonStoneIndex))
+                    );
+                }
             }
         }
+        return coordinatesToFixFourInLine;
     }
-    return coordinatesToFixFourInLine;
 }

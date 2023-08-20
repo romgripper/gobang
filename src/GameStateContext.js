@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import getGameInstance from "./core/Game";
+import getGameInstance from "./core/GameFactory";
 
 const GameContext = createContext(null);
 const StateContext = createContext(null);

@@ -28,7 +28,7 @@ it("Game plays as expected", () => {
 
     // black first [1, 1]
     const state1 = dispatch(state0, { type: "placeStone", coordinate: [1, 1] });
-    expect(state1.stones[1][1].isNoStone()).toBe(false);
+    expect(state1.stones[1][1].isNonStone()).toBe(false);
     expect(state1.stones[1][1].isBlack()).toBe(true);
     expect(state1.stones[1][1].isBlink()).toBe(true);
     expect(state1.stones[0][0]).toBe(null);
@@ -36,10 +36,10 @@ it("Game plays as expected", () => {
 
     // white next [1, 2]
     const state2 = dispatch(state1, { type: "placeStone", coordinate: [1, 2] });
-    expect(state2.stones[1][1].isNoStone()).toBe(false);
+    expect(state2.stones[1][1].isNonStone()).toBe(false);
     expect(state2.stones[1][1].isBlack()).toBe(true);
     expect(state2.stones[1][1].isBlink()).toBe(false);
-    expect(state2.stones[1][1].isNoStone()).toBe(false);
+    expect(state2.stones[1][1].isNonStone()).toBe(false);
     expect(state2.stones[1][2].isBlack()).toBe(false);
     expect(state2.stones[1][2].isBlink()).toBe(true);
     expect(state2.stones[0][0]).toBe(null);

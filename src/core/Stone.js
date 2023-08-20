@@ -10,7 +10,7 @@ export class Stone {
         return true;
     }
 
-    isNoStone() {
+    isNonStone() {
         return false;
     }
 
@@ -33,12 +33,12 @@ export class Stone {
     }
 }
 
-export class NoStone {
+export class NonStone {
     isStone() {
         return false;
     }
 
-    isNoStone() {
+    isNonStone() {
         return true;
     }
 }
@@ -48,7 +48,7 @@ export class InvalidStone {
         return false;
     }
 
-    isNoStone() {
+    isNonStone() {
         return false;
     }
 }

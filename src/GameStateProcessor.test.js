@@ -1,4 +1,4 @@
-import { createDispatcher } from "./GameStateProcessor";
+import { createDispatcher } from "./core/GameStateProcessor";
 import Game from "./core/Game";
 
 const Gobang = Game.gobang;

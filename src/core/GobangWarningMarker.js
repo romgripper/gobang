@@ -1,4 +1,6 @@
-import GobangUtils from "./GobangUtils";
+import { stonesMatchPattern } from "./Gobang";
+import Gobang from "./Gobang";
+import GameBase from "./GameBase";
 
 const WARNING_PATTERNS = [
     // 3 in line
@@ -136,7 +138,7 @@ const WARNING_PATTERNS = [
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default function markWarnings(squares, currentCoordinate) {
     const coordinatesToFixFourInLine = [];
-    GobangUtils.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
+    GameBase.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
         const fixCoordinates = checkAndShowWarningsInLine(
             squares,
             currentCoordinate,
@@ -151,7 +153,7 @@ export default function markWarnings(squares, currentCoordinate) {
 // return the coordinates which could fix the 4-in-line formed by current stone
 function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalculate, patterns) {
     function getNth(n) {
-        return GobangUtils.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+        return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
     }
 
     function emptySquaresMatchPattern(indexPattern) {
@@ -165,7 +167,7 @@ function checkAndShowWarningsInLine(squares, currentCoordinate, coordinateCalcul
     for (let i = 0; i < patterns.length; i++) {
         const stoneIndexes = patterns[i].stoneIndexes;
         const emptyIndexes = patterns[i].emptyIndexes;
-        if (GobangUtils.stonesMatchPattern(stoneIndexes, getNth) && emptySquaresMatchPattern(emptyIndexes)) {
+        if (stonesMatchPattern(stoneIndexes, getNth) && emptySquaresMatchPattern(emptyIndexes)) {
             stoneIndexes.forEach((stoneIndexes) => getNth(stoneIndexes).setBlink());
             if (stoneIndexes.length === 4) {
                 emptyIndexes.forEach((emptyIndex) =>

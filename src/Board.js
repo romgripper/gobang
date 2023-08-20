@@ -101,7 +101,7 @@ export default function Board() {
             <div className="status" style={{ width: boardSize, fontSize: fontSize, marginBottom: fontSize }}>
                 {state.hasWinner && (
                     <div>
-                        Winner is&nbsp;
+                        Winner&nbsp;
                         <img
                             src={currentPlayerImage}
                             alt={currentPlayer}
@@ -154,7 +154,7 @@ export default function Board() {
                     {state.previousState && restartButton}
                 </div>
             </div>
-            <div className={game.name + " board"} style={{ width: boardSize, padding: boardPadding }}>
+            <div className={game.getName() + " board"} style={{ width: boardSize, padding: boardPadding }}>
                 {range(game.ROW_COUNT).map((row) => (
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}

@@ -1,9 +1,7 @@
-import { VirtualSquare } from "./SquareData";
+import { InvalidStone } from "./Stone";
 import GameBase from "./GameBase";
 import gobangCheckWinner from "./GobangWinnerChecker";
 import gobangMarkWarnings from "./GobangWarningMarker";
-
-const VIRTUAL_SQUARE = new VirtualSquare();
 
 const ROW_COUNT = 15;
 const COLUMN_COUNT = 15;
@@ -16,7 +14,7 @@ export default class Gobang extends GameBase {
         this.INITIAL_STATE = {
             isNextBlack: true,
             hasWinner: false,
-            squares: super.createInitialSquares(),
+            stones: super.createInitialStones(),
             latestStoneCoordinate: null,
             fix4InLineCoordinates: [],
             previousState: null
@@ -27,18 +25,18 @@ export default class Gobang extends GameBase {
         return "gobang";
     }
 
-    // return a virtual square if out of board
-    static getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculator) {
+    // return a virtual stone if out of board
+    static getNthStoneInLine(stones, currentCoordinate, n, coordinateCalculator) {
         const coordinate = coordinateCalculator(currentCoordinate, n);
         return GameBase.isOutOfBoard(coordinate, ROW_COUNT, COLUMN_COUNT)
-            ? VIRTUAL_SQUARE
-            : GameBase.getSquare(squares, coordinate);
+            ? new InvalidStone()
+            : GameBase.getStone(stones, coordinate);
     }
 
     postProcess(newState) {
-        newState.hasWinner = gobangCheckWinner(newState.squares, newState.latestStoneCoordinate);
+        newState.hasWinner = gobangCheckWinner(newState.stones, newState.latestStoneCoordinate);
         if (!newState.hasWinner) {
-            newState.fix4InLineCoordinates = gobangMarkWarnings(newState.squares, newState.latestStoneCoordinate);
+            newState.fix4InLineCoordinates = gobangMarkWarnings(newState.stones, newState.latestStoneCoordinate);
         }
     }
 
@@ -55,7 +53,7 @@ export default class Gobang extends GameBase {
             for (let i = 0; i < state.fix4InLineCoordinates.length; i++) {
                 const coordinate = state.fix4InLineCoordinates[i];
                 // need to check if it is empty because it could be fixed
-                if (GameBase.getSquare(currentState.squares, coordinate).isEmpty()) return coordinate;
+                if (GameBase.getStone(currentState.stones, coordinate).isNoStone()) return coordinate;
             }
         }
         return;
@@ -70,6 +68,6 @@ export function stonesMatchPattern(indexPattern, getNth) {
     return true;
 }
 
-function isSameStone(square1, square2) {
-    return square1.hasStone() && square2.hasStone() && square1.isBlack() === square2.isBlack();
+function isSameStone(Stone1, Stone2) {
+    return Stone1.isStone() && Stone2.isStone() && Stone1.isBlack() === Stone2.isBlack();
 }

@@ -1,5 +1,5 @@
-import { EmptySquare } from "./SquareData";
-import { Stone } from "./SquareData";
+import { NoStone } from "./Stone";
+import { Stone } from "./Stone";
 
 export default class GameBase {
     ROW_COUNT;
@@ -21,7 +21,7 @@ export default class GameBase {
         throw new Error("Method 'getName()' must be implemented.");
     }
 
-    createInitialSquares() {
+    createInitialStones() {
         return Array(this.ROW_COUNT)
             .fill(null)
             .map(() => Array(this.COLUMN_COUNT).fill(null));
@@ -35,36 +35,36 @@ export default class GameBase {
         return row < 0 || row >= rowCount || column < 0 || column >= columnCount;
     }
 
-    // called after squares are updated, history is update, and players are switched in newState
+    // called after stones are updated, history is update, and players are switched in newState
     postProcess(state) {}
 
     determineNextStoneCoordinate(state) {}
 
-    static getSquare(squares, [row, column]) {
-        return squares[row][column] || new EmptySquare();
+    static getStone(stones, [row, column]) {
+        return stones[row][column] || new NoStone();
     }
 
-    static getRow(squares, row) {
-        return squares[row];
+    static getRow(stones, row) {
+        return stones[row];
     }
 
-    static setSquare(squares, [row, column], square) {
-        squares[row][column] = square;
+    static setStone(stones, [row, column], Stone) {
+        stones[row][column] = Stone;
     }
 
     createDispatcher() {
         return (state, action) => {
             if (action.type === "placeStone") {
                 const coordinate = action.coordinate;
-                if (state.hasWinner || GameBase.getSquare(state.squares, coordinate).hasStone()) {
+                if (state.hasWinner || GameBase.getStone(state.stones, coordinate).isStone()) {
                     return state;
                 }
-                const nextSquares = state.squares.map((row) => row.map((square) => (square ? square.clone() : null)));
-                GameBase.setSquare(nextSquares, coordinate, new Stone(state.isNextBlack).setBlink());
+                const nextStones = state.stones.map((row) => row.map((Stone) => (Stone ? Stone.clone() : null)));
+                GameBase.setStone(nextStones, coordinate, new Stone(state.isNextBlack).setBlink());
 
                 const newState = {
                     isNextBlack: !state.isNextBlack,
-                    squares: nextSquares,
+                    stones: nextStones,
                     latestStoneCoordinate: coordinate,
                     previousState: state
                 };

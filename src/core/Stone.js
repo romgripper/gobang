@@ -6,11 +6,11 @@ export class Stone {
         this.#isBlack = isBlack; // black or white
     }
 
-    hasStone() {
+    isStone() {
         return true;
     }
 
-    isEmpty() {
+    isNoStone() {
         return false;
     }
 
@@ -33,22 +33,22 @@ export class Stone {
     }
 }
 
-export class EmptySquare {
-    hasStone() {
+export class NoStone {
+    isStone() {
         return false;
     }
 
-    isEmpty() {
+    isNoStone() {
         return true;
     }
 }
 
-export class VirtualSquare {
-    hasStone() {
+export class InvalidStone {
+    isStone() {
         return false;
     }
 
-    isEmpty() {
+    isNoStone() {
         return false;
     }
 }

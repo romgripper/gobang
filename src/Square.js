@@ -1,14 +1,14 @@
-import { useSquares, useDispatch } from "./GameStateContext";
+import { useStones, useDispatch } from "./GameStateContext";
 import GameBase from "./core/GameBase";
 
 export default function Square({ row, column, size }) {
-    const square = GameBase.getSquare(useSquares(), [row, column]);
+    const stone = GameBase.getStone(useStones(), [row, column]);
     const dispatch = useDispatch();
 
     let className = "square";
-    if (square.hasStone()) {
-        className += square.isBlack() ? " black" : " white";
-        className += square.isBlink() ? " blink" : "";
+    if (stone.isStone()) {
+        className += stone.isBlack() ? " black" : " white";
+        className += stone.isBlink() ? " blink" : "";
     }
 
     return (

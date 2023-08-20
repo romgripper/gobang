@@ -12,10 +12,10 @@ const WINNING_PATTERNS = [
     [-4, -3, -2, -1, 0]
 ];
 
-function checkWinner(squares, currentCoordinate) {
-    function check5Inline(squares, currentCoordinate, coordinateCalculate) {
+function checkWinner(stones, currentCoordinate) {
+    function check5Inline(stones, currentCoordinate, coordinateCalculate) {
         function getNth(n) {
-            return Gobang.getNthSquareInLine(squares, currentCoordinate, n, coordinateCalculate);
+            return Gobang.getNthStoneInLine(stones, currentCoordinate, n, coordinateCalculate);
         }
 
         for (let winningPattern of WINNING_PATTERNS) {
@@ -28,7 +28,7 @@ function checkWinner(squares, currentCoordinate) {
     }
 
     for (let coordinateCalculator of GameBase.COORDINATE_CALCULATORS) {
-        const winning = check5Inline(squares, currentCoordinate, coordinateCalculator);
+        const winning = check5Inline(stones, currentCoordinate, coordinateCalculator);
         if (winning) {
             return true;
         }

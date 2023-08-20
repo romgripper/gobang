@@ -8,7 +8,7 @@ export default class Go extends GameBase {
         this.INITIAL_STATE = {
             isNextBlack: true,
             hasWinner: false,
-            squares: super.createInitialSquares()
+            stones: super.createInitialStones()
         };
     }
 

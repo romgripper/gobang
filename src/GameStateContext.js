@@ -20,8 +20,8 @@ export default function StateProvider({ gameName, children }) {
     );
 }
 
-export function useSquares() {
-    return useGameState().squares;
+export function useStones() {
+    return useGameState().stones;
 }
 
 export function useGameState() {

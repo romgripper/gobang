@@ -10,7 +10,7 @@ export class Stone {
         return true;
     }
 
-    isNonStone() {
+    isVacancy() {
         return false;
     }
 
@@ -33,22 +33,23 @@ export class Stone {
     }
 }
 
-export class NonStone {
+export class Vacancy {
     isStone() {
         return false;
     }
 
-    isNonStone() {
+    isVacancy() {
         return true;
     }
 }
 
+// Represent values whose coordinates are out of bound
 export class InvalidStone {
     isStone() {
         return false;
     }
 
-    isNonStone() {
+    isVacancy() {
         return false;
     }
 }

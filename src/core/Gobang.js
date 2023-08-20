@@ -47,7 +47,7 @@ export default class Gobang extends Game {
             for (let i = 0; i < state.fix4InLineCoordinates.length; i++) {
                 const coordinate = state.fix4InLineCoordinates[i];
                 // need to check if it is empty because it could be fixed
-                if (Util.getStone(currentState.stones, coordinate).isNonStone()) return coordinate;
+                if (Util.getStone(currentState.stones, coordinate).isVacancy()) return coordinate;
             }
         }
         return;

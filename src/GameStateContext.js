@@ -1,6 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import Go from "./core/Go";
-import Gobang from "./core/Gobang";
+import getGameInstance from "./core/Game";
 
 const GameContext = createContext(null);
 const StateContext = createContext(null);
@@ -8,8 +7,8 @@ const DispatchContext = createContext(null);
 
 // game is go or gobang
 export default function StateProvider({ gameName, children }) {
-    const game = gameName === "go" ? new Go() : new Gobang();
-    const [state, dispatch] = useReducer(game.createDispatcher(), game.INITIAL_STATE);
+    const game = getGameInstance(gameName);
+    const [state, dispatch] = useReducer(game.createDispatcher(), game.createInitialState());
 
     return (
         <GameContext.Provider value={game}>

@@ -1,6 +1,6 @@
 import { stonesMatchPattern } from "./Gobang";
 import Gobang from "./Gobang";
-import GameBase from "./GameBase";
+import Game from "./Game";
 
 const WARNING_PATTERNS = [
     // 3 in line
@@ -138,7 +138,7 @@ const WARNING_PATTERNS = [
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default function markWarnings(stones, currentCoordinate) {
     const coordinatesToFixFourInLine = [];
-    GameBase.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
+    Game.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
         const fixCoordinates = checkAndShowWarningsInLine(
             stones,
             currentCoordinate,

@@ -1,6 +1,6 @@
 import { stonesMatchPattern } from "./Gobang";
 import Gobang from "./Gobang";
-import GameBase from "./GameBase";
+import Game from "./Game";
 
 // current move's index is 0,
 // 5 possible positions for current move
@@ -27,7 +27,7 @@ function checkWinner(stones, currentCoordinate) {
         return false;
     }
 
-    for (let coordinateCalculator of GameBase.COORDINATE_CALCULATORS) {
+    for (let coordinateCalculator of Game.COORDINATE_CALCULATORS) {
         const winning = check5Inline(stones, currentCoordinate, coordinateCalculator);
         if (winning) {
             return true;

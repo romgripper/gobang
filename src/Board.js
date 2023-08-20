@@ -25,6 +25,8 @@ export default function Board() {
     const [autoPlacement, setAutoPlacement] = useState(false);
     const [autoPlacementDelay, setAutoPlacementDelay] = useState(2000);
 
+    console.log(state);
+
     useLayoutEffect(() => {
         function updateSize() {
             setWindowSize([window.innerWidth, window.innerHeight]);

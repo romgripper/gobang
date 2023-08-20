@@ -1,36 +1,37 @@
 import { InvalidStone } from "./Stone";
-import GameBase from "./GameBase";
+import Game from "./Game";
 import gobangCheckWinner from "./GobangWinnerChecker";
 import gobangMarkWarnings from "./GobangWarningMarker";
 
 const ROW_COUNT = 15;
 const COLUMN_COUNT = 15;
 
-export default class Gobang extends GameBase {
-    INITIAL_STATE;
-
+export default class Gobang extends Game {
     constructor() {
         super(ROW_COUNT, COLUMN_COUNT);
-        this.INITIAL_STATE = {
-            isNextBlack: true,
-            hasWinner: false,
-            stones: super.createInitialStones(),
-            latestStoneCoordinate: null,
-            fix4InLineCoordinates: [],
-            previousState: null
-        };
     }
 
     getName() {
         return "gobang";
     }
 
+    createInitialState() {
+        return {
+            isNextBlack: true,
+            hasWinner: false,
+            stones: this.createInitialStones(),
+            latestStoneCoordinate: null,
+            fix4InLineCoordinates: [],
+            previousState: null
+        };
+    }
+
     // return a virtual stone if out of board
     static getNthStoneInLine(stones, currentCoordinate, n, coordinateCalculator) {
         const coordinate = coordinateCalculator(currentCoordinate, n);
-        return GameBase.isOutOfBoard(coordinate, ROW_COUNT, COLUMN_COUNT)
+        return Game.isOutOfBoard(coordinate, ROW_COUNT, COLUMN_COUNT)
             ? new InvalidStone()
-            : GameBase.getStone(stones, coordinate);
+            : Game.getStone(stones, coordinate);
     }
 
     postProcess(newState) {
@@ -53,7 +54,7 @@ export default class Gobang extends GameBase {
             for (let i = 0; i < state.fix4InLineCoordinates.length; i++) {
                 const coordinate = state.fix4InLineCoordinates[i];
                 // need to check if it is empty because it could be fixed
-                if (GameBase.getStone(currentState.stones, coordinate).isNoStone()) return coordinate;
+                if (Game.getStone(currentState.stones, coordinate).isNoStone()) return coordinate;
             }
         }
         return;

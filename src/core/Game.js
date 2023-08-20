@@ -1,7 +1,6 @@
-import { NoStone } from "./Stone";
-import { Stone } from "./Stone";
+import { Stone, NoStone } from "./Stone";
 
-export default class GameBase {
+export default class Game {
     ROW_COUNT;
     COLUMN_COUNT;
 
@@ -21,14 +20,14 @@ export default class GameBase {
         throw new Error("Method 'getName()' must be implemented.");
     }
 
+    createInitialState() {
+        throw new Error("Method 'createInitialState()' must be implemented.");
+    }
+
     createInitialStones() {
         return Array(this.ROW_COUNT)
             .fill(null)
             .map(() => Array(this.COLUMN_COUNT).fill(null));
-    }
-
-    createInitialState() {
-        throw new Error("Method 'createInitialState()' must be implemented.");
     }
 
     static isOutOfBoard([row, column], rowCount, columnCount) {
@@ -56,11 +55,11 @@ export default class GameBase {
         return (state, action) => {
             if (action.type === "placeStone") {
                 const coordinate = action.coordinate;
-                if (state.hasWinner || GameBase.getStone(state.stones, coordinate).isStone()) {
+                if (state.hasWinner || Game.getStone(state.stones, coordinate).isStone()) {
                     return state;
                 }
                 const nextStones = state.stones.map((row) => row.map((Stone) => (Stone ? Stone.clone() : null)));
-                GameBase.setStone(nextStones, coordinate, new Stone(state.isNextBlack).setBlink());
+                Game.setStone(nextStones, coordinate, new Stone(state.isNextBlack).setBlink());
 
                 const newState = {
                     isNextBlack: !state.isNextBlack,
@@ -75,7 +74,7 @@ export default class GameBase {
             } else if (action.type === "rollback" && state.previousState) {
                 return state.previousState;
             } else if (action.type === "restart") {
-                return this.INITIAL_STATE;
+                return this.createInitialState();
             }
             return state;
         };

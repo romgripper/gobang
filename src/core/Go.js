@@ -1,14 +1,16 @@
-import GameBase from "./GameBase";
+import Game from "./Game";
 
-export default class Go extends GameBase {
-    INITIAL_STATE;
-
+export default class Go extends Game {
+    
     constructor() {
         super(19, 19);
-        this.INITIAL_STATE = {
+    }
+
+    createInitialState() {
+        return {
             isNextBlack: true,
             hasWinner: false,
-            stones: super.createInitialStones()
+            stones: this.createInitialStones()
         };
     }
 

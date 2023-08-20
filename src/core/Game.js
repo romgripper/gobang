@@ -24,10 +24,14 @@ export default class Game {
             .map(() => Array(this.COLUMN_COUNT).fill(null));
     }
 
+    supportAutoPlacement() {
+        return false;
+    }
+
     // called after stones are updated, history is update, and players are switched in newState
     postProcess(state) {}
 
-    determineNextStoneCoordinate(state) {}
+    autoDetermineNextStoneCoordinate(state) {}
 
     createDispatcher() {
         return (state, action) => {

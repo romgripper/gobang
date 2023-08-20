@@ -35,10 +35,10 @@ export default function Board() {
     }, []);
 
     useEffect(() => {
-        if (!autoPlacement) return;
+        if (!game.supportAutoPlacement() || !autoPlacement) return;
 
         let timeoutId = null;
-        const coordinate = game.autoPlace(state);
+        const coordinate = game.autoDetermineNextStoneCoordinate(state);
         if (coordinate) {
             timeoutId = setTimeout(() => {
                 dispatch({ type: "placeStone", coordinate: coordinate });
@@ -89,7 +89,7 @@ export default function Board() {
 
     return (
         <div
-            className="center"
+            className="main"
             style={{
                 width: boardSize,
                 marginLeft: horizontalMargin,
@@ -116,25 +116,6 @@ export default function Board() {
                             alt={nextPlayer}
                             style={{ width: statusHeight, height: statusHeight }}
                         />
-                        <label style={{ marginLeft: squareSize / 2 }}>
-                            <input
-                                type="checkbox"
-                                checked={autoPlacement}
-                                onChange={(e) => setAutoPlacement(e.target.checked)}
-                            ></input>
-                            Auto
-                        </label>
-                        {autoPlacement && (
-                            <input
-                                type="range"
-                                min="500"
-                                max="5000"
-                                value={autoPlacementDelay}
-                                step="500"
-                                onChange={(e) => setAutoPlacementDelay(e.target.value)}
-                                style={{ marginLeft: squareSize / 2, width: squareSize * 3 }}
-                            ></input>
-                        )}
                     </div>
                 )}
                 <div>
@@ -159,6 +140,34 @@ export default function Board() {
                     <Row row={row} key={"row" + row} height={squareSize} />
                 ))}
             </div>
+            {game.supportAutoPlacement() && (
+                <div
+                    style={{
+                        marginTop: verticalMargin,
+                        marginBottom: verticalMargin
+                    }}
+                >
+                    <label style={{ width: 3 * squareSize }}>
+                        <input
+                            type="checkbox"
+                            checked={autoPlacement}
+                            onChange={(e) => setAutoPlacement(e.target.checked)}
+                        ></input>
+                        Auto
+                    </label>
+                    {autoPlacement && (
+                        <input
+                            type="range"
+                            min="500"
+                            max="5000"
+                            value={autoPlacementDelay}
+                            step="500"
+                            onChange={(e) => setAutoPlacementDelay(e.target.value)}
+                            style={{ marginLeft: squareSize / 2, width: boardSize - squareSize * 3 }}
+                        ></input>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

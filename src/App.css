@@ -1,3 +1,7 @@
+.main {
+  margin: auto;
+}
+
 .board-row:after {
   clear: both;
   content: '';
@@ -33,11 +37,6 @@
   padding: 0px;
   background-color: transparent;
 }
-
-.center {
-  margin: auto;
-}
-
 
 .black {
   background: url('../public/black.png');

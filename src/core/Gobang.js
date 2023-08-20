@@ -34,7 +34,11 @@ export default class Gobang extends Game {
         }
     }
 
-    autoPlace(state) {
+    supportAutoPlacement() {
+        return true;
+    }
+
+    autoDetermineNextStoneCoordinate(state) {
         // the stone coordinate for next player to form 5-in-line
         const nextPlayerWinCoordinate = this.#getOpenCoordinateFor4InLine(state.previousState, state);
         if (nextPlayerWinCoordinate) return nextPlayerWinCoordinate;

@@ -143,8 +143,7 @@ export default function Board() {
             {game.supportAutoPlacement() && (
                 <div
                     style={{
-                        marginTop: verticalMargin,
-                        marginBottom: verticalMargin
+                        marginTop: squareSize / 2
                     }}
                 >
                     <label style={{ width: 3 * squareSize }}>

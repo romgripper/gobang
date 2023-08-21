@@ -1,4 +1,4 @@
-import { InvalidStone } from "./Stone";
+import InvalidStone from "./InvalidStone";
 import Util from "./Util";
 
 export default class GobangUtil {
@@ -9,7 +9,7 @@ export default class GobangUtil {
     static getNthStoneInLine(stones, currentCoordinate, n, coordinateCalculator) {
         const coordinate = coordinateCalculator(currentCoordinate, n);
         return GobangUtil.#isOutOfBoard(coordinate, GobangUtil.ROW_COUNT, GobangUtil.COLUMN_COUNT)
-            ? new InvalidStone()
+            ? InvalidStone.getInstance()
             : Util.getStone(stones, coordinate);
     }
 

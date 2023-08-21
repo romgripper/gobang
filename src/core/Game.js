@@ -1,4 +1,4 @@
-import { Stone } from "./Stone";
+import Stone from "./Stone";
 import Util from "./Util";
 
 export default class Game {

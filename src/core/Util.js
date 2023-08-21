@@ -1,4 +1,4 @@
-import { Vacancy } from "./Stone";
+import Vacancy from "./Vacancy";
 
 export default class Utils {
     static COORDINATE_CALCULATORS = [
@@ -9,7 +9,7 @@ export default class Utils {
     ];
 
     static getStone(stones, [row, column]) {
-        return stones[row][column] || new Vacancy();
+        return stones[row][column] || Vacancy.getInstance();
     }
 
     static getRow(stones, row) {

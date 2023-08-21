@@ -1,4 +1,4 @@
-export class Stone {
+export default class Stone {
     #isBlack;
     #isBlink = false;
 
@@ -30,26 +30,5 @@ export class Stone {
     // care about #isBlack only
     clone() {
         return new Stone(this.#isBlack);
-    }
-}
-
-export class Vacancy {
-    isStone() {
-        return false;
-    }
-
-    isVacancy() {
-        return true;
-    }
-}
-
-// Represent values whose coordinates are out of bound
-export class InvalidStone {
-    isStone() {
-        return false;
-    }
-
-    isVacancy() {
-        return false;
     }
 }

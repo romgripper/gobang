@@ -1,5 +1,4 @@
-import GobangUtil from "./GobangUtil";
-import BoardStones from "./BoardStones";
+import Line from "./Line";
 
 // current move's index is 0,
 // 5 possible positions for current move
@@ -12,16 +11,16 @@ const WINNING_PATTERNS = [
 ];
 export default class GobangWinnerChecker {
     #board;
-    #currentCoordinate;
+    #latestStoneCoordinate;
 
-    constructor(board, currentCoordinate) {
+    constructor(board, latestStoneCoordinate) {
         this.#board = board;
-        this.#currentCoordinate = currentCoordinate;
+        this.#latestStoneCoordinate = latestStoneCoordinate;
     }
 
     checkWinning() {
-        for (let coordinateCalculator of BoardStones.COORDINATE_CALCULATORS) {
-            const winning = this.#check5Inline(coordinateCalculator);
+        for (let line of Line.LINES) {
+            const winning = this.#check5Inline(line);
             if (winning) {
                 return true;
             }
@@ -29,14 +28,12 @@ export default class GobangWinnerChecker {
         return false;
     }
 
-    #check5Inline(coordinateCalculate) {
-        const getNth = (n) => {
-            return this.#board.getNthStoneInLine(this.#currentCoordinate, n, coordinateCalculate);
-        };
+    #check5Inline(line) {
+        const stonesInLine = new Line(this.#board, this.#latestStoneCoordinate, line);
 
         for (let winningPattern of WINNING_PATTERNS) {
-            if (GobangUtil.stonesMatchPattern(winningPattern, getNth)) {
-                winningPattern.forEach((i) => getNth(i).setBlink());
+            if (stonesInLine.stonesMatchPattern(winningPattern)) {
+                winningPattern.forEach((i) => stonesInLine.getNth(i).setBlink());
                 return true;
             }
         }

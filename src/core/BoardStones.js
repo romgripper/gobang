@@ -6,13 +6,6 @@ export default class BoardStones {
     #rowCount;
     #columnCount;
 
-    static COORDINATE_CALCULATORS = [
-        ([row, column], n) => [row, column + n], // row
-        ([row, column], n) => [row + n, column], // column
-        ([row, column], n) => [row + n, column + n], // diagonal 1
-        ([row, column], n) => [row + n, column - n] // diagonal 2
-    ];
-
     constructor(rowCount, columnCount) {
         this.#rowCount = rowCount;
         this.#columnCount = columnCount;
@@ -57,11 +50,6 @@ export default class BoardStones {
             throw new Error("Out of board");
         }
         this.#stones[row][column] = Stone;
-    }
-
-    // return a virtual stone if out of board
-    getNthStoneInLine(currentCoordinate, n, coordinateCalculator) {
-        return this.getStone(coordinateCalculator(currentCoordinate, n));
     }
 
     #isOutOfBoard([row, column]) {

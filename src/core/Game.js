@@ -1,5 +1,5 @@
 import Stone from "./Stone";
-import Util from "./Util";
+import BoardStones from "./BoardStones";
 
 export default class Game {
     ROW_COUNT;
@@ -18,10 +18,8 @@ export default class Game {
         throw new Error("Method 'createInitialState()' must be implemented.");
     }
 
-    createInitialStones() {
-        return Array(this.ROW_COUNT)
-            .fill(null)
-            .map(() => Array(this.COLUMN_COUNT).fill(null));
+    createInitialBoard() {
+        return new BoardStones(this.ROW_COUNT, this.COLUMN_COUNT);
     }
 
     supportAutoPlacement() {
@@ -37,15 +35,15 @@ export default class Game {
         return (state, action) => {
             if (action.type === "placeStone") {
                 const coordinate = action.coordinate;
-                if (state.hasWinner || Util.getStone(state.stones, coordinate).isStone()) {
+                if (state.hasWinner || state.board.getStone(coordinate).isStone()) {
                     return state;
                 }
-                const nextStones = state.stones.map((row) => row.map((Stone) => (Stone ? Stone.clone() : null)));
-                Util.setStone(nextStones, coordinate, new Stone(state.isNextBlack).setBlink());
+                const nextBoard = state.board.clone();
+                nextBoard.setStone(coordinate, new Stone(state.isNextBlack).setBlink());
 
                 const newState = {
                     isNextBlack: !state.isNextBlack,
-                    stones: nextStones,
+                    board: nextBoard,
                     latestStoneCoordinate: coordinate,
                     previousState: state
                 };

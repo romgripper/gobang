@@ -1,12 +1,10 @@
 import Game from "./Game";
-import Util from "./Util";
-import GobangUtil from "./GobangUtil";
 import GobangWinnerCheck from "./GobangWinningChecker";
 import GobangWarningMarker from "./GobangWarningMarker";
 
 export default class Gobang extends Game {
     constructor() {
-        super(GobangUtil.ROW_COUNT, GobangUtil.COLUMN_COUNT);
+        super(15, 15);
     }
 
     getName() {
@@ -17,7 +15,7 @@ export default class Gobang extends Game {
         return {
             isNextBlack: true,
             hasWinner: false,
-            stones: this.createInitialStones(),
+            board: this.createInitialBoard(),
             latestStoneCoordinate: null,
             fix4InLineCoordinates: [],
             previousState: null
@@ -25,10 +23,10 @@ export default class Gobang extends Game {
     }
 
     postProcess(newState) {
-        newState.hasWinner = new GobangWinnerCheck(newState.stones, newState.latestStoneCoordinate).checkWinning();
+        newState.hasWinner = new GobangWinnerCheck(newState.board, newState.latestStoneCoordinate).checkWinning();
         if (!newState.hasWinner) {
             newState.fix4InLineCoordinates = new GobangWarningMarker(
-                newState.stones,
+                newState.board,
                 newState.latestStoneCoordinate
             ).markWarnings();
         }
@@ -51,7 +49,7 @@ export default class Gobang extends Game {
             for (let i = 0; i < state.fix4InLineCoordinates.length; i++) {
                 const coordinate = state.fix4InLineCoordinates[i];
                 // need to check if it is empty because it could be fixed
-                if (Util.getStone(currentState.stones, coordinate).isVacancy()) return coordinate;
+                if (currentState.board.getStone(coordinate).isVacancy()) return coordinate;
             }
         }
         return;

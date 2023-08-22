@@ -1,8 +1,7 @@
-import { useStones, useDispatch } from "./GameStateContext";
-import Util from "./core/Util";
+import { useBoard, useDispatch } from "./GameStateContext";
 
 export default function Square({ row, column, size }) {
-    const stone = Util.getStone(useStones(), [row, column]);
+    const stone = useBoard().getStone([row, column]);
     const dispatch = useDispatch();
 
     let className = "square";

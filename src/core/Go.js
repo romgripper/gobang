@@ -1,7 +1,6 @@
 import Game from "./Game";
 
 export default class Go extends Game {
-    
     constructor() {
         super(19, 19);
     }
@@ -10,7 +9,7 @@ export default class Go extends Game {
         return {
             isNextBlack: true,
             hasWinner: false,
-            stones: this.createInitialStones()
+            board: this.createInitialBoard()
         };
     }
 

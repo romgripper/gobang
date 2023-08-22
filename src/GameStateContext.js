@@ -19,8 +19,8 @@ export default function StateProvider({ gameName, children }) {
     );
 }
 
-export function useStones() {
-    return useGameState().stones;
+export function useBoard() {
+    return useGameState().board;
 }
 
 export function useGameState() {

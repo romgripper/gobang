@@ -1,16 +1,17 @@
 import Gobang from "./Gobang";
-import GobangUtil from "./GobangUtil";
+import Vacancy from "./Vacancy";
 
 const gobang = new Gobang();
 const INITIAL_STATE = gobang.createInitialState();
 const PLACE_STONE = "placeStone";
 
-it("All stones are null before the black player places the first piece", () => {
-    INITIAL_STATE.stones.forEach((row) => {
-        expect(row.length).toBe(GobangUtil.COLUMN_COUNT);
-        row.forEach((stone) => expect(stone).toBe(null));
-    });
-    expect(INITIAL_STATE.stones.length).toBe(GobangUtil.ROW_COUNT);
+it("All board.getStone are null before the black player places the first piece", () => {
+    const board = INITIAL_STATE.board;
+    for (let i = 0; i < board.getRowCount(); i++) {
+        for (let j = 0; j < board.getColumnCount(); j++) {
+            expect(board.getStone([i, j])).toBe(Vacancy.getInstance());
+        }
+    }
 });
 
 const dispatch = gobang.createDispatcher();
@@ -42,12 +43,12 @@ it("Players always take turns", () => {
     expect(state.isNextBlack).toBe(true);
 
     state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 1] });
-    expect(state.stones[1][1].isBlack()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlack()).toBe(true);
     expect(state.isNextBlack).toBe(false);
 
     state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 2] });
-    expect(state.stones[1][1].isBlack()).toBe(true);
-    expect(state.stones[1][2].isBlack()).toBe(false);
+    expect(state.board.getStone([1, 1]).isBlack()).toBe(true);
+    expect(state.board.getStone([1, 2]).isBlack()).toBe(false);
     expect(state.isNextBlack).toBe(true);
 
     state = dispatch(state, { type: "rollback" });
@@ -62,11 +63,11 @@ it("Latest stone blinks", () => {
     expect(state.isNextBlack).toBe(true);
 
     state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 1] });
-    expect(state.stones[1][1].isBlink()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(true);
 
     state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 2] });
-    expect(state.stones[1][1].isBlink()).toBe(false);
-    expect(state.stones[1][2].isBlink()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([1, 2]).isBlink()).toBe(true);
     expect(state.isNextBlack).toBe(true);
 });
 
@@ -101,51 +102,51 @@ it("Latest 3-in-line, 4-in-line, or 5-in-line blinks", () => {
     state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
     // black [3,1]
     state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    expect(state.stones[1][1].isBlink()).toBe(true);
-    expect(state.stones[2][1].isBlink()).toBe(true);
-    expect(state.stones[3][1].isBlink()).toBe(true);
-    expect(state.stones[2][2].isBlink()).toBe(false);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([3, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 2]).isBlink()).toBe(false);
 
     // white [3,2]
     state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 2] });
     // open 3 or open 4 only shows for latest move
-    expect(state.stones[1][1].isBlink()).toBe(false);
-    expect(state.stones[2][1].isBlink()).toBe(false);
-    expect(state.stones[3][1].isBlink()).toBe(false);
-    expect(state.stones[1][2].isBlink()).toBe(true);
-    expect(state.stones[2][2].isBlink()).toBe(true);
-    expect(state.stones[3][2].isBlink()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([2, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([3, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([1, 2]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 2]).isBlink()).toBe(true);
+    expect(state.board.getStone([3, 2]).isBlink()).toBe(true);
 
     // black [4,1], black gets open 4
     state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 1] });
     // open 3 or open 4 only shows for latest move
-    expect(state.stones[1][1].isBlink()).toBe(true);
-    expect(state.stones[2][1].isBlink()).toBe(true);
-    expect(state.stones[3][1].isBlink()).toBe(true);
-    expect(state.stones[4][1].isBlink()).toBe(true);
-    expect(state.stones[1][2].isBlink()).toBe(false);
-    expect(state.stones[2][2].isBlink()).toBe(false);
-    expect(state.stones[3][2].isBlink()).toBe(false);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([3, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([4, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([1, 2]).isBlink()).toBe(false);
+    expect(state.board.getStone([2, 2]).isBlink()).toBe(false);
+    expect(state.board.getStone([3, 2]).isBlink()).toBe(false);
 
     // white [4,2], white gets open 4
     state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 2] });
     // open 3 or open 4 only shows for latest move
-    expect(state.stones[1][1].isBlink()).toBe(false);
-    expect(state.stones[2][1].isBlink()).toBe(false);
-    expect(state.stones[3][1].isBlink()).toBe(false);
-    expect(state.stones[4][1].isBlink()).toBe(false);
-    expect(state.stones[1][2].isBlink()).toBe(true);
-    expect(state.stones[2][2].isBlink()).toBe(true);
-    expect(state.stones[3][2].isBlink()).toBe(true);
-    expect(state.stones[4][2].isBlink()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([2, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([3, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([4, 1]).isBlink()).toBe(false);
+    expect(state.board.getStone([1, 2]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 2]).isBlink()).toBe(true);
+    expect(state.board.getStone([3, 2]).isBlink()).toBe(true);
+    expect(state.board.getStone([4, 2]).isBlink()).toBe(true);
 
     // black [5,1], 5-in-line
     state = dispatch(state, { type: PLACE_STONE, coordinate: [5, 1] });
-    expect(state.stones[1][1].isBlink()).toBe(true);
-    expect(state.stones[2][1].isBlink()).toBe(true);
-    expect(state.stones[3][1].isBlink()).toBe(true);
-    expect(state.stones[4][1].isBlink()).toBe(true);
-    expect(state.stones[5][1].isBlink()).toBe(true);
+    expect(state.board.getStone([1, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([2, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([3, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([4, 1]).isBlink()).toBe(true);
+    expect(state.board.getStone([5, 1]).isBlink()).toBe(true);
 });
 
 it("Vertical 5-in-line wins", () => {

@@ -1,5 +1,5 @@
 import GobangUtil from "./GobangUtil";
-import Util from "./Util";
+import BoardStones from "./BoardStones";
 
 const WARNING_PATTERNS = [
     // 3 in line
@@ -136,18 +136,18 @@ const WARNING_PATTERNS = [
 
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default class GobangWarningMarker {
-    #stones;
+    #board;
     #latestStoneCoordinate;
 
-    constructor(stones, latestStoneCoordinate) {
-        this.#stones = stones;
+    constructor(board, latestStoneCoordinate) {
+        this.#board = board;
         this.#latestStoneCoordinate = latestStoneCoordinate;
     }
 
     // mark 3-in-lines or 4-in-lines caused by latest stone and return coordinates that would block 4-in-lines to become 5-in-lines
     markWarnings() {
         const coordinatesToFix4InLine = [];
-        Util.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
+        BoardStones.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
             const fixCoordinates = this.#checkAndShowWarningsInLine(coordinateCalculate, WARNING_PATTERNS);
             fixCoordinates.forEach((c) => coordinatesToFix4InLine.push(c));
         });
@@ -156,8 +156,7 @@ export default class GobangWarningMarker {
 
     // return the coordinates which could fix the 4-in-line formed by current stone
     #checkAndShowWarningsInLine(coordinateCalculate, patterns) {
-        const getNth = (n) =>
-            GobangUtil.getNthStoneInLine(this.#stones, this.#latestStoneCoordinate, n, coordinateCalculate);
+        const getNth = (n) => this.#board.getNthStoneInLine(this.#latestStoneCoordinate, n, coordinateCalculate);
 
         function vacanciesMatchPattern(indexPattern) {
             for (let i = 0; i < indexPattern.length; i++) {

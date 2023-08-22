@@ -4,20 +4,12 @@ import GobangUtil from "./GobangUtil";
 const gobang = new Gobang();
 const INITIAL_STATE = gobang.createInitialState();
 
-it("There is no winner before the black player places the first piece", () => {
-    expect(INITIAL_STATE.hasWinner).toBe(false);
-});
-
 it("All stones are null before the black player places the first piece", () => {
     INITIAL_STATE.stones.forEach((row) => {
         expect(row.length).toBe(GobangUtil.COLUMN_COUNT);
         row.forEach((stone) => expect(stone).toBe(null));
     });
     expect(INITIAL_STATE.stones.length).toBe(GobangUtil.ROW_COUNT);
-});
-
-it("No latest stone coordinate set before the black player places the first piece", () => {
-    expect(INITIAL_STATE.latestStoneCoordinate).toBe(null);
 });
 
 const dispatch = gobang.createDispatcher();
@@ -77,7 +69,8 @@ it("Latest stone blinks", () => {
     expect(state.isNextBlack).toBe(true);
 });
 
-it("Latest stone coordinate is recorded", () => {
+it("Latest stone coordinates are updated", () => {
+    expect(INITIAL_STATE.latestStoneCoordinate).toBe(null);
     // black first [1, 1]
     let state = dispatch(INITIAL_STATE, { type: "placeStone", coordinate: [1, 1] });
     expect(state.latestStoneCoordinate).toStrictEqual([1, 1]);
@@ -155,22 +148,31 @@ it("Latest 3-in-line, 4-in-line, or 5-in-line blinks", () => {
 });
 
 it("5-in-line wins", () => {
+    expect(INITIAL_STATE.hasWinner).toBe(false);
     // black first [1, 1]
     let state = dispatch(INITIAL_STATE, { type: "placeStone", coordinate: [1, 1] });
+    expect(state.hasWinner).toBe(false);
     // white next [1, 2]
     state = dispatch(state, { type: "placeStone", coordinate: [1, 2] });
+    expect(state.hasWinner).toBe(false);
     // black [2,1]
     state = dispatch(state, { type: "placeStone", coordinate: [2, 1] });
+    expect(state.hasWinner).toBe(false);
     // white [2,2]
     state = dispatch(state, { type: "placeStone", coordinate: [2, 2] });
+    expect(state.hasWinner).toBe(false);
     // black [3,1]
     state = dispatch(state, { type: "placeStone", coordinate: [3, 1] });
+    expect(state.hasWinner).toBe(false);
     // white [3,2]
     state = dispatch(state, { type: "placeStone", coordinate: [3, 2] });
+    expect(state.hasWinner).toBe(false);
     // black [4,1], black gets open 4
     state = dispatch(state, { type: "placeStone", coordinate: [4, 1] });
+    expect(state.hasWinner).toBe(false);
     // white [4,2], white gets open 4
     state = dispatch(state, { type: "placeStone", coordinate: [4, 2] });
+    expect(state.hasWinner).toBe(false);
     // black [5,1], black wins
     state = dispatch(state, { type: "placeStone", coordinate: [5, 1] });
     expect(state.hasWinner).toBe(true);
@@ -213,4 +215,35 @@ it("Point 4-in-line fixes", () => {
     ]);
 });
 
-//autoDetermineNextStoneCoordinate
+it("Gobang supports auto placement", () => {
+    expect(gobang.supportAutoPlacement()).toBe(true);
+});
+
+it("Gobang determines next stone coordinates which could block 4-in-lines", () => {
+    // black first [1, 1]
+    let state = dispatch(INITIAL_STATE, { type: "placeStone", coordinate: [1, 1] });
+    expect(state.hasWinner).toBe(false);
+    // white next [1, 2]
+    state = dispatch(state, { type: "placeStone", coordinate: [1, 2] });
+    expect(state.hasWinner).toBe(false);
+    // black [2,1]
+    state = dispatch(state, { type: "placeStone", coordinate: [2, 1] });
+    expect(state.hasWinner).toBe(false);
+    // white [2,2]
+    state = dispatch(state, { type: "placeStone", coordinate: [2, 2] });
+    expect(state.hasWinner).toBe(false);
+    // black [3,1]
+    state = dispatch(state, { type: "placeStone", coordinate: [3, 1] });
+    expect(state.hasWinner).toBe(false);
+    // white [3,2]
+    state = dispatch(state, { type: "placeStone", coordinate: [3, 2] });
+    expect(state.hasWinner).toBe(false);
+    // black [4,1], black gets open 4
+    state = dispatch(state, { type: "placeStone", coordinate: [4, 1] });
+    // first one of [[0,1],[5,1]] is returned
+    expect(gobang.autoDetermineNextStoneCoordinate(state)).toStrictEqual([0, 1]);
+    // white places at [0,1] to block 4-in-line at one end
+    state = dispatch(state, { type: "placeStone", coordinate: [0, 1] });
+    // black place at [5,1] to form 5-in-line at the other end
+    expect(gobang.autoDetermineNextStoneCoordinate(state)).toStrictEqual([5, 1]);
+});

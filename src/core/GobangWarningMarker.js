@@ -137,26 +137,27 @@ const WARNING_PATTERNS = [
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default class GobangWarningMarker {
     #stones;
-    #currentCoordinate;
+    #latestStoneCoordinate;
 
-    constructor(stones, currentCoordinate) {
+    constructor(stones, latestStoneCoordinate) {
         this.#stones = stones;
-        this.#currentCoordinate = currentCoordinate;
+        this.#latestStoneCoordinate = latestStoneCoordinate;
     }
 
+    // mark 3-in-lines or 4-in-lines caused by latest stone and return coordinates that would block 4-in-lines to become 5-in-lines
     markWarnings() {
-        const coordinatesToFixFourInLine = [];
+        const coordinatesToFix4InLine = [];
         Util.COORDINATE_CALCULATORS.forEach((coordinateCalculate) => {
             const fixCoordinates = this.#checkAndShowWarningsInLine(coordinateCalculate, WARNING_PATTERNS);
-            fixCoordinates.forEach((c) => coordinatesToFixFourInLine.push(c));
+            fixCoordinates.forEach((c) => coordinatesToFix4InLine.push(c));
         });
-        return coordinatesToFixFourInLine;
+        return coordinatesToFix4InLine;
     }
 
     // return the coordinates which could fix the 4-in-line formed by current stone
     #checkAndShowWarningsInLine(coordinateCalculate, patterns) {
         const getNth = (n) =>
-            GobangUtil.getNthStoneInLine(this.#stones, this.#currentCoordinate, n, coordinateCalculate);
+            GobangUtil.getNthStoneInLine(this.#stones, this.#latestStoneCoordinate, n, coordinateCalculate);
 
         function vacanciesMatchPattern(indexPattern) {
             for (let i = 0; i < indexPattern.length; i++) {
@@ -165,7 +166,7 @@ export default class GobangWarningMarker {
             return true;
         }
 
-        const coordinatesToFixFourInLine = [];
+        const coordinatesToFix4InLine = [];
         for (let i = 0; i < patterns.length; i++) {
             const stoneIndexes = patterns[i].stoneIndexes;
             const vacancyIndexes = patterns[i].vacancyIndexes;
@@ -173,11 +174,11 @@ export default class GobangWarningMarker {
                 stoneIndexes.forEach((stoneIndexes) => getNth(stoneIndexes).setBlink());
                 if (stoneIndexes.length === 4) {
                     vacancyIndexes.forEach((vacancyIndex) =>
-                        coordinatesToFixFourInLine.push(coordinateCalculate(this.#currentCoordinate, vacancyIndex))
+                        coordinatesToFix4InLine.push(coordinateCalculate(this.#latestStoneCoordinate, vacancyIndex))
                     );
                 }
             }
         }
-        return coordinatesToFixFourInLine;
+        return coordinatesToFix4InLine;
     }
 }

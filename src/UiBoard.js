@@ -1,4 +1,4 @@
-import Row from "./Row";
+import UiRow from "./UiRow";
 import { useGameState, useDispatch, useGameContext } from "./GameStateContext";
 import { useState, useLayoutEffect, useEffect } from "react";
 
@@ -15,7 +15,7 @@ const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
 const BLACK_PLAYER = "Black";
 const WHITE_PLAYER = "White";
 
-export default function Board() {
+export default function UiBoard() {
     const state = useGameState();
     const dispatch = useDispatch();
     const game = useGameContext();
@@ -137,7 +137,7 @@ export default function Board() {
             </div>
             <div className={game.getName() + " board"} style={{ width: boardSize, padding: boardPadding }}>
                 {range(game.ROW_COUNT).map((row) => (
-                    <Row row={row} key={"row" + row} height={squareSize} />
+                    <UiRow row={row} key={"row" + row} height={squareSize} />
                 ))}
             </div>
             {game.supportAutoPlacement() && (

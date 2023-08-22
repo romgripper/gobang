@@ -1,11 +1,11 @@
-import Square from "./Square";
+import UiStone from "./UiStone";
 import { useGameContext } from "./GameStateContext";
 
-export default function Row({ row, height }) {
+export default function UiRow({ row, height }) {
     const game = useGameContext();
     const columns = [];
     for (let i = 0; i < game.COLUMN_COUNT; i++) {
-        columns.push(<Square key={`square(${row}, ${i})`} row={row} column={i} size={height} />);
+        columns.push(<UiStone key={`square(${row}, ${i})`} row={row} column={i} size={height} />);
     }
     return <div className="board-row">{columns}</div>;
 }

@@ -1,5 +1,5 @@
 import StateProvider from "./GameStateContext";
-import Board from "./Board";
+import UiBoard from "./UiBoard";
 import "./App.css";
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ export default function App() {
     return (
         <>
             <StateProvider gameName={gameName}>
-                <Board />
+                <UiBoard />
             </StateProvider>
         </>
     );

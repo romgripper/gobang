@@ -1,6 +1,6 @@
 import { useBoard, useDispatch } from "./GameStateContext";
 
-export default function Square({ row, column, size }) {
+export default function UiStone({ row, column, size }) {
     const stone = useBoard().getStone([row, column]);
     const dispatch = useDispatch();
 

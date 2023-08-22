@@ -1,5 +1,5 @@
 import Stone from "./Stone";
-import BoardStones from "./BoardStones";
+import Board from "./Board";
 
 export default class Game {
     ROW_COUNT;
@@ -19,7 +19,7 @@ export default class Game {
     }
 
     createInitialBoard() {
-        return new BoardStones(this.ROW_COUNT, this.COLUMN_COUNT);
+        return new Board(this.ROW_COUNT, this.COLUMN_COUNT);
     }
 
     supportAutoPlacement() {

@@ -1,7 +1,7 @@
 import InvalidStone from "./InvalidStone";
 import Vacancy from "./Vacancy";
 
-export default class BoardStones {
+export default class Board {
     #stones;
     #rowCount;
     #columnCount;
@@ -23,7 +23,7 @@ export default class BoardStones {
     }
 
     clone() {
-        const cloned = new BoardStones(this.#rowCount, this.#columnCount);
+        const cloned = new Board(this.#rowCount, this.#columnCount);
         for (let i = 0; i < this.#rowCount; i++) {
             for (let j = 0; j < this.#columnCount; j++) {
                 const coordinate = [i, j];

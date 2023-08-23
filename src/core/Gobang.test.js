@@ -150,131 +150,68 @@ it("Latest 3-in-line, 4-in-line, or 5-in-line blinks", () => {
 });
 
 it("Vertical 5-in-line wins", () => {
-    expect(INITIAL_STATE.hasWinner).toBe(false);
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [1, 2],
+        [2, 1],
+        [2, 2],
+        [3, 1],
+        [3, 2],
+        [4, 1],
+        [4, 2]
+    ]);
     expect(state.hasWinner).toBe(false);
-    // white next [1, 2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [2,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [2,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [3,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [3,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [4,1], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [4,2], white gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [5,1], black wins
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [5, 1] });
+    state = placeStones(state, [[5, 1]]);
     expect(state.hasWinner).toBe(true);
 });
 
 it("Horizontal 5-in-line wins", () => {
-    expect(INITIAL_STATE.hasWinner).toBe(false);
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [1, 2],
+        [2, 1],
+        [1, 3],
+        [3, 1],
+        [1, 4],
+        [4, 1],
+        [1, 6],
+        [10, 10]
+    ]);
     expect(state.hasWinner).toBe(false);
-    // white next [0, 0]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 0] });
-    expect(state.hasWinner).toBe(false);
-    // black [2,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 1] });
-    expect(state.hasWinner).toBe(false);
-    // black [3,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [4,1], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,3], white gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 3] });
-    expect(state.hasWinner).toBe(false);
-    // black [10,10]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [10, 10] });
-    // white [0,4], white wins
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 4] });
+    state = placeStones(state, [[1, 5]]);
     expect(state.hasWinner).toBe(true);
 });
 
 it("Forward diagonal 5-in-line wins", () => {
-    expect(INITIAL_STATE.hasWinner).toBe(false);
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [0, 0],
+        [2, 2],
+        [0, 1],
+        [3, 3],
+        [0, 2],
+        [4, 4],
+        [0, 3]
+    ]);
     expect(state.hasWinner).toBe(false);
-    // white next [0, 0]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 0] });
-    expect(state.hasWinner).toBe(false);
-    // black [2,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 1] });
-    expect(state.hasWinner).toBe(false);
-    // black [3,3]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 3] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [4,4], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 4] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,3], white gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 3] });
-    expect(state.hasWinner).toBe(false);
-    // black [5,5], black wins
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [5, 5] });
+    state = placeStones(state, [[5, 5]]);
     expect(state.hasWinner).toBe(true);
 });
 
 it("Backward diagonal 5-in-line wins", () => {
-    expect(INITIAL_STATE.hasWinner).toBe(false);
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [4, 0],
+        [12, 12],
+        [3, 1],
+        [3, 3],
+        [1, 3],
+        [4, 4],
+        [0, 4],
+        [10, 10]
+    ]);
     expect(state.hasWinner).toBe(false);
-    // white next [4, 0]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 0] });
-    expect(state.hasWinner).toBe(false);
-    // black [12,12]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [12, 12] });
-    expect(state.hasWinner).toBe(false);
-    // white [3,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    expect(state.hasWinner).toBe(false);
-    // black [3,3]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 3] });
-    expect(state.hasWinner).toBe(false);
-    // white [2,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [4,4], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 4] });
-    expect(state.hasWinner).toBe(false);
-    // white [1,3], white gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 3] });
-    expect(state.hasWinner).toBe(false);
-    // black [10,10], black wins
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [10, 10] });
-    expect(state.hasWinner).toBe(false);
-    // white [0,4], white wins
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 4] });
+    state = placeStones(state, [[2, 2]]);
     expect(state.hasWinner).toBe(true);
 });
 
@@ -287,32 +224,41 @@ it("Restart the game to initial state", () => {
     expect(state).toStrictEqual(INITIAL_STATE);
 });
 
-it("Point 4-in-line fixes", () => {
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
-    // white next [1, 2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 2] });
-    // black [2,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 1] });
-    // white [2,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
-    // black [3,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    // white [3,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 2] });
-    expect(state.fix4InLineCoordinates).toStrictEqual([]);
-    // black [4,1], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 1] });
-    expect(state.fix4InLineCoordinates).toStrictEqual([
+it("Point out 2 positions for two-end-open 4-in-line", () => {
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [1, 2],
+        [2, 1],
+        [2, 2],
+        [3, 1],
+        [3, 2],
+        [4, 1]
+    ]);
+    // black gets open 4-in-line
+    expect(state.blocking4InLineCoordinates).toStrictEqual([
         [0, 1],
         [5, 1]
     ]);
-    // white [4,2], white gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 2] });
-    expect(state.fix4InLineCoordinates).toStrictEqual([
+    // white [4,2], white gets open 4-in-line
+    state = placeStones(state, [[4, 2]]);
+    expect(state.blocking4InLineCoordinates).toStrictEqual([
         [0, 2],
         [5, 2]
     ]);
+});
+
+it("Point out 1 position for one-end-open 4-in-line", () => {
+    let state = placeStones(INITIAL_STATE, [
+        [10, 10],
+        [9, 9],
+        [11, 11],
+        [2, 2],
+        [13, 13],
+        [3, 2],
+        [14, 14]
+    ]);
+    // black gets open 4-in-line
+    expect(state.blocking4InLineCoordinates).toStrictEqual([[12, 12]]);
 });
 
 it("Gobang supports auto placement", () => {
@@ -320,30 +266,27 @@ it("Gobang supports auto placement", () => {
 });
 
 it("Gobang determines next stone coordinates which could block 4-in-lines", () => {
-    // black first [1, 1]
-    let state = dispatch(INITIAL_STATE, { type: PLACE_STONE, coordinate: [1, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white next [1, 2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [1, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [2,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [2,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [2, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [3,1]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 1] });
-    expect(state.hasWinner).toBe(false);
-    // white [3,2]
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [3, 2] });
-    expect(state.hasWinner).toBe(false);
-    // black [4,1], black gets open 4
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [4, 1] });
-    // first one of [[0,1],[5,1]] is returned
+    let state = placeStones(INITIAL_STATE, [
+        [1, 1],
+        [1, 2],
+        [2, 1],
+        [2, 2],
+        [3, 1],
+        [3, 2],
+        [4, 1]
+    ]);
+    // one of the two positions blocking black 4-in-line is returned
     expect(gobang.autoDetermineNextStoneCoordinate(state)).toStrictEqual([0, 1]);
     // white places at [0,1] to block 4-in-line at one end
-    state = dispatch(state, { type: PLACE_STONE, coordinate: [0, 1] });
+    state = placeStones(state, [[0, 1]]);
     // black place at [5,1] to form 5-in-line at the other end
     expect(gobang.autoDetermineNextStoneCoordinate(state)).toStrictEqual([5, 1]);
 });
+
+function placeStones(initialState, coordinates) {
+    let state = initialState;
+    coordinates.forEach((coordinate) => {
+        state = dispatch(state, { type: PLACE_STONE, coordinate: coordinate });
+    });
+    return state;
+}

@@ -17,7 +17,7 @@ export default class Gobang extends Game {
             hasWinner: false,
             board: this.createInitialBoard(),
             latestStoneCoordinate: null,
-            fix4InLineCoordinates: [],
+            blocking4InLineCoordinates: [],
             previousState: null
         };
     }
@@ -25,7 +25,7 @@ export default class Gobang extends Game {
     postProcess(newState) {
         newState.hasWinner = new GobangWinnerCheck(newState.board, newState.latestStoneCoordinate).checkWinning();
         if (!newState.hasWinner) {
-            newState.fix4InLineCoordinates = new GobangWarningMarker(
+            newState.blocking4InLineCoordinates = new GobangWarningMarker(
                 newState.board,
                 newState.latestStoneCoordinate
             ).markWarnings();
@@ -45,9 +45,9 @@ export default class Gobang extends Game {
     }
 
     #getOpenCoordinateFor4InLine(state, currentState) {
-        if (state && state.fix4InLineCoordinates && state.fix4InLineCoordinates.length !== 0) {
-            for (let i = 0; i < state.fix4InLineCoordinates.length; i++) {
-                const coordinate = state.fix4InLineCoordinates[i];
+        if (state && state.blocking4InLineCoordinates && state.blocking4InLineCoordinates.length !== 0) {
+            for (let i = 0; i < state.blocking4InLineCoordinates.length; i++) {
+                const coordinate = state.blocking4InLineCoordinates[i];
                 // need to check if it is empty because it could be fixed
                 if (currentState.board.getStone(coordinate).isVacancy()) return coordinate;
             }

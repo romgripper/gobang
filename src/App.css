@@ -25,7 +25,7 @@
   background-size: contain;
 }
 
-.status {
+.status, .auto {
   display: flex;
   justify-content: space-between;
 }

@@ -142,28 +142,35 @@ export default function UiBoard() {
             </div>
             {game.supportAutoPlacement() && (
                 <div
+                    className="auto"
                     style={{
-                        marginTop: squareSize / 2
+                        marginTop: squareSize / 2,
+                        fontSize: fontSize
                     }}
                 >
-                    <label style={{ width: 3 * squareSize }}>
-                        <input
-                            type="checkbox"
-                            checked={autoPlacement}
-                            onChange={(e) => setAutoPlacement(e.target.checked)}
-                        ></input>
-                        Auto
-                    </label>
+                    <div>
+                        <label style={{ width: 3 * squareSize }}>
+                            <input
+                                type="checkbox"
+                                checked={autoPlacement}
+                                onChange={(e) => setAutoPlacement(e.target.checked)}
+                            ></input>
+                            Auto
+                        </label>
+                    </div>
                     {autoPlacement && (
-                        <input
-                            type="range"
-                            min="500"
-                            max="5000"
-                            value={autoPlacementDelay}
-                            step="500"
-                            onChange={(e) => setAutoPlacementDelay(e.target.value)}
-                            style={{ marginLeft: squareSize / 2, width: boardSize - squareSize * 3 }}
-                        ></input>
+                        <div>
+                            <input
+                                type="range"
+                                min="100"
+                                max="5000"
+                                value={autoPlacementDelay}
+                                step="100"
+                                onChange={(e) => setAutoPlacementDelay(e.target.value)}
+                                style={{ width: boardSize - squareSize * 6 }}
+                            ></input>
+                            <span style={{ marginLeft: squareSize / 4 }}>{autoPlacementDelay}ms delay</span>
+                        </div>
                     )}
                 </div>
             )}

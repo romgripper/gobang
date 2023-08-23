@@ -80,7 +80,7 @@ export default function UiBoard() {
         <button
             style={{ fontSize: fontSize, marginLeft: squareSize / 2, width: squareSize * 3, height: statusHeight }}
             onClick={() => {
-                if (state.hasWinner || window.confirm("Restart the game?")) dispatch({ type: "restart" });
+                if (state.hasWinner || window.confirm("Restart the game?")) dispatch(game.createRestartAction());
             }}
         >
             Restart
@@ -127,7 +127,7 @@ export default function UiBoard() {
                                 height: statusHeight,
                                 marginLeft: squareSize / 2
                             }}
-                            onClick={() => dispatch({ type: "rollback" })}
+                            onClick={() => dispatch(game.createRollbackAction())}
                         >
                             Back
                         </button>

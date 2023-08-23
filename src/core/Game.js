@@ -1,6 +1,10 @@
 import Board from "./Board";
 
 export default class Game {
+    static #PLACE_STONE = "placeStone";
+    static #ROLLBACK = "rollback";
+    static #RESTART = "restart";
+
     ROW_COUNT;
     COLUMN_COUNT;
 
@@ -31,13 +35,32 @@ export default class Game {
         throw new Error("Method 'processPlaceStone()' must be implemented.");
     }
 
+    createPlaceStoneAction(coordinate) {
+        return {
+            type: Game.#PLACE_STONE,
+            coordinate: coordinate
+        };
+    }
+
+    createRollbackAction() {
+        return {
+            type: Game.#ROLLBACK
+        };
+    }
+
+    createRestartAction() {
+        return {
+            type: Game.#RESTART
+        };
+    }
+
     createDispatcher() {
         return (state, action) => {
-            if (action.type === "placeStone") {
+            if (action.type === Game.#PLACE_STONE) {
                 return this.processPlaceStone(state, action.coordinate);
-            } else if (action.type === "rollback" && state.previousState) {
+            } else if (action.type === Game.#ROLLBACK && state.previousState) {
                 return state.previousState;
-            } else if (action.type === "restart") {
+            } else if (action.type === Game.#RESTART) {
                 return this.createInitialState();
             }
             return state;

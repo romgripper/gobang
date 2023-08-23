@@ -42,12 +42,12 @@ export default function UiBoard() {
         if (coordinate) {
             timeoutId = setTimeout(() => {
                 dispatch({ type: "placeStone", coordinate: coordinate });
-            }, 2000);
+            }, autoPlacementDelay);
         }
         return () => {
             if (timeoutId) clearTimeout(timeoutId);
         };
-    }, [game, state, dispatch, autoPlacement]);
+    }, [game, state, dispatch, autoPlacement, autoPlacementDelay]);
 
     let currentPlayerImage;
     let currentPlayer;

@@ -1,4 +1,3 @@
-import Stone from "./Stone";
 import Board from "./Board";
 
 export default class Game {
@@ -26,31 +25,16 @@ export default class Game {
         return false;
     }
 
-    // called after stones are updated, history is update, and players are switched in newState
-    postProcess(state) {}
-
     autoDetermineNextStoneCoordinate(state) {}
+
+    processPlaceStone(state, coordinate) {
+        throw new Error("Method 'processPlaceStone()' must be implemented.");
+    }
 
     createDispatcher() {
         return (state, action) => {
             if (action.type === "placeStone") {
-                const coordinate = action.coordinate;
-                if (state.hasWinner || state.board.getStone(coordinate).isStone()) {
-                    return state;
-                }
-                const nextBoard = state.board.clone();
-                nextBoard.setStone(coordinate, new Stone(state.isNextBlack).setBlink());
-
-                const newState = {
-                    isNextBlack: !state.isNextBlack,
-                    board: nextBoard,
-                    latestStoneCoordinate: coordinate,
-                    previousState: state
-                };
-
-                this.postProcess(newState);
-
-                return newState;
+                return this.processPlaceStone(state, action.coordinate);
             } else if (action.type === "rollback" && state.previousState) {
                 return state.previousState;
             } else if (action.type === "restart") {

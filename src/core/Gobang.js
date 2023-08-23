@@ -1,4 +1,5 @@
 import Game from "./Game";
+import Stone from "./Stone";
 import GobangWinnerCheck from "./GobangWinningChecker";
 import GobangWarningMarker from "./GobangWarningMarker";
 
@@ -22,14 +23,26 @@ export default class Gobang extends Game {
         };
     }
 
-    postProcess(newState) {
-        newState.hasWinner = new GobangWinnerCheck(newState.board, newState.latestStoneCoordinate).checkWinning();
-        if (!newState.hasWinner) {
-            newState.blocking4InLineCoordinates = new GobangWarningMarker(
-                newState.board,
-                newState.latestStoneCoordinate
-            ).markWarnings();
+    processPlaceStone(state, coordinate) {
+        if (state.hasWinner || state.board.getStone(coordinate).isStone()) {
+            return state;
         }
+        const nextBoard = state.board.clone();
+        nextBoard.setStone(coordinate, new Stone(state.isNextBlack).setBlink());
+
+        const hasWinner = new GobangWinnerCheck(nextBoard, coordinate).checkWinning();
+        const blocking4InLineCoordinates = hasWinner
+            ? []
+            : new GobangWarningMarker(nextBoard, coordinate).markWarnings();
+
+        return {
+            isNextBlack: !state.isNextBlack,
+            board: nextBoard,
+            latestStoneCoordinate: coordinate,
+            previousState: state,
+            hasWinner: hasWinner,
+            blocking4InLineCoordinates: blocking4InLineCoordinates
+        };
     }
 
     supportAutoPlacement() {

@@ -153,7 +153,12 @@ export default function UiBoard() {
                             <input
                                 type="checkbox"
                                 checked={autoPlacement}
-                                onChange={(e) => setAutoPlacement(e.target.checked)}
+                                value="1"
+                                onChange={(e) => console.log("Checkbox onChange", e.target.checked)}
+                                // onChange works locally but won't be fired on github pages
+                                onClick={(e) => {
+                                    setAutoPlacement(e.target.checked);
+                                }}
                             ></input>
                             Auto
                         </label>
@@ -169,7 +174,7 @@ export default function UiBoard() {
                                 onChange={(e) => setAutoPlacementDelay(e.target.value)}
                                 style={{ width: boardSize - squareSize * 6 }}
                             ></input>
-                            <span style={{ marginLeft: squareSize / 4 }}>{autoPlacementDelay}ms delay</span>
+                            <span style={{ marginLeft: squareSize / 4 }}>{autoPlacementDelay}ms</span>
                         </div>
                     )}
                 </div>

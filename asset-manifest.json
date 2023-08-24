@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/gobang/static/css/main.38a610f1.css",
-    "main.js": "/gobang/static/js/main.d6fecb7e.js",
+    "main.js": "/gobang/static/js/main.c9cafb9d.js",
     "static/media/background19x19.png": "/gobang/static/media/background19x19.4bbbddfb8d42e1d8096f.png",
     "static/media/background15x15.png": "/gobang/static/media/background15x15.b50dd648e74f488a0be9.png",
     "static/media/black.png": "/gobang/static/media/black.a8f6404710fdff422aa2.png",
     "index.html": "/gobang/index.html",
     "main.38a610f1.css.map": "/gobang/static/css/main.38a610f1.css.map",
-    "main.d6fecb7e.js.map": "/gobang/static/js/main.d6fecb7e.js.map"
+    "main.c9cafb9d.js.map": "/gobang/static/js/main.c9cafb9d.js.map"
   },
   "entrypoints": [
     "static/css/main.38a610f1.css",
-    "static/js/main.d6fecb7e.js"
+    "static/js/main.c9cafb9d.js"
   ]
 }

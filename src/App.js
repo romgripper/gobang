@@ -1,5 +1,5 @@
-import StateProvider from "./GameStateContext";
-import UiBoard from "./UiBoard";
+import StateProvider from "./component/GameStateContext";
+import UiBoard from "./component/UiBoard";
 import "./App.css";
 import { useEffect } from "react";
 

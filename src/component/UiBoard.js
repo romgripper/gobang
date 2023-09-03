@@ -1,6 +1,7 @@
 import UiRow from "./UiRow";
 import { useGameState, useDispatch, useGameContext } from "./GameStateContext";
 import { useState, useLayoutEffect, useEffect } from "react";
+import Cookies from "universal-cookie";
 
 function range(size) {
     const a = [];
@@ -19,6 +20,8 @@ export default function UiBoard() {
     const state = useGameState();
     const dispatch = useDispatch();
     const game = useGameContext();
+
+    const playerName = new Cookies().get("username");
 
     const [windowSize, setWindowSize] = useState([0, 0]);
     const [windowWidth, windowHeight] = windowSize;
@@ -98,6 +101,7 @@ export default function UiBoard() {
                 marginBottom: verticalMargin
             }}
         >
+            <p>{playerName}</p>
             <div className="status" style={{ width: boardSize, fontSize: fontSize, marginBottom: fontSize }}>
                 {state.hasWinner && (
                     <div>

@@ -1,4 +1,4 @@
-import { useBoard, useGameContext, useDispatch } from "./GameStateContext";
+import { useBoard, useGameContext, useDispatch } from "./UiGame";
 
 export default function UiStone({ row, column, size }) {
     const stone = useBoard().getStone([row, column]);

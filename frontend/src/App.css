@@ -9,10 +9,10 @@
 }
 
 .board {
-  box-shadow:  0 0 10px 5px rgba(0,0,0,0.6);
-  -moz-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
-  -webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
-  -o-box-shadow: 0 0 10px 5px rgba(0,0,0,0.6);
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6);
+  -o-box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6);
 }
 
 .go {
@@ -25,7 +25,7 @@
   background-size: contain;
 }
 
-.status, .auto {
+.auto {
   display: flex;
   justify-content: space-between;
 }
@@ -50,11 +50,7 @@
 }
 
 img {
-  vertical-align:middle;
-}
-
-.status button {
-  vertical-align:middle;
+  vertical-align: middle;
 }
 
 .blink {
@@ -65,8 +61,52 @@ img {
   -ms-animation: anim-blink steps(1) 1.5s infinite;
 }
 
-@keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
-@-webkit-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
-@-moz-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
-@-o-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
-@-ms-keyframes anim-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes anim-blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes anim-blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes anim-blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@-o-keyframes anim-blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes anim-blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}

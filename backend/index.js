@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("../build"));
+app.use(express.static("../frontend/build"));
 
 const apiKey = "7mcca6yx3r9d";
 const serverClient = StreamChat.getInstance(apiKey, process.env.API_SECRET);

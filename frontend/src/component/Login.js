@@ -8,7 +8,7 @@ function Login({ setIsAuth }) {
     const [password, setPassword] = useState("");
 
     const cookies = new Cookies();
-    const login = () => {
+    function login() {
         Axios.post("/login", {
             username,
             password
@@ -25,7 +25,7 @@ function Login({ setIsAuth }) {
                 }
             })
             .catch(console.error);
-    };
+    }
     return (
         <div className="login">
             <label> Login</label>

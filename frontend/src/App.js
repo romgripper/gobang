@@ -1,11 +1,12 @@
-import StateProvider from "./component/GameStateContext";
+import UiGame from "./component/UiGame";
 import UiBoard from "./component/UiBoard";
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
 import Cookies from "universal-cookie";
-import Login from "./component/Login.js";
-import SignUp from "./component/SignUp.js";
+import Login from "./component/Login";
+import SignUp from "./component/SignUp";
+import Header from "./component/Header";
 
 import "./App.css";
 
@@ -21,16 +22,6 @@ const client = StreamChat.getInstance("7mcca6yx3r9d");
 export default function App() {
     const token = cookies.get("token");
     const [isAuth, setIsAuth] = useState(false);
-
-    function logOut() {
-        cookies.remove("token");
-        cookies.remove("userId");
-        cookies.remove("hashedPassword");
-        cookies.remove("channelName");
-        cookies.remove("username");
-        client.disconnectUser();
-        setIsAuth(false);
-    }
 
     if (token) {
         client
@@ -53,10 +44,10 @@ export default function App() {
 
     return isAuth ? (
         <Chat client={client}>
-            <StateProvider gameName={gameName}>
+            <UiGame gameName={gameName}>
+                <Header setIsAuth={setIsAuth} />
                 <UiBoard />
-                <button onClick={logOut}> Log Out</button>
-            </StateProvider>
+            </UiGame>
         </Chat>
     ) : (
         <>

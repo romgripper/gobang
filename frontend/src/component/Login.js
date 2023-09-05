@@ -11,7 +11,23 @@ function Login({ setIsAuth }) {
 
     const cookies = new Cookies();
 
+    function validateInput() {
+        if (!username) {
+            alert("Please input username");
+            return false;
+        }
+        if (!password) {
+            alert("Please input password");
+            return false;
+        }
+        return true;
+    }
+
     function login() {
+        if (!validateInput()) {
+            return;
+        }
+
         Axios.post("/login", {
             username,
             password
@@ -32,7 +48,12 @@ function Login({ setIsAuth }) {
     function signUp() {
         if (password !== passwordConfirm) {
             alert("Passwords don't match");
+            return;
         }
+        if (!validateInput()) {
+            return;
+        }
+
         Axios.post("/signup", {
             username,
             password

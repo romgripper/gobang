@@ -16,6 +16,10 @@ const serverClient = StreamChat.getInstance(apiKey, process.env.API_SECRET);
 app.post("/signup", async (req, res) => {
     try {
         const { username, password } = req.body;
+
+        const { users } = await serverClient.queryUsers({ name: username });
+        if (users.length !== 0) return res.json({ message: "User has been registered" });
+
         const userId = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
         const token = serverClient.createToken(userId);
@@ -41,7 +45,7 @@ app.post("/login", async (req, res) => {
                 userId: users[0].id
             });
         } else {
-            res.json({ error: "User name or password is not correct" });
+            res.json({ message: "User name or password is not correct" });
         }
     } catch (error) {
         res.json(error);

@@ -24,7 +24,7 @@ function Login({ setIsAuth }) {
                     cookies.set("username", username);
                     setIsAuth(true);
                 } else {
-                    alert("User name or password is incorrect");
+                    alert(res.data.message);
                 }
             })
             .catch(console.error);
@@ -44,6 +44,8 @@ function Login({ setIsAuth }) {
                 cookies.set("username", username);
                 cookies.set("hashedPassword", hashedPassword);
                 setIsAuth(true);
+            } else {
+                alert(res.data.message);
             }
         });
     }
@@ -100,7 +102,7 @@ function Login({ setIsAuth }) {
                         checked={isSignUp}
                         onClick={(e) => setIsSignUp(e.target.checked)}
                     ></input>
-                    SignUp
+                    Sign up
                 </label>
                 <div className="loginSub">{(isSignUp && signUpContent) || loginContent}</div>
             </div>

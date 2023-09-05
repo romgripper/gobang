@@ -25,11 +25,6 @@
   background-size: contain;
 }
 
-.auto {
-  display: flex;
-  justify-content: space-between;
-}
-
 .square {
   border: 0px;
   float: left;

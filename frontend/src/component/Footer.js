@@ -1,6 +1,8 @@
 import { useDispatch, useGameContext, useGameState, useSquareSize } from "./UiGame";
 import { useState, useEffect } from "react";
 
+import "./Footer.css";
+
 export default function Footer() {
     const game = useGameContext();
     const squareSize = useSquareSize();

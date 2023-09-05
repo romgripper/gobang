@@ -5,7 +5,6 @@ import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import Login from "./component/Login";
-import SignUp from "./component/SignUp";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 
@@ -35,7 +34,7 @@ export default function App() {
                     },
                     token
                 )
-                .then(console.log);
+                .then(() => {});
         }
     }, [token]);
 
@@ -52,9 +51,6 @@ export default function App() {
             </UiGame>
         </Chat>
     ) : (
-        <>
-            <SignUp setIsAuth={setIsAuth} />
-            <Login setIsAuth={setIsAuth} />
-        </>
+        <Login setIsAuth={setIsAuth} />
     );
 }

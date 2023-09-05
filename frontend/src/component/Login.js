@@ -6,8 +6,11 @@ import "./Login.css";
 function Login({ setIsAuth }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [isSignUp, setIsSignUp] = useState(false);
 
     const cookies = new Cookies();
+
     function login() {
         Axios.post("/login", {
             username,
@@ -26,10 +29,26 @@ function Login({ setIsAuth }) {
             })
             .catch(console.error);
     }
-    return (
-        <div className="login">
-            <label> Login</label>
-
+    function signUp() {
+        if (password !== passwordConfirm) {
+            alert("Passwords don't match");
+        }
+        Axios.post("/signup", {
+            username,
+            password
+        }).then((res) => {
+            const { token, userId, username, hashedPassword } = res.data;
+            if (token) {
+                cookies.set("token", token);
+                cookies.set("userId", userId);
+                cookies.set("username", username);
+                cookies.set("hashedPassword", hashedPassword);
+                setIsAuth(true);
+            }
+        });
+    }
+    const loginContent = (
+        <>
             <input
                 placeholder="Username"
                 onChange={(event) => {
@@ -43,7 +62,48 @@ function Login({ setIsAuth }) {
                     setPassword(event.target.value);
                 }}
             />
-            <button onClick={login}> Login</button>
+            <button onClick={login}>Login</button>
+        </>
+    );
+    const signUpContent = (
+        <>
+            <input
+                placeholder="Username"
+                onChange={(event) => {
+                    setUsername(event.target.value);
+                }}
+            />
+            <input
+                placeholder="Password"
+                type="password"
+                onChange={(event) => {
+                    setPassword(event.target.value);
+                }}
+            />
+            <input
+                placeholder="Password again"
+                type="password"
+                onChange={(event) => {
+                    setPasswordConfirm(event.target.value);
+                }}
+            />
+            <button onClick={signUp}>Sign Up</button>
+        </>
+    );
+    return (
+        <div className="login">
+            <div>
+                <label for="signupCheckbox">
+                    <input
+                        id="signupCheckbox"
+                        type="checkbox"
+                        checked={isSignUp}
+                        onClick={(e) => setIsSignUp(e.target.checked)}
+                    ></input>
+                    SignUp
+                </label>
+                <div className="loginSub">{(isSignUp && signUpContent) || loginContent}</div>
+            </div>
         </div>
     );
 }

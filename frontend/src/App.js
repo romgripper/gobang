@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 import Login from "./component/Login";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
+import JoinGame from "./component/JoinGame";
 
 import "./App.css";
 
@@ -22,6 +23,7 @@ const client = StreamChat.getInstance("7mcca6yx3r9d");
 export default function App() {
     const token = cookies.get("token");
     const [isAuth, setIsAuth] = useState(token ? true : false);
+    const [playersJoined, setPlayersJoined] = useState(false);
 
     useEffect(() => {
         if (token) {
@@ -42,15 +44,21 @@ export default function App() {
         document.title = gameName.charAt(0).toUpperCase() + gameName.slice(1);
     }, []);
 
-    return isAuth ? (
+    if (!isAuth) return <Login setIsAuth={setIsAuth} />;
+
+    return (
         <Chat client={client}>
             <UiGame gameName={gameName}>
-                <Header setIsAuth={setIsAuth} />
-                <UiBoard />
-                <Footer />
+                {playersJoined ? (
+                    <>
+                        <Header />
+                        <UiBoard />
+                        <Footer />
+                    </>
+                ) : (
+                    <JoinGame setIsAuth={setIsAuth} setPlayersJoined={setPlayersJoined} />
+                )}
             </UiGame>
         </Chat>
-    ) : (
-        <Login setIsAuth={setIsAuth} />
     );
 }

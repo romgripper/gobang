@@ -10,6 +10,7 @@ import Footer from "./component/Footer";
 import JoinGame from "./component/JoinGame";
 
 import "./App.css";
+import Logout from "./component/Logout";
 
 let gameName = new URLSearchParams(window.location.search).get("game") ?? "gobang";
 gameName = gameName.toLowerCase();
@@ -48,17 +49,16 @@ export default function App() {
 
     return (
         <Chat client={client}>
-            <UiGame gameName={gameName}>
-                {playersJoined ? (
-                    <>
-                        <Header />
-                        <UiBoard />
-                        <Footer />
-                    </>
-                ) : (
-                    <JoinGame setIsAuth={setIsAuth} setPlayersJoined={setPlayersJoined} />
-                )}
-            </UiGame>
+            {playersJoined ? (
+                <UiGame gameName={gameName}>
+                    <Header />
+                    <UiBoard />
+                    <Footer />
+                </UiGame>
+            ) : (
+                <JoinGame setPlayersJoined={setPlayersJoined} />
+            )}
+            <Logout setIsAuth={setIsAuth} />
         </Chat>
     );
 }

@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 
 import "./JoinGame.css";
 
-export default function JoinGame({ setIsAuth, setPlayersJoined }) {
+export default function JoinGame({ setPlayersJoined }) {
     const { client } = useChatContext();
     const cookies = new Cookies();
     const playerName = cookies.get("username");
@@ -44,18 +44,6 @@ export default function JoinGame({ setIsAuth, setPlayersJoined }) {
         setChannel(null);
     }
 
-    function logout() {
-        if (window.confirm("Do you want to logout?")) {
-            cookies.remove("token");
-            cookies.remove("userId");
-            cookies.remove("hashedPassword");
-            cookies.remove("channelName");
-            cookies.remove("username");
-            client.disconnectUser();
-            setIsAuth(false);
-        }
-    }
-
     return (
         <div className="joinGame">
             {channel ? (
@@ -68,7 +56,6 @@ export default function JoinGame({ setIsAuth, setPlayersJoined }) {
                     <h4>Create Game</h4>
                     <input placeholder="Rival username" onChange={(event) => setRivalUsername(event.target.value)} />
                     <button onClick={createChannel}>Join/Start Game</button>
-                    <button onClick={logout}>Logout {playerName}</button>
                 </>
             )}
         </div>

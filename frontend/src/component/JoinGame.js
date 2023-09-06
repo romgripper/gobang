@@ -4,13 +4,12 @@ import Cookies from "universal-cookie";
 
 import "./JoinGame.css";
 
-export default function JoinGame({ setPlayersJoined }) {
+export default function JoinGame({ channel, setChannel, setPlayersJoined }) {
     const { client } = useChatContext();
     const cookies = new Cookies();
     const playerName = cookies.get("username");
 
     const [rivalUsername, setRivalUsername] = useState("");
-    const [channel, setChannel] = useState(null);
 
     async function createChannel() {
         if (rivalUsername === playerName) {

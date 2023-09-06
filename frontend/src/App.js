@@ -1,13 +1,14 @@
-import UiGame from "./component/UiGame";
-import UiBoard from "./component/UiBoard";
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
+import { Channel } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import Login from "./component/Login";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 import JoinGame from "./component/JoinGame";
+import UiGame from "./component/UiGame";
+import UiBoard from "./component/UiBoard";
 
 import "./App.css";
 import Logout from "./component/Logout";
@@ -25,6 +26,7 @@ export default function App() {
     const token = cookies.get("token");
     const [isAuth, setIsAuth] = useState(token ? true : false);
     const [playersJoined, setPlayersJoined] = useState(false);
+    const [channel, setChannel] = useState(null);
 
     useEffect(() => {
         if (token) {
@@ -49,14 +51,16 @@ export default function App() {
 
     return (
         <Chat client={client}>
-            {playersJoined ? (
-                <UiGame gameName={gameName}>
-                    <Header />
-                    <UiBoard />
-                    <Footer />
-                </UiGame>
+            {playersJoined && channel ? (
+                <Channel channel={channel}>
+                    <UiGame gameName={gameName}>
+                        <Header />
+                        <UiBoard />
+                        <Footer />
+                    </UiGame>
+                </Channel>
             ) : (
-                <JoinGame setPlayersJoined={setPlayersJoined} />
+                <JoinGame channel={channel} setChannel={setChannel} setPlayersJoined={setPlayersJoined} />
             )}
             <Logout setIsAuth={setIsAuth} />
         </Chat>

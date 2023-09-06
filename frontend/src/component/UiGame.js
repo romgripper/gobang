@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer, useLayoutEffect, useState } from "react";
+import { createContext, useContext, useReducer, useLayoutEffect, useState, useEffect } from "react";
+import { useChannelStateContext } from "stream-chat-react";
 import getGameInstance from "../core/GameFactory";
 
 const GameContext = createContext(null);
@@ -11,6 +12,7 @@ export default function UiGame({ gameName, children }) {
     const [windowSize, setWindowSize] = useState([0, 0]);
     const game = getGameInstance(gameName);
     const [state, dispatch] = useReducer(game.createDispatcher(), game.createInitialState());
+    const { channel } = useChannelStateContext();
 
     useLayoutEffect(() => {
         function updateSize() {
@@ -21,10 +23,14 @@ export default function UiGame({ gameName, children }) {
         return () => window.removeEventListener("resize", updateSize);
     }, []);
 
+    useEffect(() => {
+        if (channel) channel.on(dispatch);
+    }, [channel]);
+
     const [windowWidth, windowHeight] = windowSize;
     const squareSize = Math.floor(
         Math.min(windowWidth / (game.COLUMN_COUNT + 2.5), windowHeight / (game.ROW_COUNT + 2.5))
-    ); // horizontally 2 for margins, 0.5 for paddings 
+    ); // horizontally 2 for margins, 0.5 for paddings
     const boardSize = Math.ceil(squareSize * (game.COLUMN_COUNT + 0.5)); // 0.5 for paddings
     const horizontalMargin = Math.floor((windowWidth - boardSize) / 2);
     const verticalMargin = Math.floor((windowHeight - boardSize) / 4.5);

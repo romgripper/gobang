@@ -1,5 +1,4 @@
 import { useSquareSize, useGameState, useDispatch, useGameContext } from "./UiGame";
-import { useChannelStateContext } from "stream-chat-react";
 
 const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black.png`;
 const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
@@ -11,7 +10,6 @@ export default function Header() {
     const dispatch = useDispatch();
     const squareSize = useSquareSize();
     const game = useGameContext();
-    const { channel } = useChannelStateContext();
 
     const fontSize = squareSize / 2.2;
     const statusHeight = squareSize * 0.8;
@@ -39,16 +37,8 @@ export default function Header() {
         marginLeft: squareSize / 2
     };
 
-    async function handleAction(action) {
-        if (channel) await channel.sendEvent(action); // don't send event if playing locally
-        dispatch(action);
-    }
-
     const backButton = (
-        <button
-            style={{ ...commonStyle, width: squareSize * 5 }}
-            onClick={() => handleAction(game.createRollbackAction())}
-        >
+        <button style={{ ...commonStyle, width: squareSize * 5 }} onClick={() => dispatch(game.createRollbackAction())}>
             Back
         </button>
     );
@@ -57,7 +47,7 @@ export default function Header() {
         <button
             style={{ ...commonStyle, width: squareSize * 3 }}
             onClick={() => {
-                if (state.hasWinner || window.confirm("Restart the game?")) handleAction(game.createRestartAction());
+                if (state.hasWinner || window.confirm("Restart the game?")) dispatch(game.createRestartAction());
             }}
         >
             Restart

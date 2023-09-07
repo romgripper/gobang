@@ -11,7 +11,7 @@ const DispatchContext = createContext(null);
 export default function UiGame({ gameName, children }) {
     const [windowSize, setWindowSize] = useState([0, 0]);
     const game = getGameInstance(gameName);
-    const [state, dispatch] = useReducer(game.createDispatcher(), game.createInitialState());
+    const [state, doDispatch] = useReducer(game.createDispatcher(), game.createInitialState());
     const { channel } = useChannelStateContext();
     const { client } = useChatContext();
 
@@ -28,10 +28,15 @@ export default function UiGame({ gameName, children }) {
         if (channel && client)
             channel.on((event) => {
                 if (event.user.id !== client.userID) {
-                    dispatch(event);
+                    doDispatch(event);
                 }
             });
     }, [channel, client]);
+
+    async function dispatch(action) {
+        if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
+        doDispatch(action);
+    }
 
     const [windowWidth, windowHeight] = windowSize;
     const squareSize = Math.floor(

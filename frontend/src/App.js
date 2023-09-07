@@ -4,8 +4,8 @@ import { Chat } from "stream-chat-react";
 import { Channel } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import Login from "./component/Login";
-import Header from "./component/Status";
-import Footer from "./component/Footer";
+import Status from "./component/Status";
+import AutoPlacement from "./component/AutoPlacement";
 import JoinGame from "./component/JoinGame";
 import UiGame from "./component/UiGame";
 import UiBoard from "./component/UiBoard";
@@ -55,9 +55,9 @@ export default function App() {
             {playersJoined && channel ? (
                 <Channel channel={channel}>
                     <UiGame gameName={gameName}>
-                        <Header />
+                        <Status />
                         <UiBoard />
-                        <Footer />
+                        <AutoPlacement />
                     </UiGame>
                     <LeaveGame setChannel={setChannel} />
                 </Channel>

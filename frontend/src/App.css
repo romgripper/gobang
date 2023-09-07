@@ -62,20 +62,19 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 20px;
+  margin-top: 20px;
 }
 
 /* leave game*/
 .leaveGame {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
 }
 
 .leaveGame button {
-  margin: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   height: 30px;
@@ -85,15 +84,14 @@
 
 /* logout */
 .logout {
+  margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
 }
 
 .logout button {
-  margin: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   height: 30px;
@@ -115,8 +113,8 @@ img {
   vertical-align: middle;
 }
 
-/* footer */
-.footer {
+/* autoPlacement */
+.autoPlacement {
   display: flex;
   justify-content: space-between;
 }

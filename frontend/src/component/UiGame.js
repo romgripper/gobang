@@ -52,8 +52,7 @@ export default function UiGame({ gameName, children }) {
                                 width: boardSize,
                                 marginLeft: horizontalMargin,
                                 marginRight: horizontalMargin,
-                                marginTop: verticalMargin,
-                                marginBottom: verticalMargin
+                                marginTop: verticalMargin
                             }}
                         >
                             {children}

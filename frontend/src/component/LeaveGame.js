@@ -4,8 +4,10 @@ export default function LeaveGame({ setChannel }) {
     const { channel } = useChannelStateContext();
 
     async function leaveGame() {
-        await channel.stopWatching();
-        setChannel(null);
+        if (window.confirm("Do you want to leave the game?")) {
+            await channel.stopWatching();
+            setChannel(null);
+        }
     }
 
     return (

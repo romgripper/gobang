@@ -6,14 +6,22 @@ const GameContext = createContext(null);
 const StateContext = createContext(null);
 const SquareSizeContext = createContext(null);
 const DispatchContext = createContext(null);
+const PlayerJoinedContext = createContext(null);
 
 // game is go or gobang
-export default function UiGame({ gameName, children }) {
+export default function Game({ gameName, children }) {
+    const { client } = useChatContext();
+    const { channel } = useChannelStateContext();
+
+    const [playersJoined, setPlayersJoined] = useState(channel.state.watcher_count === 2);
     const [windowSize, setWindowSize] = useState([0, 0]);
+    
     const game = getGameInstance(gameName);
     const [state, doDispatch] = useReducer(game.createDispatcher(), game.createInitialState());
-    const { channel } = useChannelStateContext();
-    const { client } = useChatContext();
+
+    channel.on("user.watching.start", (event) => {
+        setPlayersJoined(event.watcher_count === 2);
+    });
 
     useLayoutEffect(() => {
         function updateSize() {
@@ -23,6 +31,8 @@ export default function UiGame({ gameName, children }) {
         updateSize();
         return () => window.removeEventListener("resize", updateSize);
     }, []);
+
+    console.log(channel);
 
     useEffect(() => {
         if (channel && client)
@@ -47,25 +57,27 @@ export default function UiGame({ gameName, children }) {
     const verticalMargin = Math.floor((windowHeight - boardSize) / 4.5);
 
     return (
-        <GameContext.Provider value={game}>
-            <StateContext.Provider value={state}>
-                <DispatchContext.Provider value={dispatch}>
-                    <SquareSizeContext.Provider value={squareSize}>
-                        <div
-                            className="main"
-                            style={{
-                                width: boardSize,
-                                marginLeft: horizontalMargin,
-                                marginRight: horizontalMargin,
-                                marginTop: verticalMargin
-                            }}
-                        >
-                            {children}
-                        </div>
-                    </SquareSizeContext.Provider>
-                </DispatchContext.Provider>
-            </StateContext.Provider>
-        </GameContext.Provider>
+        <PlayerJoinedContext.Provider value={playersJoined}>
+            <GameContext.Provider value={game}>
+                <StateContext.Provider value={state}>
+                    <DispatchContext.Provider value={dispatch}>
+                        <SquareSizeContext.Provider value={squareSize}>
+                            <div
+                                className="main"
+                                style={{
+                                    width: boardSize,
+                                    marginLeft: horizontalMargin,
+                                    marginRight: horizontalMargin,
+                                    marginTop: verticalMargin
+                                }}
+                            >
+                                {children}
+                            </div>
+                        </SquareSizeContext.Provider>
+                    </DispatchContext.Provider>
+                </StateContext.Provider>
+            </GameContext.Provider>
+        </PlayerJoinedContext.Provider>
     );
 }
 
@@ -87,4 +99,8 @@ export function useDispatch() {
 
 export function useSquareSize() {
     return useContext(SquareSizeContext);
+}
+
+export function usePlayerJoined() {
+    return useContext(PlayerJoinedContext);
 }

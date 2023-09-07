@@ -1,5 +1,5 @@
+import { useGameContext, useSquareSize } from "./GameContext";
 import UiRow from "./UiRow";
-import { useGameContext, useSquareSize } from "./UiGame";
 
 function range(size) {
     const a = [];

@@ -1,7 +1,7 @@
-import { useDispatch, useGameContext, useGameState, useSquareSize } from "./UiGame";
+import { useDispatch, useGameContext, useGameState, useSquareSize } from "./GameContext";
 import { useState, useEffect } from "react";
 
-export default function Footer() {
+export default function AutoPlacement() {
     const game = useGameContext();
     const squareSize = useSquareSize();
     const state = useGameState();

@@ -1,15 +1,16 @@
-import { useSquareSize, useGameState, useDispatch, useGameContext } from "./UiGame";
+import { useSquareSize, useGameState, useDispatch, useGameContext, usePlayerJoined } from "./GameContext";
 
 const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black.png`;
 const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
 const BLACK_PLAYER = "Black";
 const WHITE_PLAYER = "White";
 
-export default function Header() {
+export default function Status() {
     const state = useGameState();
     const dispatch = useDispatch();
     const squareSize = useSquareSize();
     const game = useGameContext();
+    const playersJoined = usePlayerJoined();
 
     const fontSize = squareSize / 2.2;
     const statusHeight = squareSize * 0.8;
@@ -53,6 +54,8 @@ export default function Header() {
             Restart
         </button>
     );
+
+    if (!playersJoined) return <p>Waiting for the other player to join...</p>;
 
     return (
         <div className="status" style={{ fontSize: fontSize, marginBottom: fontSize }}>

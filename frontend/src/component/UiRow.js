@@ -1,5 +1,5 @@
 import UiStone from "./UiStone";
-import { useGameContext } from "./UiGame";
+import { useGameContext } from "./GameContext";
 
 export default function UiRow({ row, height }) {
     const game = useGameContext();

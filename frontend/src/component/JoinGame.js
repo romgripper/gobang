@@ -1,9 +1,8 @@
 import { useChatContext } from "stream-chat-react";
 import { useState } from "react";
 import Cookies from "universal-cookie";
-import LeaveGame from "./LeaveGame";
 
-export default function JoinGame({ channel, setChannel, setPlayersJoined }) {
+export default function JoinGame({ setChannel }) {
     const { client } = useChatContext();
     const cookies = new Cookies();
     const playerName = cookies.get("username");
@@ -30,27 +29,11 @@ export default function JoinGame({ channel, setChannel, setPlayersJoined }) {
         setChannel(newChannel);
     }
 
-    if (channel) {
-        setPlayersJoined(channel.state.watcher_count === 2);
-        channel.on("user.watching.start", (event) => {
-            setPlayersJoined(event.watcher_count === 2);
-        });
-    }
-
     return (
         <div className="joinGame">
-            {channel ? (
-                <>
-                    <p>Waiting for {rivalUsername} to join...</p>
-                    <LeaveGame />
-                </>
-            ) : (
-                <>
-                    <h4>Create Game</h4>
-                    <input placeholder="Rival username" onChange={(event) => setRivalUsername(event.target.value)} />
-                    <button onClick={createChannel}>Join/Start Game</button>
-                </>
-            )}
+            <h4>Create Game</h4>
+            <input placeholder="Rival username" onChange={(event) => setRivalUsername(event.target.value)} />
+            <button onClick={createChannel}>Join/Start Game</button>
         </div>
     );
 }

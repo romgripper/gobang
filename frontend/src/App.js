@@ -7,7 +7,7 @@ import Login from "./component/Login";
 import Status from "./component/Status";
 import AutoPlacement from "./component/AutoPlacement";
 import JoinGame from "./component/JoinGame";
-import UiGame from "./component/UiGame";
+import Game from "./component/GameContext";
 import UiBoard from "./component/UiBoard";
 
 import "./App.css";
@@ -26,7 +26,6 @@ const client = StreamChat.getInstance("7mcca6yx3r9d");
 export default function App() {
     const token = cookies.get("token");
     const [isAuth, setIsAuth] = useState(token ? true : false);
-    const [playersJoined, setPlayersJoined] = useState(false);
     const [channel, setChannel] = useState(null);
 
     useEffect(() => {
@@ -52,17 +51,17 @@ export default function App() {
 
     return (
         <Chat client={client}>
-            {playersJoined && channel ? (
+            {channel ? (
                 <Channel channel={channel}>
-                    <UiGame gameName={gameName}>
+                    <Game gameName={gameName}>
                         <Status />
                         <UiBoard />
                         <AutoPlacement />
-                    </UiGame>
-                    <LeaveGame setChannel={setChannel} />
+                        <LeaveGame setChannel={setChannel} />
+                    </Game>
                 </Channel>
             ) : (
-                <JoinGame channel={channel} setChannel={setChannel} setPlayersJoined={setPlayersJoined} />
+                <JoinGame setChannel={setChannel} />
             )}
             <Logout setIsAuth={setIsAuth} />
         </Chat>

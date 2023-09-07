@@ -3,6 +3,7 @@ import { useState } from "react";
 import Cookies from "universal-cookie";
 
 import "./JoinGame.css";
+import LeaveGame from "./LeaveGame";
 
 export default function JoinGame({ channel, setChannel, setPlayersJoined }) {
     const { client } = useChatContext();
@@ -38,17 +39,12 @@ export default function JoinGame({ channel, setChannel, setPlayersJoined }) {
         });
     }
 
-    async function leaveGame() {
-        await channel.stopWatching();
-        setChannel(null);
-    }
-
     return (
         <div className="joinGame">
             {channel ? (
                 <>
                     <p>Waiting for {rivalUsername} to join...</p>
-                    <button onClick={leaveGame}>Leave Game</button>
+                    <LeaveGame />
                 </>
             ) : (
                 <>

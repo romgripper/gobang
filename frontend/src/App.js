@@ -12,6 +12,7 @@ import UiBoard from "./component/UiBoard";
 
 import "./App.css";
 import Logout from "./component/Logout";
+import LeaveGame from "./component/LeaveGame";
 
 let gameName = new URLSearchParams(window.location.search).get("game") ?? "gobang";
 gameName = gameName.toLowerCase();
@@ -58,6 +59,7 @@ export default function App() {
                         <UiBoard />
                         <Footer />
                     </UiGame>
+                    <LeaveGame setChannel={setChannel} />
                 </Channel>
             ) : (
                 <JoinGame channel={channel} setChannel={setChannel} setPlayersJoined={setPlayersJoined} />

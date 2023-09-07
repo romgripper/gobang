@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useLayoutEffect, useState, useEffect } from "react";
-import { useChannelStateContext } from "stream-chat-react";
+import { useChannelStateContext, useChatContext } from "stream-chat-react";
 import getGameInstance from "../core/GameFactory";
 
 const GameContext = createContext(null);
@@ -13,6 +13,7 @@ export default function UiGame({ gameName, children }) {
     const game = getGameInstance(gameName);
     const [state, dispatch] = useReducer(game.createDispatcher(), game.createInitialState());
     const { channel } = useChannelStateContext();
+    const { client } = useChatContext();
 
     useLayoutEffect(() => {
         function updateSize() {
@@ -24,8 +25,13 @@ export default function UiGame({ gameName, children }) {
     }, []);
 
     useEffect(() => {
-        if (channel) channel.on(dispatch);
-    }, [channel]);
+        if (channel && client)
+            channel.on((event) => {
+                if (event.user.id !== client.userID) {
+                    dispatch(event);
+                }
+            });
+    }, [channel, client]);
 
     const [windowWidth, windowHeight] = windowSize;
     const squareSize = Math.floor(

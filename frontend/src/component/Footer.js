@@ -1,8 +1,6 @@
 import { useDispatch, useGameContext, useGameState, useSquareSize } from "./UiGame";
 import { useState, useEffect } from "react";
 
-import "./Footer.css";
-
 export default function Footer() {
     const game = useGameContext();
     const squareSize = useSquareSize();
@@ -33,7 +31,7 @@ export default function Footer() {
         <>
             {game.supportAutoPlacement() && (
                 <div
-                    className="auto"
+                    className="footer"
                     style={{
                         marginTop: squareSize / 2,
                         fontSize: fontSize

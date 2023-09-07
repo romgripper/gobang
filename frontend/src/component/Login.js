@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
-import "./Login.css";
 
 function Login({ setIsAuth }) {
     const [username, setUsername] = useState("");

@@ -2,6 +2,70 @@
   margin: auto;
 }
 
+/* login */
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.loginSub {
+  width: 300px;
+}
+
+#signupCheckbox {
+  margin-left: 10px;
+}
+
+.loginSub input {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  height: 30px;
+}
+
+.loginSub button {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50%;
+  height: 30px;
+  cursor: pointer;
+  display: inline;
+}
+
+/* join game */
+.joinGame input {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  width: 220px;
+  height: 30px;
+}
+
+.joinGame button {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 220px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.joinGame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px;
+}
+
+/* leave game*/
 .leaveGame {
   display: flex;
   justify-content: center;
@@ -17,6 +81,44 @@
   height: 30px;
   width: 220px;
   cursor: pointer;
+}
+
+/* logout */
+.logout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.logout button {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 30px;
+  width: 220px;
+  cursor: pointer;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.header button {
+  vertical-align: middle;
+}
+
+/* footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
 }
 
 .board-row:after {

@@ -1,8 +1,6 @@
 import Cookies from "universal-cookie";
 import { useChatContext } from "stream-chat-react";
 
-import "./Logout.css";
-
 export default function Logout({ setIsAuth }) {
     const cookies = new Cookies();
     const playerName = cookies.get("username");

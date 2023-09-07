@@ -1,8 +1,6 @@
 import { useSquareSize, useGameState, useDispatch, useGameContext } from "./UiGame";
 import { useChannelStateContext } from "stream-chat-react";
 
-import "./Header.css";
-
 const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black.png`;
 const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
 const BLACK_PLAYER = "Black";
@@ -67,7 +65,7 @@ export default function Header() {
     );
 
     return (
-        <div className="status" style={{ fontSize: fontSize, marginBottom: fontSize }}>
+        <div className="header" style={{ fontSize: fontSize, marginBottom: fontSize }}>
             {state.hasWinner && (
                 <div>
                     Winner&nbsp;

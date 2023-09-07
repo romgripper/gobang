@@ -1,8 +1,6 @@
 import { useChatContext } from "stream-chat-react";
 import { useState } from "react";
 import Cookies from "universal-cookie";
-
-import "./JoinGame.css";
 import LeaveGame from "./LeaveGame";
 
 export default function JoinGame({ channel, setChannel, setPlayersJoined }) {

@@ -4,7 +4,7 @@ import { Chat } from "stream-chat-react";
 import { Channel } from "stream-chat-react";
 import Cookies from "universal-cookie";
 import Login from "./component/Login";
-import Header from "./component/Header";
+import Header from "./component/Status";
 import Footer from "./component/Footer";
 import JoinGame from "./component/JoinGame";
 import UiGame from "./component/UiGame";

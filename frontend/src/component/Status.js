@@ -65,7 +65,7 @@ export default function Header() {
     );
 
     return (
-        <div className="header" style={{ fontSize: fontSize, marginBottom: fontSize }}>
+        <div className="status" style={{ fontSize: fontSize, marginBottom: fontSize }}>
             {state.hasWinner && (
                 <div>
                     Winner&nbsp;

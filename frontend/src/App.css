@@ -101,8 +101,8 @@
   cursor: pointer;
 }
 
-/* header */
-.header {
+/* status row*/
+.status {
   display: flex;
   justify-content: space-between;
 }
@@ -111,7 +111,7 @@ img {
   vertical-align: middle;
 }
 
-.header button {
+.status button {
   vertical-align: middle;
 }
 

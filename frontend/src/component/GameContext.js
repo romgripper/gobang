@@ -15,13 +15,28 @@ export default function Game({ gameName, children }) {
 
     const [playersJoined, setPlayersJoined] = useState(channel.state.watcher_count === 2);
     const [windowSize, setWindowSize] = useState([0, 0]);
-    
+
     const game = getGameInstance(gameName);
     const [state, doDispatch] = useReducer(game.createDispatcher(), game.createInitialState());
 
-    channel.on("user.watching.start", (event) => {
-        setPlayersJoined(event.watcher_count === 2);
-    });
+    async function dispatch(action) {
+        if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
+        doDispatch(action);
+    }
+
+    useEffect(() => {
+        const listener = channel.on("user.watching.start", (event) => {
+            if (event.watcher_count === 2) {
+                setPlayersJoined(true);
+                const actions = game.createSetStateActions(state);
+                actions.forEach(async (action) => {
+                    if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
+                    doDispatch(action);
+                });
+            }
+        });
+        return () => listener.unsubscribe();
+    }, [channel, game, state]);
 
     useLayoutEffect(() => {
         function updateSize() {
@@ -32,21 +47,16 @@ export default function Game({ gameName, children }) {
         return () => window.removeEventListener("resize", updateSize);
     }, []);
 
-    console.log(channel);
-
     useEffect(() => {
-        if (channel && client)
-            channel.on((event) => {
+        if (channel && client) {
+            const listener = channel.on((event) => {
                 if (event.user.id !== client.userID) {
                     doDispatch(event);
                 }
             });
+            return () => listener.unsubscribe();
+        }
     }, [channel, client]);
-
-    async function dispatch(action) {
-        if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
-        doDispatch(action);
-    }
 
     const [windowWidth, windowHeight] = windowSize;
     const squareSize = Math.floor(

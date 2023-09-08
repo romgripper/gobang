@@ -1,9 +1,12 @@
 import Board from "./Board";
+import Stone from "./Stone";
 
 export default class Game {
     static #PLACE_STONE = "placeStone";
     static #ROLLBACK = "rollback";
     static #RESTART = "restart";
+    static #SET_STATE = "setState";
+    static #SET_ROW = "setRow";
 
     ROW_COUNT;
     COLUMN_COUNT;
@@ -54,16 +57,36 @@ export default class Game {
         };
     }
 
+    createSetStateActions(state) {
+        const stateClone = { ...state };
+        delete stateClone.board;
+        stateClone.previousState = null; // the event message is not big enough to contain history
+        const actions = [];
+        actions.push({ type: Game.#SET_STATE, state: stateClone });
+        state.board
+            .getRows()
+            .forEach((row, rowIndex) => actions.push({ type: Game.#SET_ROW, row: row.map(Stone.toInt), rowIndex }));
+        return actions;
+    }
+
     createDispatcher() {
         return (state, action) => {
-            if (action.type === Game.#PLACE_STONE) {
-                return this.processPlaceStone(state, action.coordinate);
-            } else if (action.type === Game.#ROLLBACK && state.previousState) {
-                return state.previousState;
-            } else if (action.type === Game.#RESTART) {
-                return this.createInitialState();
+            switch (action.type) {
+                case Game.#PLACE_STONE:
+                    return this.processPlaceStone(state, action.coordinate);
+                case Game.#ROLLBACK:
+                    return state.previousState || state;
+                case Game.#RESTART:
+                    return this.createInitialState();
+                case Game.#SET_STATE:
+                    action.state.board = state.board;
+                    return action.state;
+                case Game.#SET_ROW:
+                    state.board.setRow(action.row.map(Stone.fromInt), action.rowIndex);
+                    return state;
+                default:
+                    return state;
             }
-            return state;
         };
     }
 }

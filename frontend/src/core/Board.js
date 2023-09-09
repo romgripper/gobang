@@ -22,20 +22,6 @@ export default class Board {
         return this.#columnCount;
     }
 
-    getRows() {
-        return this.#stones;
-    }
-
-    setRow(row, rowIndex) {
-        if (rowIndex >= this.#rowCount || rowIndex < 0) {
-            throw new Error("Wrong row index " + rowIndex);
-        }
-        if (row.length !== this.#columnCount) {
-            throw new Error("Wrong row length " + row.length);
-        }
-        this.#stones[rowIndex] = row;
-    }
-
     clone() {
         const cloned = new Board(this.#rowCount, this.#columnCount);
         for (let i = 0; i < this.#rowCount; i++) {

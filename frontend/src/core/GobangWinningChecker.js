@@ -11,11 +11,11 @@ const WINNING_PATTERNS = [
 ];
 export default class GobangWinnerChecker {
     #board;
-    #latestStoneCoordinate;
+    #latestMove;
 
-    constructor(board, latestStoneCoordinate) {
+    constructor(board, latestMove) {
         this.#board = board;
-        this.#latestStoneCoordinate = latestStoneCoordinate;
+        this.#latestMove = latestMove;
     }
 
     checkWinning() {
@@ -29,7 +29,7 @@ export default class GobangWinnerChecker {
     }
 
     #check5Inline(line) {
-        const stonesInLine = new Line(this.#board, this.#latestStoneCoordinate, line);
+        const stonesInLine = new Line(this.#board, this.#latestMove, line);
 
         for (let winningPattern of WINNING_PATTERNS) {
             if (stonesInLine.stonesMatchPattern(winningPattern)) {

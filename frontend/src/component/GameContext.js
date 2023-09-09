@@ -25,14 +25,22 @@ export default function Game({ gameName, children }) {
     }
 
     useEffect(() => {
-        const listener = channel.on("user.watching.start", (event) => {
+        function syncState() {
+            const historicalMoves = [];
+            let s = state;
+            while (s.previousState) {
+                historicalMoves.unshift(s.latestMove);
+                s = s.previousState;
+            }
+            const action = game.createPlaceStonesAction(historicalMoves);
+            channel.sendEvent(action);
+        }
+
+        const listener = channel.on("user.watching.start", async (event) => {
+            console.log("The other player just joined, syncing state");
             if (event.watcher_count === 2) {
                 setPlayersJoined(true);
-                const actions = game.createSetStateActions(state);
-                actions.forEach(async (action) => {
-                    if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
-                    doDispatch(action);
-                });
+                syncState();
             }
         });
         return () => listener.unsubscribe();

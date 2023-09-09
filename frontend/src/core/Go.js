@@ -11,7 +11,8 @@ export default class Go extends Game {
             isNextBlack: true,
             hasWinner: false,
             board: this.createInitialBoard(),
-            placeStone: null,
+            latestMove: null,
+            placeStone: null, // true for placeStone, false for remove stone
             previousState: null
         };
     }
@@ -36,6 +37,7 @@ export default class Go extends Game {
             isNextBlack: isNextBlack,
             board: nextBoard,
             placeStone: placeStone,
+            latestMove: coordinate,
             previousState: state
         };
     }

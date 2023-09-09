@@ -17,7 +17,7 @@ export default class Gobang extends Game {
             isNextBlack: true,
             hasWinner: false,
             board: this.createInitialBoard(),
-            latestStoneCoordinate: null,
+            latestMove: null,
             blocking4InLineCoordinates: [],
             previousState: null
         };
@@ -38,7 +38,7 @@ export default class Gobang extends Game {
         return {
             isNextBlack: !state.isNextBlack,
             board: nextBoard,
-            latestStoneCoordinate: coordinate,
+            latestMove: coordinate,
             previousState: state,
             hasWinner: hasWinner,
             blocking4InLineCoordinates: blocking4InLineCoordinates

@@ -136,11 +136,11 @@ const WARNING_PATTERNS = [
 // return the all the coordinates that could fix one of the 4-in-lines formed by current stone
 export default class GobangWarningMarker {
     #board;
-    #latestStoneCoordinate;
+    #latestMove;
 
-    constructor(board, latestStoneCoordinate) {
+    constructor(board, latestMove) {
         this.#board = board;
-        this.#latestStoneCoordinate = latestStoneCoordinate;
+        this.#latestMove = latestMove;
     }
 
     // mark 3-in-lines or 4-in-lines caused by latest stone and return coordinates that would block 4-in-lines to become 5-in-lines
@@ -155,7 +155,7 @@ export default class GobangWarningMarker {
 
     // return the coordinates which could fix the 4-in-line formed by current stone
     #checkAndShowWarningsInLine(line, patterns) {
-        const stonesInLine = new Line(this.#board, this.#latestStoneCoordinate, line);
+        const stonesInLine = new Line(this.#board, this.#latestMove, line);
 
         const coordinatesToFix4InLine = [];
         for (let i = 0; i < patterns.length; i++) {

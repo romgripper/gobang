@@ -71,16 +71,16 @@ it("Latest stone blinks", () => {
 });
 
 it("Latest stone coordinates are updated", () => {
-    expect(INITIAL_STATE.latestStoneCoordinate).toBe(null);
+    expect(INITIAL_STATE.latestMove).toBe(null);
     // black first [1, 1]
     let state = placeStone(INITIAL_STATE, [1, 1]);
-    expect(state.latestStoneCoordinate).toStrictEqual([1, 1]);
+    expect(state.latestMove).toStrictEqual([1, 1]);
     // white next [1, 2]
     state = placeStone(state, [1, 2]);
-    expect(state.latestStoneCoordinate).toStrictEqual([1, 2]);
+    expect(state.latestMove).toStrictEqual([1, 2]);
     // black [2,1]
     state = placeStone(state, [2, 1]);
-    expect(state.latestStoneCoordinate).toStrictEqual([2, 1]);
+    expect(state.latestMove).toStrictEqual([2, 1]);
 });
 
 it("No state change if place stone where there is already a stone", () => {

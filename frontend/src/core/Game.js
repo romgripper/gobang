@@ -1,12 +1,10 @@
 import Board from "./Board";
-import Stone from "./Stone";
 
 export default class Game {
     static #PLACE_STONE = "placeStone";
     static #ROLLBACK = "rollback";
     static #RESTART = "restart";
-    static #SET_STATE = "setState";
-    static #SET_ROW = "setRow";
+    static #PLACE_STONES = "placeStones";
 
     ROW_COUNT;
     COLUMN_COUNT;
@@ -41,7 +39,14 @@ export default class Game {
     createPlaceStoneAction(coordinate) {
         return {
             type: Game.#PLACE_STONE,
-            coordinate: coordinate
+            coordinate
+        };
+    }
+
+    createPlaceStonesAction(coordinates) {
+        return {
+            type: Game.#PLACE_STONES,
+            coordinates
         };
     }
 
@@ -57,18 +62,6 @@ export default class Game {
         };
     }
 
-    createSetStateActions(state) {
-        const stateClone = { ...state };
-        delete stateClone.board;
-        stateClone.previousState = null; // the event message is not big enough to contain history
-        const actions = [];
-        actions.push({ type: Game.#SET_STATE, state: stateClone });
-        state.board
-            .getRows()
-            .forEach((row, rowIndex) => actions.push({ type: Game.#SET_ROW, row: row.map(Stone.toInt), rowIndex }));
-        return actions;
-    }
-
     createDispatcher() {
         return (state, action) => {
             switch (action.type) {
@@ -78,12 +71,12 @@ export default class Game {
                     return state.previousState || state;
                 case Game.#RESTART:
                     return this.createInitialState();
-                case Game.#SET_STATE:
-                    action.state.board = state.board;
-                    return action.state;
-                case Game.#SET_ROW:
-                    state.board.setRow(action.row.map(Stone.fromInt), action.rowIndex);
-                    return state;
+                case Game.#PLACE_STONES:
+                    let newState = state;
+                    for (let coordinate of action.coordinates) {
+                        newState = this.processPlaceStone(newState, coordinate);
+                    }
+                    return newState;
                 default:
                     return state;
             }

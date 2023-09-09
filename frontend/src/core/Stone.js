@@ -31,37 +31,4 @@ export default class Stone {
     clone() {
         return new Stone(this.#isBlack);
     }
-
-    /*
-        null        -> 0
-        black       -> 1
-        blink black -> -1
-        white       -> 2
-        blink white -> -2
-    */
-
-    static toInt(stone) {
-        if (!stone) {
-            return 0;
-        }
-        if (stone.isBlack()) {
-            return stone.isBlink() ? -1 : 1;
-        }
-        return stone.isBlink() ? -2 : 2;
-    }
-
-    static fromInt(value) {
-        switch (value) {
-            case 1:
-                return new Stone(true);
-            case -1:
-                return new Stone(true).setBlink();
-            case 2:
-                return new Stone(false);
-            case -2:
-                return new Stone(false).setBlink();
-            default:
-                return null;
-        }
-    }
 }

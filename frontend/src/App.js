@@ -13,7 +13,8 @@ import UiBoard from "./component/UiBoard";
 import "./App.css";
 import Logout from "./component/Logout";
 import LeaveGame from "./component/LeaveGame";
-import Constant from "./component/Constant";
+import Constant from "./core/Constant";
+import PersistUtil from "./core/PersistUtil";
 
 let gameName = new URLSearchParams(window.location.search).get("game") ?? "gobang";
 gameName = gameName.toLowerCase();
@@ -35,7 +36,7 @@ export default function App() {
                 .connectUser(
                     {
                         id: cookies.get(Constant.COOKIE_USER_ID),
-                        name: cookies.get(Constant.COOKIE_USERNAME),
+                        name: PersistUtil.getStoredUserName,
                         hashedPassword: cookies.get(Constant.COOKIE_HASHED_PASSWORD)
                     },
                     token

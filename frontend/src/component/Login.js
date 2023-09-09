@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
-import Constant from "./Constant";
+import Constant from "../core/Constant";
+import PersistUtil from "../core/PersistUtil";
 
 function Login({ setIsAuth }) {
     const [username, setUsername] = useState("");
@@ -37,7 +38,7 @@ function Login({ setIsAuth }) {
                 if (token) {
                     cookies.set(Constant.COOKIE_TOKEN, token);
                     cookies.set(Constant.COOKIE_USER_ID, userId);
-                    cookies.set(Constant.COOKIE_USERNAME, username);
+                    PersistUtil.persistUsername(username);
                     setIsAuth(true);
                 } else {
                     alert(res.data.message);
@@ -62,7 +63,7 @@ function Login({ setIsAuth }) {
             if (token) {
                 cookies.set(Constant.COOKIE_TOKEN, token);
                 cookies.set(Constant.COOKIE_USER_ID, userId);
-                cookies.set(Constant.COOKIE_USERNAME, username);
+                PersistUtil.persistUsername(username);
                 cookies.set(Constant.COOKIE_HASHED_PASSWORD, hashedPassword);
                 setIsAuth(true);
             } else {

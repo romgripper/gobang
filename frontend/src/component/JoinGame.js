@@ -1,14 +1,12 @@
 import { useChatContext } from "stream-chat-react";
 import { useState } from "react";
-import Cookies from "universal-cookie";
-import Constant from "./Constant";
+import PersistUtil from "../core/PersistUtil";
 
 export default function JoinGame({ setChannel }) {
     const { client } = useChatContext();
-    const cookies = new Cookies();
-    const playerName = cookies.get(Constant.COOKIE_USERNAME);
+    const playerName = PersistUtil.getUsername();
 
-    const [rivalUsername, setRivalUsername] = useState(cookies.get(Constant.COOKIE_RIVAL));
+    const [rivalUsername, setRivalUsername] = useState(PersistUtil.getRival());
 
     async function createChannel() {
         if (rivalUsername === playerName) {
@@ -22,7 +20,7 @@ export default function JoinGame({ setChannel }) {
             return;
         }
 
-        cookies.set(Constant.COOKIE_RIVAL, rivalUsername);
+        PersistUtil.persistRival(rivalUsername);
         const newChannel = await client.channel("messaging", {
             members: [client.userID, response.users[0].id]
         });

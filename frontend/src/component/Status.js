@@ -1,4 +1,5 @@
 import { useSquareSize, useGameState, useDispatch, useGameContext, usePlayerJoined } from "./GameContext";
+import PersistUtil from "../core/PersistUtil";
 
 const BLACK_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/black.png`;
 const WHITE_PLAYER_IMAGE = `${process.env.PUBLIC_URL}/white.png`;
@@ -55,7 +56,7 @@ export default function Status() {
         </button>
     );
 
-    if (!playersJoined) return <p>Waiting for the other player to join...</p>;
+    if (!playersJoined) return <p>Waiting for {PersistUtil.getRival()} to join...</p>;
 
     return (
         <div className="status" style={{ fontSize: fontSize, marginBottom: fontSize }}>

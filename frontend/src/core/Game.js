@@ -14,6 +14,14 @@ export default class Game {
         this.COLUMN_COUNT = columnCount;
     }
 
+    getRowCount() {
+        return this.ROW_COUNT;
+    }
+
+    getColumnCount() {
+        return this.COLUMN_COUNT;
+    }
+
     getName() {
         throw new Error("Method 'getName()' must be implemented.");
     }

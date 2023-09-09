@@ -20,20 +20,32 @@ export default function Game({ gameName, children }) {
     const [state, doDispatch] = useReducer(game.createDispatcher(), game.createInitialState());
 
     async function dispatch(action) {
-        if (channel) await channel.sendEvent(action); // don't send event if playing locally where channel is null
+        if (playersJoined && channel) {
+            console.log("Sending event", action);
+            await channel.sendEvent(action); // don't send event if playing locally where channel is null
+        }
         doDispatch(action);
     }
 
     useEffect(() => {
         function syncState() {
-            const historicalMoves = [];
+            const historicalMoves = []; // 2 dimension array
             let s = state;
+            // split historical moves in to multiple events so the events won't exceed the limit size
+            let movesChunk = [];
             while (s.previousState) {
-                historicalMoves.unshift(s.latestMove);
+                movesChunk.unshift(s.latestMove);
+                if (movesChunk.length === game.getColumnCount()) {
+                    historicalMoves.unshift(movesChunk);
+                    movesChunk = [];
+                }
                 s = s.previousState;
             }
-            const action = game.createPlaceStonesAction(historicalMoves);
-            channel.sendEvent(action);
+            if (movesChunk.length !== 0) {
+                historicalMoves.unshift(movesChunk);
+            }
+
+            historicalMoves.forEach((movesChunk) => channel.sendEvent(game.createPlaceStonesAction(movesChunk)));
         }
 
         const listener = channel.on("user.watching.start", async (event) => {
@@ -59,6 +71,7 @@ export default function Game({ gameName, children }) {
         if (channel && client) {
             const listener = channel.on((event) => {
                 if (event.user.id !== client.userID) {
+                    console.log("Received event from the other player", event);
                     doDispatch(event);
                 }
             });

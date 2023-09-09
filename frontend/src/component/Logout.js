@@ -1,5 +1,6 @@
 import Cookies from "universal-cookie";
 import { useChatContext } from "stream-chat-react";
+import Constant from "./Constant";
 
 export default function Logout({ setIsAuth }) {
     const cookies = new Cookies();
@@ -8,11 +9,10 @@ export default function Logout({ setIsAuth }) {
 
     function logout() {
         if (window.confirm("Do you want to logout?")) {
-            cookies.remove("token");
-            cookies.remove("userId");
-            cookies.remove("hashedPassword");
-            cookies.remove("channelName");
-            cookies.remove("username");
+            cookies.remove(Constant.COOKIE_TOKEN);
+            cookies.remove(Constant.COOKIE_USER_ID);
+            cookies.remove(Constant.COOKIE_HASHED_PASSWORD);
+            cookies.remove(Constant.COOKIE_USERNAME);
             client.disconnectUser();
             setIsAuth(false);
         }

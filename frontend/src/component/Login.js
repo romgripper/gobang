@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
+import Constant from "./Constant";
 
 function Login({ setIsAuth }) {
     const [username, setUsername] = useState("");
@@ -34,9 +35,9 @@ function Login({ setIsAuth }) {
             .then((res) => {
                 const { username, token, userId } = res.data;
                 if (token) {
-                    cookies.set("token", token);
-                    cookies.set("userId", userId);
-                    cookies.set("username", username);
+                    cookies.set(Constant.COOKIE_TOKEN, token);
+                    cookies.set(Constant.COOKIE_USER_ID, userId);
+                    cookies.set(Constant.COOKIE_USERNAME, username);
                     setIsAuth(true);
                 } else {
                     alert(res.data.message);
@@ -59,10 +60,10 @@ function Login({ setIsAuth }) {
         }).then((res) => {
             const { token, userId, username, hashedPassword } = res.data;
             if (token) {
-                cookies.set("token", token);
-                cookies.set("userId", userId);
-                cookies.set("username", username);
-                cookies.set("hashedPassword", hashedPassword);
+                cookies.set(Constant.COOKIE_TOKEN, token);
+                cookies.set(Constant.COOKIE_USER_ID, userId);
+                cookies.set(Constant.COOKIE_USERNAME, username);
+                cookies.set(Constant.COOKIE_HASHED_PASSWORD, hashedPassword);
                 setIsAuth(true);
             } else {
                 alert(res.data.message);

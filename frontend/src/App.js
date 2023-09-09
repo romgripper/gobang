@@ -13,6 +13,7 @@ import UiBoard from "./component/UiBoard";
 import "./App.css";
 import Logout from "./component/Logout";
 import LeaveGame from "./component/LeaveGame";
+import Constant from "./component/Constant";
 
 let gameName = new URLSearchParams(window.location.search).get("game") ?? "gobang";
 gameName = gameName.toLowerCase();
@@ -24,7 +25,7 @@ const cookies = new Cookies();
 const client = StreamChat.getInstance("7mcca6yx3r9d");
 
 export default function App() {
-    const token = cookies.get("token");
+    const token = cookies.get(Constant.COOKIE_TOKEN);
     const [isAuth, setIsAuth] = useState(token ? true : false);
     const [channel, setChannel] = useState(null);
 
@@ -33,9 +34,9 @@ export default function App() {
             client
                 .connectUser(
                     {
-                        id: cookies.get("userId"),
-                        name: cookies.get("username"),
-                        hashedPassword: cookies.get("hashedPassword")
+                        id: cookies.get(Constant.COOKIE_USER_ID),
+                        name: cookies.get(Constant.COOKIE_USERNAME),
+                        hashedPassword: cookies.get(Constant.COOKIE_HASHED_PASSWORD)
                     },
                     token
                 )

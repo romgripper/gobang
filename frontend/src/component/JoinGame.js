@@ -1,13 +1,14 @@
 import { useChatContext } from "stream-chat-react";
 import { useState } from "react";
 import Cookies from "universal-cookie";
+import Constant from "./Constant";
 
 export default function JoinGame({ setChannel }) {
     const { client } = useChatContext();
     const cookies = new Cookies();
-    const playerName = cookies.get("username");
+    const playerName = cookies.get(Constant.COOKIE_USERNAME);
 
-    const [rivalUsername, setRivalUsername] = useState("");
+    const [rivalUsername, setRivalUsername] = useState(cookies.get(Constant.COOKIE_RIVAL));
 
     async function createChannel() {
         if (rivalUsername === playerName) {
@@ -21,6 +22,7 @@ export default function JoinGame({ setChannel }) {
             return;
         }
 
+        cookies.set(Constant.COOKIE_RIVAL, rivalUsername);
         const newChannel = await client.channel("messaging", {
             members: [client.userID, response.users[0].id]
         });
@@ -32,7 +34,11 @@ export default function JoinGame({ setChannel }) {
     return (
         <div className="joinGame">
             <h4>Create Game</h4>
-            <input placeholder="Rival username" onChange={(event) => setRivalUsername(event.target.value)} />
+            <input
+                placeholder="Rival username"
+                Value={rivalUsername}
+                onChange={(event) => setRivalUsername(event.target.value)}
+            />
             <button onClick={createChannel}>Join/Start Game</button>
         </div>
     );

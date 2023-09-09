@@ -29,7 +29,7 @@ export default function Game({ gameName, children }) {
 
     useEffect(() => {
         function syncState() {
-            const historicalMoves = []; // 2 dimension array
+            const historicalMoves = []; // 2-dimension array
             let s = state;
             // split historical moves in to multiple events so the events won't exceed the limit size
             let movesChunk = [];

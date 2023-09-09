@@ -12,7 +12,6 @@ export default class Go extends Game {
             hasWinner: false,
             board: this.createInitialBoard(),
             latestMove: null,
-            placeStone: null, // true for placeStone, false for remove stone
             previousState: null
         };
     }
@@ -24,10 +23,8 @@ export default class Go extends Game {
     processPlaceStone(state, coordinate) {
         const nextBoard = state.board.clone();
         let isNextBlack = state.isNextBlack;
-        let placeStone = true;
         if (state.board.getStone(coordinate).isStone()) {
             nextBoard.setStone(coordinate, null);
-            placeStone = false;
         } else {
             nextBoard.setStone(coordinate, new Stone(state.isNextBlack).setBlink());
             isNextBlack = !isNextBlack;
@@ -36,7 +33,6 @@ export default class Go extends Game {
         return {
             isNextBlack: isNextBlack,
             board: nextBoard,
-            placeStone: placeStone,
             latestMove: coordinate,
             previousState: state
         };

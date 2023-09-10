@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
 import Constant from "../core/Constant";
@@ -9,6 +9,9 @@ function Login({ setIsAuth }) {
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [isSignUp, setIsSignUp] = useState(false);
+
+    const loginButton = useRef();
+    const signupButton = useRef();
 
     const cookies = new Cookies();
 
@@ -71,6 +74,13 @@ function Login({ setIsAuth }) {
             }
         });
     }
+
+    function handleKey(e) {
+        if (e.key === "Enter") {
+            (isSignUp ? signupButton : loginButton).current.click();
+        }
+    }
+
     const loginContent = (
         <>
             <input
@@ -87,9 +97,12 @@ function Login({ setIsAuth }) {
                     setPassword(event.target.value);
                 }}
             />
-            <button onClick={login}>Login</button>
+            <button ref={loginButton} onClick={login}>
+                Login
+            </button>
         </>
     );
+    
     const signUpContent = (
         <>
             <input
@@ -112,23 +125,23 @@ function Login({ setIsAuth }) {
                     setPasswordConfirm(event.target.value);
                 }}
             />
-            <button onClick={signUp}>Sign Up</button>
+            <button ref={signupButton} onClick={signUp}>
+                Sign Up
+            </button>
         </>
     );
     return (
-        <div className="login">
-            <div>
-                <label for="signupCheckbox">
-                    <input
-                        id="signupCheckbox"
-                        type="checkbox"
-                        checked={isSignUp}
-                        onClick={(e) => setIsSignUp(e.target.checked)}
-                    ></input>
-                    Sign up
-                </label>
-                <div className="loginSub">{(isSignUp && signUpContent) || loginContent}</div>
-            </div>
+        <div className="login" onKeyUp={handleKey}>
+            <label for="signupCheckbox">
+                <input
+                    id="signupCheckbox"
+                    type="checkbox"
+                    checked={isSignUp}
+                    onClick={(e) => setIsSignUp(e.target.checked)}
+                ></input>
+                Sign up
+            </label>
+            <div className="loginSub">{(isSignUp && signUpContent) || loginContent}</div>
         </div>
     );
 }

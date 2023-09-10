@@ -1,12 +1,13 @@
 import { useChatContext } from "stream-chat-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PersistUtil from "../core/PersistUtil";
 
 export default function JoinGame({ setChannel }) {
     const { client } = useChatContext();
-    const playerName = PersistUtil.getUsername();
-
     const [rivalUsername, setRivalUsername] = useState(PersistUtil.getRival());
+    const joinGameButton = useRef();
+
+    const playerName = PersistUtil.getUsername();
 
     async function createChannel() {
         if (rivalUsername === playerName) {
@@ -30,14 +31,16 @@ export default function JoinGame({ setChannel }) {
     }
 
     return (
-        <div className="joinGame">
+        <div className="joinGame" onKeyUp={(e) => e.key === "Enter" && joinGameButton.current.click()}>
             <h4>Create Game</h4>
             <input
                 placeholder="Rival username"
                 value={rivalUsername}
                 onChange={(event) => setRivalUsername(event.target.value)}
             />
-            <button onClick={createChannel}>Join/Start Game</button>
+            <button ref={joinGameButton} onClick={createChannel}>
+                Join/Start Game
+            </button>
         </div>
     );
 }

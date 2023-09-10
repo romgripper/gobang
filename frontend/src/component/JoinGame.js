@@ -6,18 +6,21 @@ export default function JoinGame({ setChannel }) {
     const { client } = useChatContext();
     const [rivalUsername, setRivalUsername] = useState(PersistUtil.getRival());
     const joinGameButton = useRef();
+    const rivalUsernameInput = useRef();
 
     const playerName = PersistUtil.getUsername();
 
     async function createChannel() {
         if (rivalUsername === playerName) {
             alert("You cannot play against yourself!");
+            rivalUsernameInput.current.focus();
             return;
         }
 
         const response = await client.queryUsers({ name: { $eq: rivalUsername } });
         if (response.users.length === 0) {
             alert("User not found");
+            rivalUsernameInput.current.focus();
             return;
         }
 
@@ -36,6 +39,7 @@ export default function JoinGame({ setChannel }) {
             <input
                 placeholder="Rival username"
                 value={rivalUsername}
+                ref={rivalUsernameInput}
                 onChange={(event) => setRivalUsername(event.target.value)}
             />
             <button ref={joinGameButton} onClick={createChannel}>

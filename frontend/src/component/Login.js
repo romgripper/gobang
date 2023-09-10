@@ -12,16 +12,21 @@ function Login({ setIsAuth }) {
 
     const loginButton = useRef();
     const signupButton = useRef();
+    const usernameInput = useRef();
+    const passwordInput = useRef();
+    const passwordConfirmInput = useRef();
 
     const cookies = new Cookies();
 
     function validateInput() {
         if (!username) {
             alert("Please input username");
+            usernameInput.current.focus();
             return false;
         }
         if (!password) {
             alert("Please input password");
+            passwordInput.current.focus();
             return false;
         }
         return true;
@@ -45,13 +50,23 @@ function Login({ setIsAuth }) {
                     setIsAuth(true);
                 } else {
                     alert(res.data.message);
+                    usernameInput.current.focus();
                 }
             })
-            .catch(console.error);
+            .catch((error) => {
+                console.log(error);
+                usernameInput.current.focus();
+            });
     }
     function signUp() {
+        if (!passwordConfirm) {
+            alert("Please input password agin");
+            passwordConfirmInput.current.focus();
+            return;
+        }
         if (password !== passwordConfirm) {
             alert("Passwords don't match");
+            passwordInput.current.focus();
             return;
         }
         if (!validateInput()) {
@@ -61,18 +76,24 @@ function Login({ setIsAuth }) {
         Axios.post("/signup", {
             username,
             password
-        }).then((res) => {
-            const { token, userId, username, hashedPassword } = res.data;
-            if (token) {
-                cookies.set(Constant.COOKIE_TOKEN, token);
-                cookies.set(Constant.COOKIE_USER_ID, userId);
-                PersistUtil.persistUsername(username);
-                cookies.set(Constant.COOKIE_HASHED_PASSWORD, hashedPassword);
-                setIsAuth(true);
-            } else {
-                alert(res.data.message);
-            }
-        });
+        })
+            .then((res) => {
+                const { token, userId, username, hashedPassword } = res.data;
+                if (token) {
+                    cookies.set(Constant.COOKIE_TOKEN, token);
+                    cookies.set(Constant.COOKIE_USER_ID, userId);
+                    PersistUtil.persistUsername(username);
+                    cookies.set(Constant.COOKIE_HASHED_PASSWORD, hashedPassword);
+                    setIsAuth(true);
+                } else {
+                    alert(res.data.message);
+                    usernameInput.current.focus();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                usernameInput.current.focus();
+            });
     }
 
     function handleKey(e) {
@@ -84,6 +105,7 @@ function Login({ setIsAuth }) {
     const loginContent = (
         <>
             <input
+                ref={usernameInput}
                 placeholder="Username"
                 value={username}
                 onChange={(event) => {
@@ -91,6 +113,7 @@ function Login({ setIsAuth }) {
                 }}
             />
             <input
+                ref={passwordInput}
                 placeholder="Password"
                 type="password"
                 onChange={(event) => {
@@ -102,16 +125,18 @@ function Login({ setIsAuth }) {
             </button>
         </>
     );
-    
+
     const signUpContent = (
         <>
             <input
+                ref={usernameInput}
                 placeholder="Username"
                 onChange={(event) => {
                     setUsername(event.target.value);
                 }}
             />
             <input
+                ref={passwordInput}
                 placeholder="Password"
                 type="password"
                 onChange={(event) => {
@@ -119,6 +144,7 @@ function Login({ setIsAuth }) {
                 }}
             />
             <input
+                ref={passwordConfirmInput}
                 placeholder="Password again"
                 type="password"
                 onChange={(event) => {

@@ -45,7 +45,11 @@ export default function Game({ gameName, children }) {
                 historicalMoves.unshift(movesChunk);
             }
 
-            historicalMoves.forEach((movesChunk) => channel.sendEvent(game.createPlaceStonesAction(movesChunk)));
+            historicalMoves.forEach((movesChunk) => {
+                const action = game.createPlaceStonesAction(movesChunk);
+                console.log("Sending event", action);
+                channel.sendEventaction();
+            });
         }
 
         const listener = channel.on("user.watching.start", async (event) => {

@@ -34,7 +34,7 @@ export default function JoinGame({ setChannel }) {
             <h4>Create Game</h4>
             <input
                 placeholder="Rival username"
-                Value={rivalUsername}
+                value={rivalUsername}
                 onChange={(event) => setRivalUsername(event.target.value)}
             />
             <button onClick={createChannel}>Join/Start Game</button>

@@ -10,10 +10,6 @@ export default class PersistUtil {
         new Cookies().set(Constant.COOKIE_USERNAME, username);
     }
 
-    static removeUsername() {
-        new Cookies().remove(Constant.COOKIE_USERNAME);
-    }
-
     static getRival() {
         return new Cookies().get(Constant.COOKIE_RIVAL);
     }

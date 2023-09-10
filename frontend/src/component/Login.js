@@ -5,7 +5,7 @@ import Constant from "../core/Constant";
 import PersistUtil from "../core/PersistUtil";
 
 function Login({ setIsAuth }) {
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(PersistUtil.getUsername());
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [isSignUp, setIsSignUp] = useState(false);
@@ -75,6 +75,7 @@ function Login({ setIsAuth }) {
         <>
             <input
                 placeholder="Username"
+                value={username}
                 onChange={(event) => {
                     setUsername(event.target.value);
                 }}

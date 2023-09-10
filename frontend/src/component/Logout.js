@@ -1,7 +1,6 @@
 import Cookies from "universal-cookie";
 import { useChatContext } from "stream-chat-react";
 import Constant from "../core/Constant";
-import PersistUtil from "../core/PersistUtil";
 
 export default function Logout({ setIsAuth }) {
     const cookies = new Cookies();
@@ -13,7 +12,6 @@ export default function Logout({ setIsAuth }) {
             cookies.remove(Constant.COOKIE_TOKEN);
             cookies.remove(Constant.COOKIE_USER_ID);
             cookies.remove(Constant.COOKIE_HASHED_PASSWORD);
-            PersistUtil.removeUsername();
             client.disconnectUser();
             setIsAuth(false);
         }

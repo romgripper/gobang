@@ -29,26 +29,9 @@ export default function Game({ gameName, children }) {
 
     useEffect(() => {
         function syncState() {
-            const historicalMoves = []; // 2-dimension array
-            let s = state;
-            // split historical moves in to multiple events so the events won't exceed the limit size
-            let movesChunk = [];
-            while (s.previousState) {
-                movesChunk.unshift(s.latestMove);
-                if (movesChunk.length === game.getColumnCount()) {
-                    historicalMoves.unshift(movesChunk);
-                    movesChunk = [];
-                }
-                s = s.previousState;
-            }
-            if (movesChunk.length !== 0) {
-                historicalMoves.unshift(movesChunk);
-            }
-
-            historicalMoves.forEach((movesChunk) => {
-                const action = game.createPlaceStonesAction(movesChunk);
+            game.createSyncMoveActions(state).forEach((action) => {
                 console.log("Sending event", action);
-                channel.sendEventaction();
+                channel.sendEvent(action);
             });
         }
 

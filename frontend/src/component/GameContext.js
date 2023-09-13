@@ -35,14 +35,25 @@ export default function Game({ gameName, children }) {
             });
         }
 
-        const listener = channel.on("user.watching.start", async (event) => {
+        const joinListener = channel.on("user.watching.start", async (event) => {
             console.log("The other player just joined, syncing state");
             if (event.watcher_count === 2) {
                 setPlayersJoined(true);
                 syncState();
             }
         });
-        return () => listener.unsubscribe();
+
+        const leaveListener = channel.on("user.watching.stop", async (event) => {
+            console.log("The other player just left, freeze state");
+            if (event.watcher_count !== 2) {
+                setPlayersJoined(false);
+            }
+        });
+
+        return () => {
+            joinListener.unsubscribe();
+            leaveListener.unsubscribe();
+        };
     }, [channel, game, state]);
 
     useLayoutEffect(() => {
@@ -65,6 +76,11 @@ export default function Game({ gameName, children }) {
             return () => listener.unsubscribe();
         }
     }, [channel, client]);
+
+    // freeze game if the other player doesn't join
+    useEffect(() => {
+        state.freeze = !playersJoined;
+    }, [state, playersJoined]);
 
     const [windowWidth, windowHeight] = windowSize;
     const squareSize = Math.floor(
